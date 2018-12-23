@@ -32,7 +32,7 @@ HMM Extensions: To overcome HMM limitations, a number of extensions have been de
 Getting started 
 
 JUCHMME is an executable file in Java that is executed from the command line. JUCHMME is written in Java and requires a 32-bit or 64-bit Java runtime environment version 7 or later, freely available from http://www.java.org. The Windows and MacOS X installers contain a suitable Java runtime environment that will be used if a suitable Java runtime environment cannot be found on the computer.
-Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/itamposis/juchmme. 
+Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/pbagos/juchmme. 
 
 Compile 
 
