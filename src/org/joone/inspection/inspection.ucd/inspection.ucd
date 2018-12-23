@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" size="972,590" id="localhostrootjoone467" metadata="nsuml-1.4" initialized="true" showWireOptions="3">
+  <children xsi:type="editmodel:InterfaceEditModel" location="398,230" size="106,68" targetConnections="//@children.7/@sourceConnections.0" id="localhostrootjoone468" runTimeClassModel="localhostlocaldomainrootjoone2366;localhostlocaldomainrootjoone2364">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="86,20">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2364"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2366"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" location="278,50" size="181,68" targetConnections="//@children.4/@sourceConnections.0 //@children.5/@sourceConnections.1" id="localhostrootjoone1560" runTimeClassModel="localhostrootjoone1614;localhostrootjoone1612">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="161,20">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1612"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1614"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="485,168" size="172,22" id="localhostrootjoone248" shortShow="true" runTimeClassModel="localhostlocaldomainrootjoone2334;localhostrootjoone268;localhostrootjoone314;localhostrootjoone303;localhostrootjoone299;localhostrootjoone347;localhostlocaldomainrootjoone2332;localhostrootjoone289;localhostrootjoone258;localhostrootjoone337;localhostrootjoone359;localhostrootjoone326;localhostrootjoone277;localhostrootjoone349;localhostrootjoone324;localhostrootjoone351;localhostrootjoone310;localhostrootjoone253;localhostrootjoone284;localhostrootjoone354;localhostrootjoone332;localhostrootjoone397;localhostrootjoone267;localhostrootjoone376;localhostrootjoone402;localhostrootjoone345;localhostrootjoone266;localhostrootjoone301;localhostlocaldomainrootjoone2329;localhostrootjoone412;localhostrootjoone417;localhostrootjoone388;localhostrootjoone410;localhostrootjoone335;localhostrootjoone293;localhostrootjoone249;localhostrootjoone379;localhostrootjoone394;localhostrootjoone279;localhostrootjoone392;localhostrootjoone306;localhostrootjoone370;localhostrootjoone414;localhostrootjoone385;localhostrootjoone255;localhostrootjoone356;localhostrootjoone312;localhostrootjoone262;localhostrootjoone363;localhostrootjoone341;localhostrootjoone406;localhostrootjoone308;localhostrootjoone272;localhostrootjoone373;localhostrootjoone339;localhostlocaldomainrootjoone2281;localhostrootjoone422;localhostrootjoone343;localhostrootjoone264;localhostrootjoone275;localhostrootjoone317;localhostrootjoone419;localhostrootjoone382;localhostrootjoone274;localhostrootjoone320;localhostrootjoone270;localhostrootjoone296;localhostrootjoone367;localhostrootjoone260;localhostrootjoone330;localhostrootjoone399">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="121,380">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone312"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone314"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone324"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone402"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone330"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone332"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone337"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone339"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone410"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone406"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2332"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone341"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone343"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone345"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone347"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone349"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone422"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2334"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone392"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone412"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone397"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone417"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone317"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone335"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone354"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone356"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone394"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone367"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone370"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone414"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone373"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone399"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone376"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone379"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone382"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone385"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone419"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2329"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="localhostrootjoone1562" connectionRouterKind="Manual" source="//@children.2" target="//@children.4/@sourceConnections.0" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="86,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="239,168" size="216,22" id="localhostrootjoone1006" shortShow="true" runTimeClassModel="localhostrootjoone1507;localhostrootjoone1485;localhostrootjoone1503;localhostrootjoone1414;localhostrootjoone1472;localhostrootjoone1494;localhostrootjoone1480;localhostrootjoone1458;localhostrootjoone1394;localhostrootjoone1408;localhostrootjoone1463;localhostrootjoone1370;localhostrootjoone1380;localhostrootjoone1427;localhostrootjoone1364;localhostrootjoone1410;localhostrootjoone1418;localhostrootjoone1501;localhostrootjoone1499;localhostrootjoone1490;localhostrootjoone1383;localhostrootjoone1368;localhostrootjoone1416;localhostrootjoone1396;localhostrootjoone1448;localhostrootjoone1374;localhostrootjoone1445;localhostrootjoone1452;localhostrootjoone1423;localhostrootjoone1477;localhostrootjoone1466;localhostrootjoone1455;localhostrootjoone1433;localhostrootjoone1406;localhostrootjoone1443;localhostrootjoone1400;localhostrootjoone1372;localhostrootjoone1505;localhostrootjoone1356;localhostrootjoone1360;localhostrootjoone1362;localhostrootjoone1387;localhostrootjoone1469;localhostrootjoone1436;localhostrootjoone1404;localhostrootjoone1425;localhostrootjoone1358;localhostrootjoone1420;localhostrootjoone1366;localhostrootjoone1412;localhostrootjoone1496;localhostrootjoone1392;localhostrootjoone1378;localhostrootjoone1482;localhostrootjoone1440;localhostrootjoone1487;localhostrootjoone1460;localhostrootjoone1390;localhostrootjoone1475;localhostrootjoone1429;localhostrootjoone1431;localhostrootjoone1509">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="151,320">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1394"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1503"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1490"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1404"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1485"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1406"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1480"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1408"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1507"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1505"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1475"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1412"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1414"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1418"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1420"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1423"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1425"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1427"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1429"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1431"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1509"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1458"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1433"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1487"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1440"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1445"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1482"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1455"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1477"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1460"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1463"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostrootjoone1466"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" connectionRouterKind="Manual" source="//@children.3" target="//@children.4/@sourceConnections.0" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="108,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="50,168" size="159,22" id="localhostlocaldomainrootjoone2590" shortShow="true" runTimeClassModel="localhostlocaldomainrootjoone2635;localhostlocaldomainrootjoone2681;localhostlocaldomainrootjoone2602;localhostlocaldomainrootjoone2693;localhostlocaldomainrootjoone2658;localhostlocaldomainrootjoone2770;localhostlocaldomainrootjoone2679;localhostlocaldomainrootjoone2612;localhostlocaldomainrootjoone2645;localhostlocaldomainrootjoone2696;localhostlocaldomainrootjoone2789;localhostlocaldomainrootjoone2808;localhostlocaldomainrootjoone2745;localhostlocaldomainrootjoone2724;localhostlocaldomainrootjoone2651;localhostlocaldomainrootjoone2701;localhostlocaldomainrootjoone2768;localhostlocaldomainrootjoone2608;localhostlocaldomainrootjoone2628;localhostlocaldomainrootjoone2616;localhostlocaldomainrootjoone2632;localhostlocaldomainrootjoone2606;localhostlocaldomainrootjoone2710;localhostlocaldomainrootjoone2610;localhostlocaldomainrootjoone2654;localhostlocaldomainrootjoone2784;localhostlocaldomainrootjoone2782;localhostlocaldomainrootjoone2743;localhostlocaldomainrootjoone2599;localhostlocaldomainrootjoone2787;localhostlocaldomainrootjoone2691;localhostlocaldomainrootjoone2675;localhostlocaldomainrootjoone2707;localhostlocaldomainrootjoone2798;localhostlocaldomainrootjoone2731;localhostlocaldomainrootjoone2756;localhostlocaldomainrootjoone2778;localhostlocaldomainrootjoone2603;localhostlocaldomainrootjoone2648;localhostlocaldomainrootjoone2677;localhostlocaldomainrootjoone2663;localhostlocaldomainrootjoone2604;localhostlocaldomainrootjoone2753;localhostlocaldomainrootjoone2734;localhostlocaldomainrootjoone2728;localhostlocaldomainrootjoone2712;localhostlocaldomainrootjoone2749;localhostlocaldomainrootjoone2772;localhostlocaldomainrootjoone2643;localhostlocaldomainrootjoone2715;localhostlocaldomainrootjoone2668;localhostlocaldomainrootjoone2766;localhostlocaldomainrootjoone2624;localhostlocaldomainrootjoone2801;localhostlocaldomainrootjoone2687;localhostlocaldomainrootjoone2792;localhostlocaldomainrootjoone2804;localhostlocaldomainrootjoone2759;localhostlocaldomainrootjoone2671;localhostlocaldomainrootjoone2774;localhostlocaldomainrootjoone2600;localhostlocaldomainrootjoone2666;localhostlocaldomainrootjoone2597;localhostlocaldomainrootjoone2683;localhostlocaldomainrootjoone2739;localhostlocaldomainrootjoone2661;localhostlocaldomainrootjoone2704;localhostlocaldomainrootjoone2780;localhostlocaldomainrootjoone2776;localhostlocaldomainrootjoone2699;localhostlocaldomainrootjoone2685;localhostlocaldomainrootjoone2721;localhostlocaldomainrootjoone2620;localhostlocaldomainrootjoone2718;localhostlocaldomainrootjoone2737;localhostlocaldomainrootjoone2810;localhostlocaldomainrootjoone2689;localhostlocaldomainrootjoone2641;localhostlocaldomainrootjoone2763;localhostlocaldomainrootjoone2741;localhostlocaldomainrootjoone2795;localhostlocaldomainrootjoone2638">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="121,430">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2643"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2645"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2715"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2648"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2731"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2770"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2795"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2658"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2801"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2774"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2675"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2677"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2679"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2681"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2778"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2776"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2683"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2808"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2685"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2687"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2780"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2810"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2782"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2787"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2768"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2792"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2798"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2804"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2651"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2689"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2691"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2693"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2696"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2699"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2701"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2704"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2707"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2718"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2721"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2734"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2737"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2741"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2772"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.3/@sourceConnections.0 //@children.2/@sourceConnections.0" id="localhostlocaldomainrootjoone2594" connectionRouterKind="GeneralizationManhattan" source="//@children.4" target="//@children.1" targetEnd="//@children.4/@sourceConnections.0/@children.1" sourceEnd="//@children.4/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="79,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="89,68" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="717,91" size="121,60" id="localhostlocaldomainrootjoone2338" runTimeClassModel="localhostlocaldomainrootjoone2351;localhostlocaldomainrootjoone2341;localhostlocaldomainrootjoone2339;localhostlocaldomainrootjoone2344">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="101,20">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2341"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2351"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="localhostlocaldomainrootjoone4776" connectionRouterKind="Manual" source="//@children.5" target="//@children.6" targetEnd="//@children.5/@sourceConnections.0/@children.1" sourceEnd="//@children.5/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="localhostlocaldomainrootjoone2356" connectionRouterKind="Manhattan" source="//@children.5" target="//@children.1" targetEnd="//@children.5/@sourceConnections.1/@children.1" sourceEnd="//@children.5/@sourceConnections.1/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,18" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="709,27" size="141,20" targetConnections="//@children.5/@sourceConnections.0" id="localhostrootjoone1805" shortShow="true" runTimeClassModel="localhostlocaldomainrootjoone2456;localhostlocaldomainrootjoone2399;localhostlocaldomainrootjoone2373;localhostlocaldomainrootjoone2419;localhostlocaldomainrootjoone2395;localhostlocaldomainrootjoone2422;localhostlocaldomainrootjoone2378;localhostlocaldomainrootjoone2411;localhostlocaldomainrootjoone2468;localhostlocaldomainrootjoone2379;localhostlocaldomainrootjoone2477;localhostlocaldomainrootjoone2376;localhostlocaldomainrootjoone2448;localhostlocaldomainrootjoone2462;localhostlocaldomainrootjoone2405;localhostlocaldomainrootjoone2382;localhostlocaldomainrootjoone2407;localhostlocaldomainrootjoone2445;localhostlocaldomainrootjoone2415;localhostlocaldomainrootjoone2391;localhostlocaldomainrootjoone2426;localhostlocaldomainrootjoone2374;localhostlocaldomainrootjoone2388;localhostlocaldomainrootjoone2384;localhostlocaldomainrootjoone2442;localhostlocaldomainrootjoone2464;localhostlocaldomainrootjoone2375;localhostlocaldomainrootjoone2437;localhostlocaldomainrootjoone2417;localhostlocaldomainrootjoone2397;localhostlocaldomainrootjoone2459;localhostlocaldomainrootjoone2454;localhostlocaldomainrootjoone2451;localhostlocaldomainrootjoone2431;localhostlocaldomainrootjoone2439;localhostlocaldomainrootjoone2402;localhostlocaldomainrootjoone2466;localhostlocaldomainrootjoone2434">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="146,190">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2388"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2384"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2391"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2382"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2466"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2442"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2405"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2454"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2415"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2448"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2437"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2431"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2445"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2402"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2456"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2411"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2451"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2434"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2407"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="50,358" size="351,20" id="localhostlocaldomainrootjoone2538" shortShow="true" runTimeClassModel="localhostlocaldomainrootjoone2544;localhostlocaldomainrootjoone2540;localhostlocaldomainrootjoone2546;localhostlocaldomainrootjoone2541">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="96,30">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2541"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2544"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2546"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.8/@sourceConnections.0 //@children.9/@sourceConnections.0" id="localhostlocaldomainrootjoone2539" connectionRouterKind="GeneralizationManhattan" source="//@children.7" target="//@children.0" targetEnd="//@children.7/@sourceConnections.0/@children.1" sourceEnd="//@children.7/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="175,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="53,68" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="237,398" size="363,20" id="localhostrootjoone1539" shortShow="true" runTimeClassModel="localhostlocaldomainrootjoone2564;localhostlocaldomainrootjoone2562;localhostlocaldomainrootjoone2555;localhostlocaldomainrootjoone2557;localhostlocaldomainrootjoone2560">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="106,40">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2560"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2557"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2562"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2564"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="localhostrootjoone1540" connectionRouterKind="Manual" source="//@children.8" target="//@children.7/@sourceConnections.0" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="181,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="444,358" size="369,20" id="localhostrootjoone470" shortShow="true" runTimeClassModel="localhostlocaldomainrootjoone2579;localhostlocaldomainrootjoone2577;localhostlocaldomainrootjoone2574;localhostlocaldomainrootjoone2573">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="111,30">
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2574"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2577"/>
+      <children xsi:type="editmodel:MethodEditModel" id="localhostlocaldomainrootjoone2579"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" id="localhostrootjoone472" connectionRouterKind="Manual" source="//@children.9" target="//@children.7/@sourceConnections.0" targetEnd="//@children.9/@sourceConnections.0/@children.1" sourceEnd="//@children.9/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="184,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true"/>
+  </children>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPublicMethods="true" showPublicInnerClasses="true" showInterfaceStereotype="true" showClassStereotype="true" showPackageStereotype="true"/>
+</editmodel:ClassDiagramEditModel>

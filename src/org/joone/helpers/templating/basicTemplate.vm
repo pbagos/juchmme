@@ -1,0 +1,201 @@
+#*
+ * Joone Neural Network java code generator template
+ * 
+ * @author P. Marrone
+ *#
+
+## Macros
+##
+
+#macro ( layers $layer $name )
+    $layer.class.name ${name} = new ${layer.class.name}();
+    ${name}.setLayerName("$layer.layerName");
+    ${name}.setRows($layer.rows);
+#if ( $layer.class.name == "org.joone.engine.LinearLayer" )
+    ${name}.setBeta($layer.beta);
+#end
+#if ( $layer.class.name == "org.joone.engine.ContextLayer" )
+    ${name}.setBeta($layer.beta);
+    ${name}.setTimeConstant($layer.timeConstant);
+#end
+#if ( $layer.class.name == "org.joone.engine.DelayLayer" )
+    ${name}.setTaps($layer.taps);
+#end
+#end ## Macro layers
+
+#macro( inputSynapses $input $name )
+## TODO: Add the handling of all the existing InputSynapses
+    $input.class.name ${name} = new ${input.class.name}();
+    ${name}.setName("$input.name");
+    ${name}.setAdvancedColumnSelector("$input.advancedColumnSelector");
+    ${name}.setFirstRow($input.firstRow);
+    ${name}.setLastRow($input.lastRow);
+    ${name}.setBuffered($input.buffered);
+    ${name}.setStepCounter($input.stepCounter);
+    ${name}.setMaxBufSize($input.maxBufSize);
+#if ( $input.class.name == "org.joone.io.FileInputSynapse")
+    ${name}.setFileName("$input.fileName");
+#end
+#if ( $input.class.name == "org.joone.io.XLSInputSynapse")
+    ${name}.setFileName("$input.fileName");
+    ${name}.setSheetName("$input.sheetName");
+#end
+#if ( $input.class.name == "org.joone.io.URLInputSynapse")
+    ${name}.setdbURL("$input.dbUrl");
+    ${name}.setdriverName("$input.driverName");
+    ${name}.setSQLQuery("$input.SQLQuery");
+#end
+#if ( $input.class.name == "org.joone.io.JDBCInputSynapse")
+    ${name}.setURL("$input.url");
+#end
+#if ( $input.class.name == "org.joone.io.YahooFinanceInputSynapse")
+    ${name}.setDateStart("$input.dateStart");
+    ${name}.setDateEnd("$input.dateEnd");
+    ${name}.setPeriod("$input.period");
+    ${name}.setSymbol("$input.symbol");
+#end
+#end ## Macro inputSynapses
+
+#macro( outputSynapses $output $name )
+## TODO: Add the handling of all the existing OutputSynapses
+    $output.class.name $name = new ${output.class.name}();
+    ${name}.setName("$output.name");
+    ${name}.setEnabled($output.enabled);
+#if ( $output.class.name == "org.joone.engine.learning.TeachingSynapse" )
+    // Teacher's desired synapse
+#set ( $desired = $output.desired )
+#inputSynapses( $desired "targetSynapse" )
+#set ( $results = $output.theLinearLayer.allOutputs )
+    // Teacher's result synapses
+#foreach ( $result in $results )
+#outputSynapses( $result "result${velocityCount}" )
+    ${name}.addResultSynapse(result${velocityCount});
+#end
+    ${name}.setDesired(targetSynapse);
+    nnet.setTeacher($name);
+#end ## TeachingSynapses
+#if ( $output.class.name == "org.joone.io.FileOutputSynapse" )
+    ${name}.setFileName("$output.fileName");
+    ${name}.setBuffered($output.buffered);
+#end
+#if ( $output.class.name == "org.joone.io.XLSOutputSynapse" )
+    ${name}.setFileName("$output.fileName");
+    ${name}.setBuffered($output.buffered);
+    ${name}.setSheetName("$output.sheetName");
+#end
+#if ( $output.class.name == "org.joone.io.JDBCOutputSynapse" )
+    ${name}.setdbURL("$output.dbURL");
+    ${name}.setBuffered($output.buffered);
+    ${name}.setDriverName("$output.driverName");
+    ${name}.setSQLAmendment("$output.SQLAmendment");
+#end
+#end ## Macro outputSynapses
+
+##
+## end Macros
+
+#if ( $package.trim() != "" )
+package ${package};
+#end
+
+/*
+ * ${class}.java
+ *
+ * Copyright @2005 by <Your Name/Organization>
+ * Licensed under the <your license> license;
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at <license URL>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.joone.net.*;
+import org.joone.engine.NeuralNetListener;
+
+#set ( $layers = $netDescriptor.Layers )
+#set ( $num = $netDescriptor.numLayers )
+public class ${class} {
+
+  public NeuralNet createNeuralNet() {
+    // NeuralNet 
+    NeuralNet nnet = new NeuralNet();
+
+    // Layers
+#set ( $inpLayer = $netDescriptor.inputLayer )
+#set ( $outLayer = $netDescriptor.outputLayer )
+#foreach ( $c in [1..$num] )
+#set ( $p = $c - 1 )
+#set ( $layer = $layers.get($p) )
+#layers ( $layer "layer${p}" )
+#if ( $layer == $inpLayer )
+    nnet.addLayer(layer${p}, NeuralNet.INPUT_LAYER);
+#elseif ( $layer == $outLayer )
+    nnet.addLayer(layer${p}, NeuralNet.OUTPUT_LAYER);
+#else
+    nnet.addLayer(layer${p}, NeuralNet.HIDDEN_LAYER);
+#end
+#end
+
+    // Synapses
+#set ( $conns = $netDescriptor.connectionSet )
+#foreach ( $conn in $conns )
+#set ( $syn = $conn.synapse )
+    $syn.class.name synapse${velocityCount} = new ${syn.class.name}();
+    synapse${velocityCount}.setName("$syn.name");
+    synapse${velocityCount}.setEnabled($syn.enabled);
+    synapse${velocityCount}.setLoopBack($syn.loopBack);
+#if ($syn.class.name == "org.joone.engine.DelaySynapse" )
+    synapse${velocityCount}.setTaps($syn.taps);
+#end
+
+#set ( $inp = $conn.input - 1 )
+#set ( $out = $conn.output - 1 )
+    // synapse${velocityCount} connects layer${inp} to layer${out}
+    layer${inp}.addOutputSynapse(synapse${velocityCount});
+    layer${out}.addInputSynapse(synapse${velocityCount});
+
+#end
+
+    // I/O Components
+#set ( $inp = $netDescriptor.inputLayerInd )
+#set ( $inputs = $inpLayer.allInputs )
+#foreach ( $input in $inputs )
+#inputSynapses( $input "input$velocityCount" )
+    layer${inp}.addInputSynapse(input${velocityCount});
+#end
+
+#set ( $out = $netDescriptor.outputLayerInd )
+#set ( $outputs = $outLayer.allOutputs )
+#foreach ( $output in $outputs )
+#outputSynapses( $output "output${velocityCount}" )
+    layer${out}.addOutputSynapse(output${velocityCount});
+#end
+    return nnet;
+  }
+
+
+  public void trainNeuralNet(NeuralNet nnet, NeuralNetListener listener) {
+    // Monitor
+#set ( $monitor = $netDescriptor.monitor )
+    org.joone.engine.Monitor monitor = nnet.getMonitor();
+    monitor.setBatchSize($monitor.batchSize);
+    monitor.setLearningMode($monitor.learningMode);
+    monitor.setLearningRate($monitor.learningRate);
+    monitor.setMomentum($monitor.momentum);
+    monitor.setPreLearning($monitor.preLearning);
+    monitor.setSupervised($monitor.supervised);
+    monitor.setTotCicles($monitor.totCicles);
+    monitor.setTrainingPatterns($monitor.trainingPatterns);
+    monitor.setValidation($monitor.validation);
+    monitor.setValidationPatterns($monitor.validationPatterns);
+    monitor.setLearning(true);
+    
+    nnet.addNeuralNetListener(listener);
+    nnet.start();
+    monitor.Go();
+    nnet.join();
+  }
+}
