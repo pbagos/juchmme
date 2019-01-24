@@ -29,18 +29,18 @@ HMM Extensions: To overcome HMM limitations, a number of extensions have been de
 14.	Tamposis, I.A., et al., Extending Hidden Markov Models to Allow Conditioning on Previous Observations. Journal of Bioinformatics and Computational Biology, 2018.
 15.	Tamposis, I.A., et al., Semi-supervised learning of Hidden Markov Models for biological sequence analysis. Bioinformatics, 2018: p. bty910-bty910.
 
-Getting started 
+##Getting started 
 
 JUCHMME is an executable file in Java that is executed from the command line. JUCHMME is written in Java and requires a 32-bit or 64-bit Java runtime environment version 7 or later, freely available from http://www.java.org. The Windows and MacOS X installers contain a suitable Java runtime environment that will be used if a suitable Java runtime environment cannot be found on the computer.
 Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/pbagos/juchmme. 
 
-Compile 
+##Compile 
 
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/juchmme.java
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/RandomSeq.java
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/nn/Main.java
+'javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/juchmme.java'
+'javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/RandomSeq.java'
+'javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/nn/Main.java'
 
-Command Line
+##Command Line
 
 The juchmme program is controlled by a list of command-line argument options. The following options control this:
 -V: print JUCHMME version and exit
