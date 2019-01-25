@@ -21,13 +21,11 @@ Download the program from http://www.compgen.org/tools/juchmme or Github https:/
 
 ## Compile 
 
-`
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/Juchmme.java
+`javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/Juchmme.java`
 
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/RandomSeq.java
+`javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/RandomSeq.java`
  
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/nn/Main.java
-`
+`javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/nn/Main.java`
 
 ## Command Line
 
