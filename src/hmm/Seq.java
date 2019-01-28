@@ -1,551 +1,485 @@
 package hmm;
 
-public class Seq
-{
+import java.util.*;
 
-	private String xs;
-	private String xsorig;
-	private String xstates;
-	private String xorig;
-	private int indexID;
-	String header;
+public class Seq {
 
-	String[] path;
-	double[] score;	
-	double[] relscore;	
-	double   dynScoreDiff;
-	double   logOdds;
-	double   logProb;
-	double   maxProb;
-	double   lng;
-    private  boolean isUnlabeled;
+    private String xs;
+    private String xsorig;
+    private String xstates;
+    private String xorig;
+    private int indexID;
+    String header;
 
-	public Seq( String seq, String obs, int indx )
-	{
+    String[] path;
+    double[] score;
+    double[] relscore;
+    double dynScoreDiff;
+    double logOdds;
+    double logProb;
+    double maxProb;
+    double lng;
+    private boolean isUnlabeled;
+
+    public Seq(String seq, String obs, int indx) {
         //If set the extension of alphabet transform the sequence with new Alphabet
-        if (Params.PAST_OBS_EXT){
+        if (Params.PAST_OBS_EXT) {
             this.xs = Model.enc.transformSeq(seq);
-        }else{
-            this.xs = seq;
-        }
-
-		this.xsorig      = seq;
-        this.xorig       = obs;
-        this.xstates     = obs;
-        this.indexID     = indx;
-        this.isUnlabeled = checkUnlabeledSeq(obs);
-		
-		init();
-	}
-
-	public Seq( String seq, int indx )
-	{
-        if (Params.PAST_OBS_EXT){
-            this.xs = Model.enc.transformSeq(seq);
-        }else{
+        } else {
             this.xs = seq;
         }
 
         this.xsorig = seq;
-		this.indexID= indx;
+        this.xorig = obs;
+        this.xstates = obs;
+        this.indexID = indx;
+        this.isUnlabeled = checkUnlabeledSeq(obs);
 
-		EmptyXStates();
-		init();
-	}
-
-	public Seq( int indx)
-	{
-        this.xs     = "";
-        this.xsorig = "";
-        this.xorig  = "";
-        this.xstates= "";
-		this.indexID= indx;
-		init();
-	}
-	
-	public void SetObs( String newxstates )
-    {
-	    xstates=newxstates;
-	}
-
-    public void SetIndexID( int idx )
-    {
-        this.indexID=idx;
+        init();
     }
 
-	private void EmptyXStates()
-	{
+    public Seq(String seq, int indx) {
+        if (Params.PAST_OBS_EXT) {
+            this.xs = Model.enc.transformSeq(seq);
+        } else {
+            this.xs = seq;
+        }
+
+        this.xsorig = seq;
+        this.indexID = indx;
+
+        EmptyXStates();
+        init();
+    }
+
+    public Seq(int indx) {
+        this.xs = "";
+        this.xsorig = "";
+        this.xorig = "";
         this.xstates = "";
-        this.xorig   = "";
+        this.indexID = indx;
+        init();
+    }
 
-		for( int i=0; i<xs.length(); i++ )
-		{
-            this.xstates+="-";
-            this.xorig+="-";
-		}
-	}
+    public void SetObs(String newxstates) {
+        xstates = newxstates;
+    }
 
-    public boolean checkUnlabeledSeq(String obs)
-    {
-        if( obs.indexOf('-')> -1 )
+    public void SetIndexID(int idx) {
+        this.indexID = idx;
+    }
+
+    private void EmptyXStates() {
+        this.xstates = "";
+        this.xorig = "";
+
+        for (int i = 0; i < xs.length(); i++) {
+            this.xstates += "-";
+            this.xorig += "-";
+        }
+    }
+
+    public boolean checkUnlabeledSeq(String obs) {
+        if (obs.indexOf('-') > -1)
             return true;
 
         return false;
     }
 
-    public boolean IsUnlabeled()
-    {
+    public boolean IsUnlabeled() {
         if (this.isUnlabeled) return true;
         else return false;
     }
 
-	private void init()
-	{
-	    //Number of Decoding Method Modules
-		int nufOfMod = 10;
-		
-		if( xs.length() != xstates.length() )
-			System.out.println( "ERROR sequence and observed path differ." );
-		
-		header = "";
-		path = new String[nufOfMod];
-		for( int i=0; i<nufOfMod; i++ )
-		    for( int j=0; j<xs.length(); j++ )
-				path[i]+='-';
+    private void init() {
+        //Number of Decoding Method Modules
+        int nufOfMod = 10;
+
+        if (xs.length() != xstates.length())
+            System.out.println("ERROR sequence and observed path differ.");
+
+        header = "";
+        path = new String[nufOfMod];
+        for (int i = 0; i < nufOfMod; i++)
+            for (int j = 0; j < xs.length(); j++)
+                path[i] += '-';
 
         //Score Initialization
-		score=new double[nufOfMod];
-		for( int i=0; i<nufOfMod; i++ )
-			score[i]=Double.NEGATIVE_INFINITY;
+        score = new double[nufOfMod];
+        for (int i = 0; i < nufOfMod; i++)
+            score[i] = Double.NEGATIVE_INFINITY;
 
-		//relScore Initialization
-        relscore=new double[nufOfMod];
-        for( int i=0; i<nufOfMod; i++ )
-			relscore[i]=0;
+        //relScore Initialization
+        relscore = new double[nufOfMod];
+        for (int i = 0; i < nufOfMod; i++)
+            relscore[i] = 0;
 
         dynScoreDiff = 0;
-	}	
+    }
 
-	public void PutDashes( String M )
-	{
-		String newxstates="";
-		int[] start= new int[100];
-		int[] end  = new int[100];
-		int noTM = GetStrands( xstates, start, end, M );
+    public void PutDashes(String M) {
+        String newxstates = "";
+        List<Integer> start = new ArrayList<>();
+        List<Integer> end = new ArrayList<>();
+        GetStrands(xstates, start, end, M);
 
-		for( int i=0; i<xstates.length(); i++ )
-		{
-			boolean ok=false;
-			
-			for( int k=0; k<noTM; k++ )
-				if( ( i>=start[k]-Params.FLANK && i<start[k]+Params.FLANK ) || 
-						( i>end[k]-Params.FLANK && i<=end[k]+Params.FLANK ) )
-				{
-					ok=true;
-					break;
-				}
+        for (int i = 0; i < xstates.length(); i++) {
+            boolean ok = false;
 
-			 newxstates+= ok? '-':xstates.charAt( i );
-		}
+            for (int k = 0; k < start.size(); k++)
+                if ((i >= start.get(k) - Params.FLANK && i < start.get(k) + Params.FLANK) ||
+                        (i > end.get(k) - Params.FLANK && i <= end.get(k) + Params.FLANK)) {
+                    ok = true;
+                    break;
+                }
 
-		xstates = newxstates;
-	}
+            newxstates += ok ? '-' : xstates.charAt(i);
+        }
 
-
-	//SHOW RESULTS
-	void ShowRes()
-    {
-
-		System.out.println( "ID: "+ header );
-		System.out.println( "SQ: "+ xs );
-
-		if (Params.PAST_OBS_EXT)
-		    System.out.println( "OR: "+ xsorig );
-
-		if (Params.THREELINE)
-		    System.out.println( "OB: "+ xorig );
-
-        System.out.println("\t"+"lng = "+lng+"\t"+logOdds +" (logodds)" );
-        System.out.println("\t"+"lng = "+lng+"\t"+maxProb + " (maxprob1)");
-        System.out.println("\t"+"lng = "+lng+"\t"+( -logProb/lng) + " (-logprob/lng)" );
-
-		if( Params.VITERBI>-1 )
-		{ 
-			System.out.println( "VS: "+ score[Params.VITERBI] );
-			System.out.println( "VR: "+ relscore[Params.VITERBI] ); 
-			System.out.println( "VP: "+ path[Params.VITERBI] );
-		}
-		if( Params.POSVIT>-1 )
-		{ 
-			System.out.println( "PS: "+ score[Params.POSVIT] );
-			System.out.println( "PR: "+ relscore[Params.POSVIT] ); 
-			System.out.println( "PP: "+ path[Params.POSVIT] );
-		}
-		if( Params.PLP>-1 )
-		{ 
-			System.out.println( "LS: "+ score[Params.PLP] );
-			System.out.println( "LR: "+ relscore[Params.PLP] ); 
-			System.out.println( "LP: "+ path[Params.PLP] );
-		}
-		
-		if( Params.NBEST>-1 )
-		{
-			System.out.println( "NS: "+ score[Params.NBEST] );
-			System.out.println( "NR: "+ relscore[Params.NBEST] ); 
-			System.out.println( "NP: "+ path[Params.NBEST] );
-		}
-		
-		if( Params.DYNAMIC>-1 )
-		{
-			System.out.println( "DR: "+ relscore[Params.DYNAMIC] ); 
-			System.out.println( "DR: "+ dynScoreDiff );
-			System.out.println( "DP: "+ path[Params.DYNAMIC] );
-		}
+        xstates = newxstates;
     }
 
 
-	public int getLen()
-	{
-		return xs.length();
-	}
+    //SHOW RESULTS
+    void ShowRes() {
 
-	public String getHeader()
-	{
-		return header;
-	}
+        System.out.println("ID: " + header);
+        System.out.println("SQ: " + xs);
 
-	public int getNESym(int i)
-	{
-		return Model.esym.lastIndexOf( getSym( i ) );
-	}
+        if (Params.PAST_OBS_EXT)
+            System.out.println("OR: " + xsorig);
 
-	public int getNSym( int i )
-	{
-		return Model.osym.lastIndexOf( getSym( i ) );
-	}
+        if (Params.THREELINE)
+            System.out.println("OB: " + xorig);
 
-	public int getNPObs( int i )
-	{
-		if( getObs( i ) == '-' ) return -1;
-		return Model.psym.lastIndexOf( getObs( i ) );
-	}
+        System.out.println("\t" + "lng = " + lng + "\t" + logOdds + " (logodds)");
+        System.out.println("\t" + "lng = " + lng + "\t" + maxProb + " (maxprob1)");
+        System.out.println("\t" + "lng = " + lng + "\t" + (-logProb / lng) + " (-logprob/lng)");
 
-	/*
-	 * Get the symbol in position i of the Sequence
-	 */
-	public char getSym( int i )
-	{
-		return xs.charAt( i );
-	}
+        if (Params.VITERBI > -1) {
+            System.out.println("VS: " + score[Params.VITERBI]);
+            System.out.println("VR: " + relscore[Params.VITERBI]);
+            System.out.println("VP: " + path[Params.VITERBI]);
+        }
+        if (Params.POSVIT > -1) {
+            System.out.println("PS: " + score[Params.POSVIT]);
+            System.out.println("PR: " + relscore[Params.POSVIT]);
+            System.out.println("PP: " + path[Params.POSVIT]);
+        }
+        if (Params.PLP > -1) {
+            System.out.println("LS: " + score[Params.PLP]);
+            System.out.println("LR: " + relscore[Params.PLP]);
+            System.out.println("LP: " + path[Params.PLP]);
+        }
 
-	/*
- 	 * Get the symbol in position i of the Osbesrvation
- 	 */
-	public char getObs( int i )
-	{
-		return xstates.charAt( i );
-	}
-	/*
-	 * Get the Sequence
-	 */
-	public String getSeq()
-	{
-		return xs;
-	}
-	/*
-	 * Get the Observasion
-	 */
-	public String getObs()
-	{
-		return xstates;
-	}
+        if (Params.NBEST > -1) {
+            System.out.println("NS: " + score[Params.NBEST]);
+            System.out.println("NR: " + relscore[Params.NBEST]);
+            System.out.println("NP: " + path[Params.NBEST]);
+        }
 
-	/*
-	 * Get the Observasion
-	 */
-	public String getOrigObs()
-	{
-		return xorig;
-	}
+        if (Params.DYNAMIC > -1) {
+            System.out.println("DR: " + relscore[Params.DYNAMIC]);
+            System.out.println("DR: " + dynScoreDiff);
+            System.out.println("DP: " + path[Params.DYNAMIC]);
+        }
+    }
 
-	public int getIndexID()
-	{
-		return this.indexID;
-	}
 
-    void ShowProb( double[][]total )
-    {
-		int wdth=20;
-		System.out.println("#\t(res)\tObs:\tVI\tNB\tDY\tPost.");
+    public int getLen() {
+        return xs.length();
+    }
 
-		for (int i=0; i<xs.length(); i++)
-		{
-			int g=0;
-			System.out.print( (i+1)+"\t"+"("+xs.charAt( i ) + ")\t" );
-			System.out.print( xorig.charAt( i ) );
-			System.out.print( ":\t");
-		
-			if( Params.VITERBI>-1 ) System.out.print( "VI: "+ path[Params.VITERBI].charAt( i ) );
-				System.out.print( "\t");
-			if( Params.NBEST>-1 )	System.out.print( "NB: "+ path[Params.NBEST].charAt( i ) );
-				System.out.print( "\t");
-			if( Params.DYNAMIC>-1 )	System.out.print( "DY: "+ path[Params.DYNAMIC].charAt( i ) );
-				System.out.print( "\t");
-			if( Params.POSVIT>-1 ) System.out.print( "PVI: "+ path[Params.POSVIT].charAt( i ) );
-				System.out.print( "\t");
-			if( Params.PLP>-1 ) System.out.print( "PVI: "+ path[Params.PLP].charAt( i ) );
-				System.out.print( "\t");
+    public String getHeader() {
+        return header;
+    }
 
-			for( int q=0; q<Model.npsym-2; q++ )
-			{
-				System.out.print("|");
-				for( g=1; g<=total[i][q]*wdth; g++ )
-				{
-					System.out.print( Model.psym.charAt( q ) );
-				}
+    public int getNESym(int i) {
+        return Model.esym.lastIndexOf(getSym(i));
+    }
 
-				for( ; g<=wdth; g++ )
-				{
-					System.out.print( " " );
-				}
-			}
+    public int getNSym(int i) {
+        return Model.osym.lastIndexOf(getSym(i));
+    }
 
-			System.out.print( "|\t" );
+    public int getNPObs(int i) {
+        if (getObs(i) == '-') return -1;
+        return Model.psym.lastIndexOf(getObs(i));
+    }
 
-			for( int q=0; q<Model.npsym-2; q++ )
-			{
-				System.out.print( total[i][q]+"\t" );
-			}			
+    /*
+     * Get the symbol in position i of the Sequence
+     */
+    public char getSym(int i) {
+        return xs.charAt(i);
+    }
 
-			System.out.print("\n");
-		}
+    /*
+     * Get the symbol in position i of the Osbesrvation
+     */
+    public char getObs(int i) {
+        return xstates.charAt(i);
+    }
+
+    /*
+     * Get the Sequence
+     */
+    public String getSeq() {
+        return xs;
+    }
+
+    /*
+     * Get the Observasion
+     */
+    public String getObs() {
+        return xstates;
+    }
+
+    /*
+     * Get the Observasion
+     */
+    public String getOrigObs() {
+        return xorig;
+    }
+
+    public int getIndexID() {
+        return this.indexID;
+    }
+
+    void ShowProb(double[][] total) {
+        int wdth = 20;
+        System.out.println("#\t(res)\tObs:\tVI\tNB\tDY\tPost.");
+
+        for (int i = 0; i < xs.length(); i++) {
+            int g = 0;
+            System.out.print((i + 1) + "\t" + "(" + xs.charAt(i) + ")\t");
+            System.out.print(xorig.charAt(i));
+            System.out.print(":\t");
+
+            if (Params.VITERBI > -1) System.out.print("VI: " + path[Params.VITERBI].charAt(i));
+            System.out.print("\t");
+            if (Params.NBEST > -1) System.out.print("NB: " + path[Params.NBEST].charAt(i));
+            System.out.print("\t");
+            if (Params.DYNAMIC > -1) System.out.print("DY: " + path[Params.DYNAMIC].charAt(i));
+            System.out.print("\t");
+            if (Params.POSVIT > -1) System.out.print("PVI: " + path[Params.POSVIT].charAt(i));
+            System.out.print("\t");
+            if (Params.PLP > -1) System.out.print("PVI: " + path[Params.PLP].charAt(i));
+            System.out.print("\t");
+
+            for (int q = 0; q < Model.npsym - 2; q++) {
+                System.out.print("|");
+                for (g = 1; g <= total[i][q] * wdth; g++) {
+                    System.out.print(Model.psym.charAt(q));
+                }
+
+                for (; g <= wdth; g++) {
+                    System.out.print(" ");
+                }
+            }
+
+            System.out.print("|\t");
+
+            for (int q = 0; q < Model.npsym - 2; q++) {
+                System.out.print(total[i][q] + "\t");
+            }
+
+            System.out.print("\n");
+        }
 
     }
 
-	public char[] getWindow( int i )
-	{
-		char[] win=new char[Params.window];
-		int c=0;
-		for( int j= i-(Params.window-1)/2; j<=i+(Params.window-1)/2; j++ )
-		{
-			if( j<0 || j>=xs.length() )
-			{
-				win[c]='0';
-			}
-			else
-			{
-				win[c]=xs.charAt( j );
-			}
-			c++;
-		}
+    public char[] getWindow(int i) {
+        char[] win = new char[Params.window];
+        int c = 0;
+        for (int j = i - (Params.window - 1) / 2; j <= i + (Params.window - 1) / 2; j++) {
+            if (j < 0 || j >= xs.length()) {
+                win[c] = '0';
+            } else {
+                win[c] = xs.charAt(j);
+            }
+            c++;
+        }
 
-		return win;
-		
-	}
-	
-	public int CorrectTop( String pred, String M )
-	{
-		return CorrectTop( xorig, pred, M );
-	}
-	
-	public static int CorrectTop( String obs, String pred, String M )
-	{	
-		int[] ost = new int[100];
-		int[] oen = new int[100];
-		int[] pst = new int[100];
-		int[] pen = new int[100];
-		
-		int noTM = GetStrands( obs, ost, oen, M  );
-		
-		if( noTM!= GetStrands( pred, pst, pen, M  ) )
-			return -1;
-	
-		int err=noTM;
-		int point = 0;
-		for( int i=0; i< noTM; i++ )
-		{
-			boolean ok=false;
-			
-			for( int j=point; j< noTM; j++ )
-			{
-				if( oen[i]>=pst[j] && pen[j]>=ost[i] )
-				{
-					ok = true;
-					point = j+1;
-					break;
-				}
-			}
-			if( ok ) err--;
-		}			
-		return err;
-	}
-	
-	public static int GetStrands( String x, int[] start, int[] end, String M )
-	{
-		boolean inTM = false;
-		int noTM = 0;
-		for( int i=0; i< x.length(); i++ )
-		{
-			char xx = x.charAt( i );
-			if( M.lastIndexOf( xx )>-1 && !inTM )
-			{
-				start[noTM] = i;
-				inTM = true;
-			}
-			else if( M.lastIndexOf( xx )<0 && inTM )
-			{
-				end[noTM] = i-1;
-				inTM = false;
-				noTM++;
-			}
-		}
-		
-		if( inTM )
-		{
-			end[noTM] = x.length()-1;
-			noTM++;
-		}
-		
-		
-		return noTM;
-	}
-	
-	public static boolean NTermIn( String x, String instr, String outstr )
-	{
-		if( instr.lastIndexOf( x.charAt( 0 )) > -1 )
-			return true;
-		else if( outstr.lastIndexOf( x.charAt( 0 ))>-1 )
-			return false;
-		else
-		{
-			for( int i=1; i<x.length(); i++ )
-				if( instr.lastIndexOf( x.charAt( 0 ) )> -1 )
-					return false;
-				else if( outstr.lastIndexOf( x.charAt( 0 ) )> -1 )
-					return true;
-				
-			return false;
-		}
-	}
+        return win;
 
-    String ShowProb( double[][]total, int VITERBI, int POSVIT, int NBEST, int DYNAMIC, int PLP )
-    {
-		int wdth=20;
-		java.lang.StringBuffer buf = new java.lang.StringBuffer();
-		
-		//buf.append("#\t(res)\tObs:\tVI\tNB\tDY\tPost."+"\n");
-		//System.out.println("#\t(res)\tObs:\tVI\tNB\tDY\tPost.");
-
-		for (int i=0; i<xs.length(); i++)
-		{
-			int g=0;
-			//buf.append( (i+1)+"\t"+"("+xs.charAt( i ) + ")\t" );
-			//System.out.print( (i+1)+"\t"+"("+xs.charAt( i ) + ")\t" );
-			if( xstates!="" )
-			{
-				//System.out.print( xstates.charAt( i ) );
-				//buf.append( xstates.charAt( i ) );
-			}
-			//buf.append( ":\t");
-			//System.out.print( ":\t");
-		
-			if( VITERBI>-1 )
-			{
-				//System.out.print( "VI: "+ path[VITERBI].charAt( i ) );
-				//buf.append( "VI: "+ path[VITERBI].charAt( i ) );
-			}
-			//System.out.print( "\t");
-			//buf.append( "\t");
-			if( NBEST>-1 )
-			{
-				//System.out.print( "NB: "+ path[NBEST].charAt( i ) );
-				//buf.append( "NB: "+ path[NBEST].charAt( i ) );
-			}
-			//System.out.print( "\t");
-			//buf.append( "\t");
-			if( DYNAMIC>-1 )
-			{
-				//System.out.print( "DY: "+ path[DYNAMIC].charAt( i ) );
-				//buf.append( "DY: "+ path[DYNAMIC].charAt( i ) );
-			}
-			//System.out.print( "\t");
-			//buf.append( "\t");
-		
-			for( int q=0; q<Model.npsym; q++ )
-			{
-				//buf.append("|");
-				//System.out.print("|");
-				for( g=1; g<=total[i][q]*wdth; g++ )
-				{
-					//System.out.print( Model.psym.charAt( q ) );
-					//buf.append( Model.psym.charAt( q ) );
-				}
-				for( ; g<=wdth; g++ )
-				{
-					//System.out.print( " " );
-					//buf.append( " " );
-				}
-			}
-			//buf.append( "|\t" );
-			//System.out.print( "|\t" );
-			for( int q=0; q<Model.npsym; q++ )
-			{
-				buf.append( total[i][q]);
-				
-				if (q<Model.npsym-1)
-					buf.append("|");
-				else buf.append("&");
-				//System.out.print( total[i][q]+"\t" );
-			}			
-	  	    //buf.append("\n");		
-	  	    //System.out.print("\n");		
-		}
-
-		return buf.toString();
     }
 
-    String ShowRes( int VITERBI, int NBEST, int DYNAMIC , int POSVIT, int PLP )
-    {
-	    java.lang.StringBuffer buf = new java.lang.StringBuffer();
-	    
-		//System.out.println( "ID: "+header );
-		//buf.append("ID:  "+header +"\n");	
-	    	
-		System.out.println( "SQ: "+xs );
-		//buf.append("SQ:  "+ xs + "\n" );
-		
-		//System.out.println( "OB: "+ xstates );
-		//buf.append("OB:  "+xstates +"\n");
-		if( VITERBI>-1 )
-		{
-			buf.append("VI:"+path[VITERBI]+"\n");
-			System.out.println( "VI: "+ path[VITERBI] );
-		}
-		if( POSVIT>-1 )
-		{
-			buf.append("PVI:"+path[POSVIT]+"\n");
-			System.out.println( "PV: "+ path[POSVIT] );
-		}
-		if( PLP>-1 )
-		{
-			buf.append("PLP:"+path[PLP]+"\n");
-			System.out.println( "LP: "+ path[PLP] );
-		}
+    public int CorrectTop(String pred, String M) {
+        return CorrectTop(xorig, pred, M);
+    }
 
-		if( NBEST>-1 )
-		{
-			buf.append( "NB:"+ path[NBEST] +"\n");
-			System.out.println( "NB: "+ path[NBEST] );
-		}
-		if( DYNAMIC>-1 )
-		{
-			
-			buf.append( "DY:"+ path[DYNAMIC]+"\n");
-			System.out.println( "DY: "+ path[DYNAMIC] );
-		}
+    public static int CorrectTop(String obs, String pred, String M) {
+        List<Integer> ost = new ArrayList<>();
+        List<Integer> oen = new ArrayList<>();
+        List<Integer> pst = new ArrayList<>();
+        List<Integer> pen = new ArrayList<>();
+        GetStrands(obs, ost, oen, M);
+        GetStrands(pred, pst, pen, M);
 
-		return buf.toString();
-	}
-    
+        if (ost.size() != pst.size())
+            return -1;
+
+        int err = ost.size();
+        int point = 0;
+        for (int i = 0; i < ost.size(); i++) {
+            boolean ok = false;
+
+            for (int j = point; j < ost.size(); j++) {
+                if (oen.get(i) >= pst.get(j) && pen.get(j) >= ost.get(i)) {
+                    ok = true;
+                    point = j + 1;
+                    break;
+                }
+            }
+            if (ok) err--;
+        }
+        return err;
+    }
+
+    public static void GetStrands(String x, List<Integer> start, List<Integer> end, String M) {
+        boolean inTM = false;
+
+        for (int i = 0; i < x.length(); i++) {
+
+            char xx = x.charAt(i);
+            //System.out.println(xx);
+
+            if (M.lastIndexOf(xx) > -1 && !inTM) {
+                //System.out.println(i);
+                start.add(i);
+                inTM = true;
+            } else if (M.lastIndexOf(xx) < 0 && inTM) {
+                //System.out.println(i);
+                end.add(i - 1);
+                inTM = false;
+            }
+        }
+
+        if (inTM) {
+            end.add(x.length() - 1);
+        }
+
+    }
+
+    public static boolean NTermIn(String x, String instr, String outstr) {
+        if (instr.lastIndexOf(x.charAt(0)) > -1)
+            return true;
+        else if (outstr.lastIndexOf(x.charAt(0)) > -1)
+            return false;
+        else {
+            for (int i = 1; i < x.length(); i++)
+                if (instr.lastIndexOf(x.charAt(0)) > -1)
+                    return false;
+                else if (outstr.lastIndexOf(x.charAt(0)) > -1)
+                    return true;
+
+            return false;
+        }
+    }
+
+    String ShowProb(double[][] total, int VITERBI, int POSVIT, int NBEST, int DYNAMIC, int PLP) {
+        int wdth = 20;
+        java.lang.StringBuffer buf = new java.lang.StringBuffer();
+
+        //buf.append("#\t(res)\tObs:\tVI\tNB\tDY\tPost."+"\n");
+        //System.out.println("#\t(res)\tObs:\tVI\tNB\tDY\tPost.");
+
+        for (int i = 0; i < xs.length(); i++) {
+            int g = 0;
+            //buf.append( (i+1)+"\t"+"("+xs.charAt( i ) + ")\t" );
+            //System.out.print( (i+1)+"\t"+"("+xs.charAt( i ) + ")\t" );
+            if (xstates != "") {
+                //System.out.print( xstates.charAt( i ) );
+                //buf.append( xstates.charAt( i ) );
+            }
+            //buf.append( ":\t");
+            //System.out.print( ":\t");
+
+            if (VITERBI > -1) {
+                //System.out.print( "VI: "+ path[VITERBI].charAt( i ) );
+                //buf.append( "VI: "+ path[VITERBI].charAt( i ) );
+            }
+            //System.out.print( "\t");
+            //buf.append( "\t");
+            if (NBEST > -1) {
+                //System.out.print( "NB: "+ path[NBEST].charAt( i ) );
+                //buf.append( "NB: "+ path[NBEST].charAt( i ) );
+            }
+            //System.out.print( "\t");
+            //buf.append( "\t");
+            if (DYNAMIC > -1) {
+                //System.out.print( "DY: "+ path[DYNAMIC].charAt( i ) );
+                //buf.append( "DY: "+ path[DYNAMIC].charAt( i ) );
+            }
+            //System.out.print( "\t");
+            //buf.append( "\t");
+
+            for (int q = 0; q < Model.npsym; q++) {
+                //buf.append("|");
+                //System.out.print("|");
+                for (g = 1; g <= total[i][q] * wdth; g++) {
+                    //System.out.print( Model.psym.charAt( q ) );
+                    //buf.append( Model.psym.charAt( q ) );
+                }
+                for (; g <= wdth; g++) {
+                    //System.out.print( " " );
+                    //buf.append( " " );
+                }
+            }
+            //buf.append( "|\t" );
+            //System.out.print( "|\t" );
+            for (int q = 0; q < Model.npsym; q++) {
+                buf.append(total[i][q]);
+
+                if (q < Model.npsym - 1)
+                    buf.append("|");
+                else buf.append("&");
+                //System.out.print( total[i][q]+"\t" );
+            }
+            //buf.append("\n");
+            //System.out.print("\n");
+        }
+
+        return buf.toString();
+    }
+
+    String ShowRes(int VITERBI, int NBEST, int DYNAMIC, int POSVIT, int PLP) {
+        java.lang.StringBuffer buf = new java.lang.StringBuffer();
+
+        //System.out.println( "ID: "+header );
+        //buf.append("ID:  "+header +"\n");
+
+        System.out.println("SQ: " + xs);
+        //buf.append("SQ:  "+ xs + "\n" );
+
+        //System.out.println( "OB: "+ xstates );
+        //buf.append("OB:  "+xstates +"\n");
+        if (VITERBI > -1) {
+            buf.append("VI:" + path[VITERBI] + "\n");
+            System.out.println("VI: " + path[VITERBI]);
+        }
+        if (POSVIT > -1) {
+            buf.append("PVI:" + path[POSVIT] + "\n");
+            System.out.println("PV: " + path[POSVIT]);
+        }
+        if (PLP > -1) {
+            buf.append("PLP:" + path[PLP] + "\n");
+            System.out.println("LP: " + path[PLP]);
+        }
+
+        if (NBEST > -1) {
+            buf.append("NB:" + path[NBEST] + "\n");
+            System.out.println("NB: " + path[NBEST]);
+        }
+        if (DYNAMIC > -1) {
+
+            buf.append("DY:" + path[DYNAMIC] + "\n");
+            System.out.println("DY: " + path[DYNAMIC]);
+        }
+
+        return buf.toString();
+    }
+
 }
 

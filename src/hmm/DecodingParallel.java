@@ -19,8 +19,7 @@ package hmm;
 
 import java.util.concurrent.RecursiveAction;
 
-public class DecodingParallel extends RecursiveAction
-{
+public class DecodingParallel extends RecursiveAction {
     private int start;
     private int end;
     private int threshold;
@@ -29,23 +28,21 @@ public class DecodingParallel extends RecursiveAction
     boolean free;
     boolean showResults;
 
-    public DecodingParallel( HMM model, SeqSet testSet, boolean free, int start, int end, int threshold, boolean showResults )
-    {
-        this.start       = start;
-        this.end         = end;
-        this.threshold   = threshold;
-        this.model       = model;
-        this.testSet     = testSet;
-        this.free        = free;
+    public DecodingParallel(HMM model, SeqSet testSet, boolean free, int start, int end, int threshold, boolean showResults) {
+        this.start = start;
+        this.end = end;
+        this.threshold = threshold;
+        this.model = model;
+        this.testSet = testSet;
+        this.free = free;
         this.showResults = showResults;
     }
 
     @Override
     protected void compute() {
-        if(end - start < threshold) {
+        if (end - start < threshold) {
             computeDirectly(this.model, this.testSet, this.free);
-        }
-        else {
+        } else {
             int middle = (start + end) / 2;
             DecodingParallel subTask1 = new DecodingParallel(model, testSet, free, start, middle, threshold, showResults);
             DecodingParallel subTask2 = new DecodingParallel(model, testSet, free, middle, end, threshold, showResults);
@@ -55,15 +52,15 @@ public class DecodingParallel extends RecursiveAction
     }
 
     protected void computeDirectly(HMM model, SeqSet testSet, boolean free) {
-        try{
+        try {
             Test pred;
 
-            for(int i = start; i < end; i++) {
+            for (int i = start; i < end; i++) {
                 pred = new Test(model, testSet.seq[i], free);
                 if (this.showResults)
                     testSet.seq[i].ShowRes();
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println("DecodingParallel: ERROR ");
         }
 
@@ -71,13 +68,13 @@ public class DecodingParallel extends RecursiveAction
 
     /**
      * Method to determine current thread id in the created pool
+     *
      * @param processors
      * @return --Returns the result of getId mod the number of processors to keep it in the range of 0 - processors-1
      */
     public static long getThreadID(int processors) {
         return Thread.currentThread().getId() % processors;
     }
-
 
 
 }

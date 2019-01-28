@@ -1,23 +1,21 @@
 package hmm;
 
-class Estimator
-{
+class Estimator {
     private HMM hmm;
     public double valLog;
     private Probs tabUpdate;
 
-    public Estimator( SeqSet trainSetLa, SeqSet trainSetUn, Probs tab) throws Exception
-    {
-        valLog = trainSetLa.getTotL()*Params.CUSTOM_STOP;
+    public Estimator(SeqSet trainSetLa, SeqSet trainSetUn, Probs tab) throws Exception {
+        valLog = trainSetLa.getTotL() * Params.CUSTOM_STOP;
         SeqSet newSet;
 
         //Check if exists any Unlabaled sequence to activate Semi-supervised Learning
-        if (trainSetUn.nseqs > 0 && Params.enabledSSL){
+        if (trainSetUn.nseqs > 0 && Params.enabledSSL) {
             System.out.println(Params.methodSSL);
 
-            if (Params.methodSSL.equals("GEM")){
+            if (Params.methodSSL.equals("GEM")) {
 
-                GEM training = new GEM( trainSetLa, trainSetUn, tab  );
+                GEM training = new GEM(trainSetLa, trainSetUn, tab);
                 hmm = training.GetModel();
             } else {
                 SeqSet trainSetUnNew;
@@ -27,7 +25,7 @@ class Estimator
                 int iter = 0;
 
                 System.out.println("SSL - Semi-supervised Learning");
-                System.out.println("SSL - Method SSL - Add Method "+Params.addMethodSSL);
+                System.out.println("SSL - Method SSL - Add Method " + Params.addMethodSSL);
                 System.out.println("SSL - Initial model training with " + trainSetLa.nseqs + " Labeled Sequences");
 
                 //Use of the completely labeled data to train an initial model
@@ -116,164 +114,147 @@ class Estimator
                 } while (Math.abs(logdiff) > Params.thresholdSSL && iter < Params.maxIterSSL);
             }
 
-        } else{
-            if( Params.EARLY )
-                valLog = early( trainSetLa, tab );
+        } else {
+            if (Params.EARLY)
+                valLog = early(trainSetLa, tab);
 
-            hmm = Estimate( trainSetLa, tab );
+            hmm = Estimate(trainSetLa, tab);
 
         }
 
     }
 
-    public HMM GetModel()
-    {
+    public HMM GetModel() {
         return hmm;
     }
 
-    private HMM Estimate( SeqSet trainSet, Probs tab) throws Exception
-    {
+    private HMM Estimate(SeqSet trainSet, Probs tab) throws Exception {
         WeightsL weightsL;
         weightsL = new WeightsL(trainSet.nseqs);
 
-        return Estimate( trainSet, tab, weightsL);
+        return Estimate(trainSet, tab, weightsL);
 
     }
 
-    private HMM Estimate( SeqSet trainSet, Probs tab, WeightsL weightsL ) throws Exception
-    {
-        if( Params.HNN )
+    private HMM Estimate(SeqSet trainSet, Probs tab, WeightsL weightsL) throws Exception {
+        if (Params.HNN)
         // HNN
         {
-            Backprop training = new Backprop( trainSet, tab, valLog, weightsL );
+            Backprop training = new Backprop(trainSet, tab, valLog, weightsL);
             tabUpdate = training.GetProbs();
             return training.GetModel();
-        }
-        else if( !Params.RUN_CML ){
+        } else if (!Params.RUN_CML) {
             // ML
 
-            if( Params.REFINE  )
-            {
-                ML training = new ML( trainSet, tab, 0, weightsL  );
+            if (Params.REFINE) {
+                ML training = new ML(trainSet, tab, 0, weightsL);
 
-                System.out.println( "ML TRAINING for path refinement: ");
+                System.out.println("ML TRAINING for path refinement: ");
                 //training.GetModel().print( new SystemOut() );
 
-                for( int j=0; j< trainSet.nseqs; j++ ) {
-                    System.out.println("Performed refinement "+trainSet.seq[j].header );
-                    trainSet.seq[j].PutDashes( Model.transmLabels );
-                    Viterbi vit2 = new Viterbi( training.GetModel(),  trainSet.seq[j], false );
-                    trainSet.seq[j].SetObs( vit2.getPath2() );
+                for (int j = 0; j < trainSet.nseqs; j++) {
+                    System.out.println("Performed refinement " + trainSet.seq[j].header);
+                    trainSet.seq[j].PutDashes(Model.transmLabels);
+                    Viterbi vit2 = new Viterbi(training.GetModel(), trainSet.seq[j], false);
+                    trainSet.seq[j].SetObs(vit2.getPath2());
                 }
             }
 
-            ML training = new ML( trainSet, tab, valLog, weightsL  );
+            ML training = new ML(trainSet, tab, valLog, weightsL);
             tabUpdate = training.GetProbs();
-            return  training.GetModel();
+            return training.GetModel();
         } else {
             // CML
-            if( Params.REFINE  )
-            {
-                ML training = new ML( trainSet, tab, 0, weightsL  );
+            if (Params.REFINE) {
+                ML training = new ML(trainSet, tab, 0, weightsL);
 
-                System.out.println( "ML TRAINING for path refinement: ");
+                System.out.println("ML TRAINING for path refinement: ");
                 //training.GetModel().print( new SystemOut() );
 
-                for( int j=0; j< trainSet.nseqs; j++ ) {
-                    trainSet.seq[j].PutDashes( Model.transmLabels );
-                    Viterbi vit2 = new Viterbi( training.GetModel(),  trainSet.seq[j], false );
-                    trainSet.seq[j].SetObs( vit2.getPath2() );
-                    System.out.println("Performed refinement." );
+                for (int j = 0; j < trainSet.nseqs; j++) {
+                    trainSet.seq[j].PutDashes(Model.transmLabels);
+                    Viterbi vit2 = new Viterbi(training.GetModel(), trainSet.seq[j], false);
+                    trainSet.seq[j].SetObs(vit2.getPath2());
+                    System.out.println("Performed refinement.");
                 }
             }
 
-            if( Params.ML_INIT )
-            {
-                ML training = new ML( trainSet, tab, 0, weightsL  );
-                System.out.println( "ML TRAINING for ML INIT: ");
+            if (Params.ML_INIT) {
+                ML training = new ML(trainSet, tab, 0, weightsL);
+                System.out.println("ML TRAINING for ML INIT: ");
                 //training.GetModel().print( new SystemOut() );
-                System.out.println("Starting CML with ML output model." );
-                tab =  training.GetModel().GetProbs();
+                System.out.println("Starting CML with ML output model.");
+                tab = training.GetModel().GetProbs();
             }
 
-            CML training = new CML( trainSet, tab, valLog, weightsL  );
+            CML training = new CML(trainSet, tab, valLog, weightsL);
             tabUpdate = training.GetProbs();
             return training.GetModel();
         }
     }
 
-    private static double early( SeqSet jackSet, Probs tab ) throws Exception
-    {
+    private static double early(SeqSet jackSet, Probs tab) throws Exception {
         double vLog = 0;
         int nTrain = Params.NTRAIN;
         int nRound = Params.NROUND;
-        WeightsL weightsL = new WeightsL( jackSet.nseqs);
+        WeightsL weightsL = new WeightsL(jackSet.nseqs);
 
-        SeqSet trainSet= new SeqSet( nTrain );
-        SeqSet valSet  = new SeqSet( jackSet.nseqs-nTrain );
+        SeqSet trainSet = new SeqSet(nTrain);
+        SeqSet valSet = new SeqSet(jackSet.nseqs - nTrain);
 
-        for( int i=0; i< nRound; i++ )
-        {
-            System.out.println("Preparing training set no "+ ( i+1 ) );
+        for (int i = 0; i < nRound; i++) {
+            System.out.println("Preparing training set no " + (i + 1));
             int cou = 0;
-            boolean[] sqtr = new boolean [jackSet.nseqs];
-            while( cou<nTrain )
-            {
-                int pick = ( int )Math.floor( Math.random() * jackSet.nseqs );
-                System.out.println("pick="+pick);
-                if( !sqtr[pick] )
-                {
-                    trainSet.seq[cou]=jackSet.seq[pick];
+            boolean[] sqtr = new boolean[jackSet.nseqs];
+            while (cou < nTrain) {
+                int pick = (int) Math.floor(Math.random() * jackSet.nseqs);
+                System.out.println("pick=" + pick);
+                if (!sqtr[pick]) {
+                    trainSet.seq[cou] = jackSet.seq[pick];
                     trainSet.seq[cou].SetIndexID(cou);
-                    sqtr[pick]=true;
-                    System.out.println("\tAdded "+ trainSet.seq[cou].header +" to training set" );
+                    sqtr[pick] = true;
+                    System.out.println("\tAdded " + trainSet.seq[cou].header + " to training set");
                     cou++;
                 }
 
             }
 
             cou = 0;
-            for( int j=0; j<jackSet.nseqs; j++ )
-                if( !sqtr[j] )
-                {
-                    valSet.seq[cou]=jackSet.seq[j];
+            for (int j = 0; j < jackSet.nseqs; j++)
+                if (!sqtr[j]) {
+                    valSet.seq[cou] = jackSet.seq[j];
                     valSet.seq[cou].SetIndexID(cou);
-                    System.out.println("\tAdded "+ valSet.seq[cou].header +" to validation set" );
+                    System.out.println("\tAdded " + valSet.seq[cou].header + " to validation set");
                     cou++;
                 }
 
             double vlog;
 
-            if( Params.HNN )
-            {
-                Backprop training = new Backprop( trainSet, tab, valSet, weightsL );
+            if (Params.HNN) {
+                Backprop training = new Backprop(trainSet, tab, valSet, weightsL);
                 vlog = training.valLog;
-            }
-            else if( !Params.RUN_CML )
-            {
-                ML training = new ML( trainSet, tab, valSet, weightsL );
+            } else if (!Params.RUN_CML) {
+                ML training = new ML(trainSet, tab, valSet, weightsL);
                 vlog = training.valLog;
-            }
-            else
-            {
-                CML training = new CML( trainSet, tab, valSet, weightsL );
+            } else {
+                CML training = new CML(trainSet, tab, valSet, weightsL);
                 vlog = training.valLog;
             }
 
             double vl = vlog / trainSet.getTotL();
 
-            System.out.println( "\tStopped at likelihood "+vlog+" / "+trainSet.getTotL()+
-                    " residues = " + vl );
+            System.out.println("\tStopped at likelihood " + vlog + " / " + trainSet.getTotL() +
+                    " residues = " + vl);
 
-            vLog+=vl;
+            vLog += vl;
 
         }
 
-        vLog/=nRound;
+        vLog /= nRound;
 
         vLog *= jackSet.getTotL();
 
-        System.out.println( "I will stop when likelihood is " + vLog );
+        System.out.println("I will stop when likelihood is " + vLog);
 
         return vLog;
 

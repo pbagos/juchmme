@@ -20,52 +20,49 @@ package hmm;
 import java.io.*;
 import java.util.*;
 
-public class NNEncode
-{
+public class NNEncode {
     public static double[][] encode;
 
-    public static final void Init(String file)
-    {
-        String linea="";
-        int row=0;
+    public static final void Init(String file) {
+        String linea = "";
+        int row = 0;
         encode = new double[Model.nesym][Model.nesym];
 
-        RandomAccessFile in=null;
+        RandomAccessFile in = null;
 
-        try{
-            in = new RandomAccessFile( file,"r");
+        try {
+            in = new RandomAccessFile(file, "r");
 
-            try{
+            try {
                 row = 0;
 
-                while( (linea=in.readLine())!=null )
-                {
-                    if( row > Model.nesym )
-                        System.err.println( file+": more rows than "+Model.esym );
+                while ((linea = in.readLine()) != null) {
+                    if (row > Model.nesym)
+                        System.err.println(file + ": more rows than " + Model.esym);
 
                     StringTokenizer st = new StringTokenizer(linea, " \t");
                     int cols = st.countTokens();
 
-                    if( cols !=Model.nesym )
-                        System.err.println( file+": "+cols+"columns instead of "+Model.esym+" at line "+(row+1) );
+                    if (cols != Model.nesym)
+                        System.err.println(file + ": " + cols + "columns instead of " + Model.esym + " at line " + (row + 1));
 
-                    for(int col=0; col < cols; col++)
-                    {
-                        Double val =Double.valueOf(st.nextToken());
+                    for (int col = 0; col < cols; col++) {
+                        Double val = Double.valueOf(st.nextToken());
                         encode[row][col] = val.doubleValue();
                         //System.out.println(val.doubleValue()+" "+encode[row][col]);
                     }
                     row++;
                 }
-            }catch (IOException e) {System.out.println("File access for Encode ERROR 1");}
-        } catch (IOException e){System.out.println("File access for Encode ERROR 2");}
-        finally
-        {
-            try{
-                in.close();
+            } catch (IOException e) {
+                System.out.println("File access for Encode ERROR 1");
             }
-            catch (Exception e)
-            {}
+        } catch (IOException e) {
+            System.out.println("File access for Encode ERROR 2");
+        } finally {
+            try {
+                in.close();
+            } catch (Exception e) {
+            }
         }
     }
 

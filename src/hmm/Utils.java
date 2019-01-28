@@ -19,12 +19,10 @@ package hmm;
 
 import java.util.*;
 
-public final class Utils
-{
-    public static void notifyParseError(String key)
-    {
-        System.err.println("Invalid input for parameter "+key);
-        System.exit( 1 );
+public final class Utils {
+    public static void notifyParseError(String key) {
+        System.err.println("Invalid input for parameter " + key);
+        System.exit(1);
     }
 
     /*
@@ -32,11 +30,10 @@ public final class Utils
      * @params value The String
      * @return The boolean value
      */
-    public static boolean parseBoolean( String value, String key)
-    {
-        if( value.equals( "true" ) )
+    public static boolean parseBoolean(String value, String key) {
+        if (value.equals("true"))
             return true;
-        else if(  value.equals( "false" ) )
+        else if (value.equals("false"))
             return false;
 
         notifyParseError(key);
@@ -48,9 +45,8 @@ public final class Utils
      * @params value The String
      * @return The Integer value
      */
-    public static int parseInteger( String value, String key )
-    {
-        try{
+    public static int parseInteger(String value, String key) {
+        try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
             notifyParseError(key);
@@ -64,9 +60,8 @@ public final class Utils
      * @params value The String
      * @return The Double value
      */
-    public static double parseDouble( String value, String key )
-    {
-        try{
+    public static double parseDouble(String value, String key) {
+        try {
             return Double.valueOf(value);
         } catch (NumberFormatException e) {
             notifyParseError(key);
@@ -80,19 +75,17 @@ public final class Utils
      * @params value The String
      * @return The Double List
      */
-    public static double[] stringToDoubleList(String value, String key, String delim)
-    {
+    public static double[] stringToDoubleList(String value, String key, String delim) {
         double[] list;
 
-        StringTokenizer st = new StringTokenizer( value , delim );
+        StringTokenizer st = new StringTokenizer(value, delim);
         int iter = st.countTokens();
 
         list = new double[iter];
 
-        for( int i=0; i< iter; i++ )
-        {
-            try{
-                list[i]  = Double.parseDouble(st.nextElement().toString());
+        for (int i = 0; i < iter; i++) {
+            try {
+                list[i] = Double.parseDouble(st.nextElement().toString());
             } catch (NumberFormatException e) {
                 notifyParseError(key);
             }
@@ -106,18 +99,16 @@ public final class Utils
      * @params value The String
      * @return The String List
      */
-    public static String[] stringToList(String value, String var, String delim)
-    {
+    public static String[] stringToList(String value, String var, String delim) {
         String[] list;
 
-        StringTokenizer st     = new StringTokenizer( value , delim );
+        StringTokenizer st = new StringTokenizer(value, delim);
         int iter = st.countTokens();
 
         list = new String[iter];
 
-        for( int i=0; i< iter; i++ )
-        {
-            list[i]   = st.nextElement().toString();
+        for (int i = 0; i < iter; i++) {
+            list[i] = st.nextElement().toString();
         }
 
         return list;

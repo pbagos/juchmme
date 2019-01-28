@@ -1,18 +1,15 @@
 package hmm;
 
 class SystemOut extends Output {
-    public void print(String s)
-    {
+    public void print(String s) {
         System.out.print(s);
     }
 
-    public void println(String s)
-    {
+    public void println(String s) {
         System.out.println(s);
     }
 
-    public void println()
-    {
+    public void println() {
         System.out.println();
     }
 }

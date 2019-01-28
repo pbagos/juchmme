@@ -15,13 +15,12 @@
  *   REAR 	Reversal Distance
  */
 package hmm;
+
 import java.io.*;
 
-public class juchmme
-{
+public class Juchmme {
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         long startTime = System.currentTimeMillis();
 
         System.out.println("JUCHMME :: Java Utility for Class Hidden Markov Models and Extensions");
@@ -33,14 +32,14 @@ public class juchmme
         //Parse Method Arguments
         Args.Init(args);
         System.out.println("--------------------------------------------------------------------------");
+        //Parse Method Parameters
+        Params.Init(Args.parFile);
+        System.out.println("--------------------------------------------------------------------------");
         //Parse Model
         Model.Init(Args.mdelFile);
         System.out.println("--------------------------------------------------------------------------");
-        //Parse Method Parameters
-        Params.Init( Args.parFile);
-        System.out.println("--------------------------------------------------------------------------");
         //Parse HNN Encoding File
-        if( !Args.fileEncode.equals(""))
+        if (!Args.fileEncode.equals(""))
             NNEncode.Init(Args.fileEncode);
 
 
@@ -48,31 +47,31 @@ public class juchmme
          *  TRAINING SET
          */
         Stats stats = new Stats();
-        SeqSet trainSet,trainSetLa, trainSetUn;
+        SeqSet trainSet, trainSetLa, trainSetUn;
 
-        trainSet   = new SeqSet( 0 );
-        trainSetLa = new SeqSet( 0 );
-        trainSetUn = new SeqSet( 0 );
+        trainSet = new SeqSet(0);
+        trainSetLa = new SeqSet(0);
+        trainSetUn = new SeqSet(0);
 
-        if( Args.RUN_TRAINING ){
+        if (Args.RUN_TRAINING) {
             //Initiate and Set the training Set
-            trainSet=new SeqSet( Args.file );
+            trainSet = new SeqSet(Args.file);
 
-            if (trainSet.ExistUnlabeled()){
+            if (trainSet.ExistUnlabeled()) {
                 trainSetLa = new SeqSet(trainSet.numOfLabeledSeqs);
                 trainSetUn = new SeqSet(trainSet.numOfUnlabeledSeqs);
 
-                int l=0,Un=0;
-                for( int j=0; j<trainSet.nseqs; j++ ) {
+                int l = 0, Un = 0;
+                for (int j = 0; j < trainSet.nseqs; j++) {
                     if (trainSet.seq[j].IsUnlabeled()) {
                         trainSetUn.seq[Un] = trainSet.seq[j];
                         Un++;
-                    } else{
+                    } else {
                         trainSetLa.seq[l] = trainSet.seq[j];
                         l++;
                     }
                 }
-            }else{
+            } else {
                 trainSetLa = trainSet;
             }
         }
@@ -87,8 +86,7 @@ public class juchmme
         /*  TRAINING / TESTING
          *  Run a Training Procedure OR just Training OR just Testing
          */
-        if( Args.RUN_TRAINING && (Args.RUN_SELFCONS || Args.RUN_CROSSVAL || Args.RUN_JACKNIFE) )
-        {
+        if (Args.RUN_TRAINING && (Args.RUN_SELFCONS || Args.RUN_CROSSVAL || Args.RUN_JACKNIFE)) {
             // TRAINING PROCEDURE
             TrainProc tp = new TrainProc(trainSetLa, trainSetUn, tab);
             stats.calcStats(trainSetLa);
@@ -96,22 +94,22 @@ public class juchmme
             HMM model;
 
             // TRAINING
-            if( Args.RUN_TRAINING ){
+            if (Args.RUN_TRAINING) {
                 System.out.println("TRAINING");
                 Estimator est = new Estimator(trainSetLa, trainSetUn, tab);
                 model = est.GetModel();
             } else {
-                model = new HMM( tab );
+                model = new HMM(tab);
             }
 
             // DECODING
-            if (Args.filesThree.size()>0){
-                SeqSet testSet=new SeqSet( (String)Args.filesThree.get( 0 ) );
+            if (Args.filesThree.size() > 0) {
+                SeqSet testSet = new SeqSet((String) Args.filesThree.get(0));
                 Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true);
             }
 
-            if (Args.filesFasta.size()>0){
-                SeqSet testSet=new SeqSet( (String)Args.filesFasta.get( 0 ) );
+            if (Args.filesFasta.size() > 0) {
+                SeqSet testSet = new SeqSet((String) Args.filesFasta.get(0));
                 Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true);
             }
 
@@ -119,8 +117,8 @@ public class juchmme
 
         long endTime = System.currentTimeMillis();
         float execTime = (endTime - startTime);
-        System.out.println("Execution time = "+ (endTime - startTime) +" miliseconds");
-        System.out.println("Execution time = "+ execTime/1000 +" seconds");
+        System.out.println("Execution time = " + (endTime - startTime) + " miliseconds");
+        System.out.println("Execution time = " + execTime / 1000 + " seconds");
     }
 
 }

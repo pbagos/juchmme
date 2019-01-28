@@ -19,18 +19,15 @@ package hmm;
 
 import java.util.concurrent.ForkJoinPool;
 
-class Decoding
-{
+class Decoding {
 
-    public Decoding( HMM model, SeqSet testSet, boolean free, boolean showResults ) throws Exception
-    {
+    public Decoding(HMM model, SeqSet testSet, boolean free, boolean showResults) throws Exception {
         Test pred;
         int CPUs;
 
-        if (Params.parallel)
-        {
-            if (Params.processors/testSet.nseqs < 2 )
-                CPUs = testSet.nseqs/2;
+        if (Params.parallel) {
+            if (Params.processors / testSet.nseqs < 2)
+                CPUs = testSet.nseqs / 2;
             else
                 CPUs = Params.processors;
 
