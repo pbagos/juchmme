@@ -13,6 +13,54 @@ Training Procedures: It contains built-in model creation and evaluation procedur
 
 HMM Extensions: To overcome HMM limitations, a number of extensions have been developed or developed such as segmental k–means both for Maximum Likelihood (ML) and for Conditional Maximum Likelihood (CML) [6], Hidden Neural Networks [13], models that condition on previous observations [14] and a method for semi-supervised learning of HMMs that can incorporate labeled, unlabeled and partially-labeled data (semi–supervised learning) [15].
 
+## Getting started 
+
+JUCHMME is an executable file in Java that is executed from the command line. JUCHMME is written in Java and requires a 32-bit or 64-bit Java runtime environment version 7 or later, freely available from http://www.java.org. The Windows and MacOS X installers contain a suitable Java runtime environment that will be used if a suitable Java runtime environment cannot be found on the computer.
+
+Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/pbagos/juchmme. 
+
+## Compile 
+
+`javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/Juchmme.java`
+
+`javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/RandomSeq.java`
+ 
+`javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/nn/Main.java`
+
+## Command Line
+
+The juchmme program is controlled by a list of command-line argument options. The following options control this:
+
+-V: print JUCHMME version and exit
+
+-a: the free emission parameter file. This parameter file is required.
+
+-e: the free transition parameter file
+
+-i: the input sequence three-line file. This file stores the input sequences for decoding or training algorithms in a three-line format. 
+
+-f: the input sequence FASTA file. This file stores the input sequences for decoding algorithms in a fasta format. 
+
+-m: the model file. This parameter file is required.
+
+-x: the HNN encoding file
+
+-t: Training option
+
+-c: the configuration file
+
+-v 10: k–fold cross-validation mode using an integer larger than 0 for k (for instance k=10)
+
+-s: self-consistency test
+
+-j: jacknife test
+
+-p: show plot
+
+-P: graph plot Directory
+
+## References
+
 1.	Baum, L.E., An equality and associated maximization technique in statistical estimation for probabilistic functions of Markov processes. Inequalities, 1972. 3: p. 1-8.
 2.	Durbin, R., et al., Biological sequence analysis: probabilistic models of proteins and nucleic acids. 1998: Cambridge university press.
 3.	Rabiner, L.R., A tutorial on hidden Markov models and selected applications in speech recognition. Proceedings of the IEEE, 1989. 77(2): p. 257-286.
@@ -28,33 +76,3 @@ HMM Extensions: To overcome HMM limitations, a number of extensions have been de
 13.	Krogh, A. and S.K. Riis, Hidden neural networks. Neural Computation, 1999. 11(2): p. 541-563.
 14.	Tamposis, I.A., et al., Extending Hidden Markov Models to Allow Conditioning on Previous Observations. Journal of Bioinformatics and Computational Biology, 2018.
 15.	Tamposis, I.A., et al., Semi-supervised learning of Hidden Markov Models for biological sequence analysis. Bioinformatics, 2018: p. bty910-bty910.
-
-Getting started 
-
-JUCHMME is an executable file in Java that is executed from the command line. JUCHMME is written in Java and requires a 32-bit or 64-bit Java runtime environment version 7 or later, freely available from http://www.java.org. The Windows and MacOS X installers contain a suitable Java runtime environment that will be used if a suitable Java runtime environment cannot be found on the computer.
-Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/pbagos/juchmme. 
-
-Compile 
-
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/juchmme.java
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/hmm/RandomSeq.java
-javac -XDignore.symbol.file -sourcepath src/ -d ./bin src/nn/Main.java
-
-Command Line
-
-The juchmme program is controlled by a list of command-line argument options. The following options control this:
--V: print JUCHMME version and exit
--a: the free emission parameter file. This parameter file is required.
--e: the free transition parameter file
--i: the input sequence three-line file. This file stores the input sequences for decoding or training algorithms in a three-line format. 
--f: the input sequence FASTA file. This file stores the input sequences for decoding algorithms in a fasta format. 
--m: the model file. This parameter file is required.
--x: the HNN encoding file
--t: Training option
--c: the configuration file
--v 10: k–fold cross-validation mode using an integer larger than 0 for k (for instance k=10)
--s: self-consistency test
--j: jacknife test
--p: show plot
--P: graph plot Directory
-
