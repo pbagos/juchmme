@@ -249,7 +249,5 @@ public class HMM {
     public double getLoga(int i, int j) {
         return loga[i][j];
     }
-
-
+    
 }
-

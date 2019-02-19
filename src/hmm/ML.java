@@ -53,12 +53,14 @@ class ML extends TrainAlgo {
         */
 
         // noise
-        for (int k = 0; k < Model.nstate; k++) {
-            if (Params.NOISE_TR)
-                tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
+        if (Params.NOISE_TR || Params.NOISE_EM) {
+            for (int k = 0; k < Model.nstate; k++) {
+                if (Params.NOISE_TR)
+                    tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
 
-            if (Params.NOISE_EM)
-                tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+                if (Params.NOISE_EM)
+                    tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+            }
         }
 
         hmm = new HMM(tab);
@@ -198,13 +200,15 @@ class ML extends TrainAlgo {
 
             iter++;
 
-            for (int k = 0; k < Model.nstate; k++) {
-                if (Params.NOISE_TR)
-                    //tab.aprob is modified
-                    tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
+            if (Params.NOISE_TR || Params.NOISE_EM) {
+                for (int k = 0; k < Model.nstate; k++) {
+                    if (Params.NOISE_TR)
+                        //tab.aprob is modified
+                        tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
 
-                if (Params.NOISE_EM)
-                    tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+                    if (Params.NOISE_EM)
+                        tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+                }
             }
 
             // Create new model
@@ -235,7 +239,7 @@ class ML extends TrainAlgo {
                 }
             }
 
-            hmm.SaveModel();
+            //hmm.SaveModel();
         } while (Math.abs(logdiff) > Params.threshold && iter < Params.maxIter && loglikelihood < stopLog);
 
         hmm.lh = loglikelihood;

@@ -40,4 +40,3 @@ public class HNeural extends NN {
     }
 
 }
- 

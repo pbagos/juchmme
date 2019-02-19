@@ -52,12 +52,12 @@ class Weights {
     }
 
     public void InitializeByRpropNN(FileEntries fileData) {
-        int windowSize = Params.windowSize;
-        int hiddenNeuronsNum = Params.nhiddenNN;
+        int windowSize = Params.window;
+        int hiddenNeuronsNum = Params.nhidden;
         int numberOfCycles = Params.nOfCycles;
         boolean doCrossValidation = Params.crossVal;
         int crossValidationIterations = Params.crossValIter;
-        double minimumGEdifference = Params.minGEdif;
+        double minimumGEdifference = Params.minGEdiff;
         char[] labelAlphabet = new char[Model.nosym - 2];
 
         for (int i = 0; i < Model.nosym - 2; i++) {
@@ -371,6 +371,4 @@ class Weights {
             }
         }
     }
-
-
 }

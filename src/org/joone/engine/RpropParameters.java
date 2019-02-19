@@ -1,5 +1,7 @@
 package org.joone.engine;
 
+import hmm.Params;
+
 /**
  * This object holds the global parameters for the RPROP learning 
  * algorithm (RpropLearner).
@@ -9,19 +11,19 @@ package org.joone.engine;
 public class RpropParameters {
     
     /** The initial delta value. */
-    private double theInitialDelta = 0.1; // default 0.1
+    private double theInitialDelta = Params.initialDelta; // default 0.1
     
     /** The maximum delta value that is allowed. */
-    private double theMaxDelta = 50.0; // default 50.0
+    private double theMaxDelta = Params.maxDelta; // default 50.0
 
     /** The minimum delta value that is allowed. */
-    private double theMinDelta = 1e-6; // default
+    private double theMinDelta = Params.minDelta; // default
     
     /** The incremental learning factor/rate. */
-    private double theEtaInc = 1.2; // default
+    private double theEtaInc = Params.etaInc; // default
 
     /** The decremental learning factor/rate. */
-    private double theEtaDec = 0.5; // default
+    private double theEtaDec = Params.etaDec; // default
     
     /** The batch size. */
     private int theBatchSize = 1;
@@ -141,5 +143,14 @@ public class RpropParameters {
      */
     public void setBatchSize(int aBatchsize) {
         theBatchSize = aBatchsize;
+    }
+    
+        public void setParameteresByParams(){
+        theInitialDelta = Params.initialDelta;
+        theMaxDelta = Params.maxDelta;
+        theMinDelta = Params.minDelta;
+        theEtaInc = Params.etaInc;
+        theEtaDec = Params.etaDec;
+
     }
 }

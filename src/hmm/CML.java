@@ -59,12 +59,14 @@ class CML extends TrainAlgo {
             esyminv[Model.esym.charAt(b)] = b;
 
         // noise @@
-        for (int k = 0; k < Model.nstate; k++) {
-            if (Params.NOISE_TR)
-                tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
+        if (Params.NOISE_TR || Params.NOISE_EM) {
+            for (int k = 0; k < Model.nstate; k++) {
+                if (Params.NOISE_TR)
+                    tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
 
-            if (Params.NOISE_EM)
-                tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+                if (Params.NOISE_EM)
+                    tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+            }
         }
 
         hmm = new HMM(tab);
@@ -169,14 +171,9 @@ class CML extends TrainAlgo {
                         for (int i = 1; i <= seqLen; i++)
                             for (int k = 0; k < Model.nstate; k++) // @@ ektos begin kai end?
                             {
-                                // Sto HNN, den prepei na athroizontai gia ola ta i
                                 if (esyminv[trainSet.seq[s].getSym(i - 1)] < 0)
                                     throw new Exception("ERROR: Symbol " + trainSet.seq[s].getSym(i - 1) +
                                             " at position " + i + ", sequence " + (s + 1) + ".");
-                                //-giannis dhmiourgei enan neo pinaka emmissions me times tin ekthetikh timi tis prosthesis
-                                //tou Forward,Backward
-                                //gia kathe aminoksi kai oles tis katastaseis, - tin pithanofania PC tis akolouthias
-                                //EC for Labels
 
                                 EC[k][esyminv[trainSet.seq[s].getSym(i - 1)]] += exp(fwdC.f[i][k] + bwdC.GetVal(i, k) - PC) * weightsL.getWeightL(trainSet.seq[s].getIndexID()); // @@
                                 EF[k][esyminv[trainSet.seq[s].getSym(i - 1)]] += exp(fwdF.f[i][k] + bwdF.GetVal(i, k) - PF) * weightsL.getWeightL(trainSet.seq[s].getIndexID()); // @@
@@ -190,7 +187,7 @@ class CML extends TrainAlgo {
 
                             for (int k = 0; k < Model.nstate; k++)
                                 for (int ell = 0; ell < Model.nstate; ell++) {
-                                    if (lab == Model.plab[ell]) //-giannis an sumfwnoun oi shmanseis
+                                    if (lab == Model.plab[ell])
                                     {
                                         double num = exp(fwdC.f[i][k]  // Forward value
                                                 + hmm.getLoga(k, ell)//transition
@@ -222,7 +219,7 @@ class CML extends TrainAlgo {
                                         - PF);
                             }
 
-                    } else//-giannis-Allagi an trexoume Viterbi Training
+                    } else
                     {
                         String vPathC = vPathsC[s];
                         String vPathF = vPathsF[s];
@@ -289,15 +286,17 @@ class CML extends TrainAlgo {
             }
 
             iter++;
+
             // noise @@
-            for (int k = 0; k < Model.nstate; k++) {
-                if (Params.NOISE_TR)
-                    tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
+            if (Params.NOISE_TR || Params.NOISE_EM) {
+                for (int k = 0; k < Model.nstate; k++) {
+                    if (Params.NOISE_TR)
+                        tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
 
-                if (Params.NOISE_EM)
-                    tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+                    if (Params.NOISE_EM)
+                        tab.eprob[k] = Model.putPriorEM(Model.nesym, tab.eprob[k], tab0.eprob[k], k);
+                }
             }
-
 
             // Create new model
             hmm = new HMM(tab);
@@ -322,11 +321,11 @@ class CML extends TrainAlgo {
                 valLoglikelihoodF = fwdbwd(true, valSeqs);
 
                 valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF;
-                System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF);//////////
+                System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF);
                 System.out.println(iter + "\tval log likelihood = " + valLoglikelihood);
                 System.out.print("\tval log likelihood = " + valLoglikelihood + "\t\t diff = ");
 
-                if (valLoglikelihood > oldvalLoglikelihood || iter < Params.ITER)////////pbagos ITER
+                if (valLoglikelihood > oldvalLoglikelihood || iter < Params.ITER)
                 {
                     System.out.println("DOWN");
                 } else {
@@ -336,7 +335,7 @@ class CML extends TrainAlgo {
                 }
             }
 
-            hmm.SaveModel();
+            //hmm.SaveModel();
             //adiff = tab.aDiff( tab_p );
             //ediff = tab.eDiff( tab_p );
             //System.out.println( "adiff = "+adiff+"\tediff = "+ediff );
@@ -353,4 +352,3 @@ class CML extends TrainAlgo {
         return tab;
     }
 }
-

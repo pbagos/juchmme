@@ -8,6 +8,7 @@ import org.joone.net.NetCheck;
 import java.io.IOException;
 import java.util.TreeSet;
 
+import hmm.Params;
 
 /**
  * Final element of a neural network; it permits to calculate
@@ -38,15 +39,20 @@ public class TeacherSynapse extends AbstractTeacherSynapse {
         // myError^2 = (Dn - yn)^2
         // GlobalError += SUM[ SUM[ 1/2 (Dn - yn)^2]]
         // GlobalError += SUM[ 1/2 SUM[(Dn - yn)^2]]
+
+        if (Params.globalError.equals("RMSE"))
+        	GlobalError += (myError * myError) / 2; /*for RMSE*/
+        else
+        	GlobalError -= (aDesired*Math.log(anOutput) + (1-aDesired)*Math.log(1-anOutput)); /*for Cross Entropy*/
         
-        //GlobalError += (myError * myError) / 2; /*for RMSE*/
-        GlobalError -= (aDesired*Math.log(anOutput) + (1-aDesired)*Math.log(1-anOutput)); /*for Cross Entropy*/
         return myError;
     }
     
     protected double calculateGlobalError() {
         double myError = GlobalError / getMonitor().getNumOfPatterns();
-        if(getMonitor().isUseRMSE()) {
+
+        //if(getMonitor().isUseRMSE()) {
+        if (Params.globalError.equals("RMSE")){
             myError = Math.sqrt(myError);
         }
         GlobalError = 0;

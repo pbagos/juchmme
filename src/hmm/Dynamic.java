@@ -347,4 +347,3 @@ class Dynamic {
         return best_top_score - best2_top_score;
     }
 }
-

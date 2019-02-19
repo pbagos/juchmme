@@ -192,6 +192,7 @@ public class RpropExtender extends DeltaRuleExtender {
         if(theRpropParameters == null) {
             // create default parameters
             theRpropParameters = new RpropParameters();
+            theRpropParameters.setParameteresByParams();
         }
         return theRpropParameters;
     }

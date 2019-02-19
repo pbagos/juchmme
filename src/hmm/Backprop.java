@@ -5,6 +5,8 @@ import java.lang.Math;
 class Backprop extends TrainAlgo {
     public double valLog;
     private boolean valid;
+    private double[][][] E;
+    private double[][] A;
     private Probs tab;
 
     public Backprop(final SeqSet trainSet, final Probs tab0, final SeqSet valSeqs, WeightsL weightsL) throws Exception {
@@ -48,7 +50,6 @@ class Backprop extends TrainAlgo {
         acts = new Activ[Model.nosym - 2][seqs.nseqs][seqs.getMaxL()];
         Activ[][][] valActs;
 
-        //if( Params.EARLY )
         valActs = new Activ[Model.nosym - 2][valSeqs.nseqs][valSeqs.getMaxL()];
 
         double bestl = Double.NEGATIVE_INFINITY;
@@ -67,14 +68,10 @@ class Backprop extends TrainAlgo {
             CalcActs(seqs);
 
             loglikelihoodC = fwdbwd(fwdsC, bwdsC, logPC, false, seqs);
+            loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs);
+            loglikelihood = loglikelihoodC - loglikelihoodF;
+            System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF);//////////
 
-            if (Params.RUN_CML) {
-                loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs);
-                loglikelihood = loglikelihoodC - loglikelihoodF;
-                System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF);//////////
-            } else {
-                loglikelihood = loglikelihoodC;
-            }
 
             System.out.println(i + "/" + Params.BOOT + "\tlog likelihood = " + loglikelihood);
 
@@ -90,10 +87,10 @@ class Backprop extends TrainAlgo {
             System.out.println("*** Chosen " + loglikelihood + " ***");
         }
 
-
-        for (int k = 0; k < Model.nstate; k++) {
-            tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
-        }
+        if (Params.NOISE_TR)
+            for (int k = 0; k < Model.nstate; k++) {
+                tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
+            }
 
         hmm = new HMM(tab);
 
@@ -110,23 +107,15 @@ class Backprop extends TrainAlgo {
 
         double sum_weights = WeightsSquare(tab.weights);
 
-        if (Params.RUN_CML) {
-            loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs, ex);
+        loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs, ex);
 
-            loglikelihood = loglikelihoodC - loglikelihoodF - Params.DECAY * sum_weights;
-            System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF + ", SqWts=" + sum_weights);
+        loglikelihood = loglikelihoodC - loglikelihoodF - Params.DECAY * sum_weights;
+        System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF + ", SqWts=" + sum_weights);
 
-            if (valid) {
-                valLoglikelihoodF = fwdbwd(true, valSeqs, valActs);
-                valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF - Params.DECAY * sum_weights;
-                System.out.println("\tVC=" + valLoglikelihoodC + ", VF=" + valLoglikelihoodF + ", SqWts=" + sum_weights);
-            }
-
-        } else {
-            loglikelihood = loglikelihoodC;
-
-            if (valid)
-                valLoglikelihood = valLoglikelihoodC;
+        if (valid) {
+            valLoglikelihoodF = fwdbwd(true, valSeqs, valActs);
+            valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF - Params.DECAY * sum_weights;
+            System.out.println("\tVC=" + valLoglikelihoodC + ", VF=" + valLoglikelihoodF + ", SqWts=" + sum_weights);
         }
 
         if (loglikelihood == Double.NEGATIVE_INFINITY)
@@ -154,8 +143,8 @@ class Backprop extends TrainAlgo {
 
            /*double[][][] EC = new double[Model.nstate][seqs.getMaxL()][seqs.nseqs];
 		    double[][][] EF = new double[Model.nstate][seqs.getMaxL()][seqs.nseqs]; */
-            double[][][] E = new double[Model.nstate][seqs.getMaxL()][seqs.nseqs];
-            double[][] A = new double[Model.nstate][Model.nstate];
+            E = new double[Model.nstate][seqs.getMaxL()][seqs.nseqs];
+            A = new double[Model.nstate][Model.nstate];
 
             System.out.println("\tComputing expected counts");
             System.out.print("\t");
@@ -177,6 +166,7 @@ class Backprop extends TrainAlgo {
 
                 int L = seqs.seq[s].getLen();
 
+                //Calc new Emissions
                 for (int i = 1; i <= L; i++) {
                     for (int k = 0; k < Model.nstate; k++) {
                         double EC = 0;
@@ -185,20 +175,17 @@ class Backprop extends TrainAlgo {
                             EC = (exp(fwdC.f[i][k] + bwdC.GetVal(i, k) - PC))
                                     / acts[(Model.slab[k])][s][i - 1].layer3[0];
 
-                        if (Params.RUN_CML) {
-                            double EF = 0;
+                        double EF = 0;
 
-                            if (k > 0 && k < Model.nstate - 1)
-                                EF = (exp(fwdF.f[i][k] + bwdF.GetVal(i, k) - PF))
-                                        / acts[(Model.slab[k])][s][i - 1].layer3[0];
+                        if (k > 0 && k < Model.nstate - 1)
+                            EF = (exp(fwdF.f[i][k] + bwdF.GetVal(i, k) - PF))
+                                    / acts[(Model.slab[k])][s][i - 1].layer3[0];
 
-                            E[k][i - 1][s] = EC - EF;
-                        } else {
-                            E[k][i - 1][s] = EC;
-                        }
+                        E[k][i - 1][s] = EC - EF;
                     }
                 }
 
+                //Calc new Transitions
                 for (int i = 0; i <= L - 1; i++) {
                     int lab = seqs.seq[s].getNPObs(i + 1 - 1); // was getNObs
                     for (int k = 0; k < Model.nstate; k++)
@@ -211,13 +198,13 @@ class Backprop extends TrainAlgo {
                                             - PC) * acts[Model.slab[ell]][s][(i + 1) - 1].layer3[0]);
                                 }
 
-                                if (Params.RUN_CML) {
-                                    A[k][ell] -= (exp(fwdF.f[i][k]
-                                            + hmm.getLoga(k, ell)
-                                            + bwdF.GetVal(i + 1, ell)
-                                            - PF) * acts[Model.slab[ell]][s][(i + 1) - 1].layer3[0]);
 
-                                }
+                                A[k][ell] -= (exp(fwdF.f[i][k]
+                                        + hmm.getLoga(k, ell)
+                                        + bwdF.GetVal(i + 1, ell)
+                                        - PF) * acts[Model.slab[ell]][s][(i + 1) - 1].layer3[0]);
+
+
                             }
                         }
                 }
@@ -265,10 +252,11 @@ class Backprop extends TrainAlgo {
             //LineSearch();
 
             iter++;
-            for (int k = 0; k < Model.nstate; k++) {
-                tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
-                //tab.eprob[k] = Params.putPriorEM( Model.nesym, tab.eprob[k], tab0.eprob[k] );
-            }
+            if (Params.NOISE_TR)
+                for (int k = 0; k < Model.nstate; k++) {
+                    tab.aprob[k] = noiseTrans(Model.nstate, tab.aprob[k], tab0.aprob[k], iter);
+                }
+
             // Create new model
             hmm = new HMM(tab);
             //hmm.print();////////////
@@ -287,21 +275,14 @@ class Backprop extends TrainAlgo {
             //sum_weights *=Params.DECAY;
             /////////////////////////////////////////////
 
-            if (Params.RUN_CML) {
-                loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs, ex);
-                loglikelihood = loglikelihoodC - loglikelihoodF - Params.DECAY * sum_weights;
-                System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF + ", SqWts=" + sum_weights);//////////
+            loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs, ex);
+            loglikelihood = loglikelihoodC - loglikelihoodF - Params.DECAY * sum_weights;
+            System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF + ", SqWts=" + sum_weights);//////////
 
-                if (valid) {
-                    valLoglikelihoodF = fwdbwd(true, valSeqs, valActs);
-                    valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF - Params.DECAY * sum_weights; //////////????????
-                    System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF + ", SqWts=" + sum_weights);//////////
-                }
-            } else {
-                loglikelihood = loglikelihoodC;
-
-                if (valid)
-                    valLoglikelihood = valLoglikelihoodC;
+            if (valid) {
+                valLoglikelihoodF = fwdbwd(true, valSeqs, valActs);
+                valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF - Params.DECAY * sum_weights; //////////????????
+                System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF + ", SqWts=" + sum_weights);//////////
             }
 
             logdiff = Math.abs(oldloglikelihood - loglikelihood);
@@ -320,7 +301,7 @@ class Backprop extends TrainAlgo {
                 }
             }
 
-            // hmm.print();
+            //hmm.SaveModel();
             tab_p = new Probs(tab.aprob, tab.weights);
 
             //if (Params.PRINT_MODEL)
@@ -332,7 +313,6 @@ class Backprop extends TrainAlgo {
         hmm.lh = loglikelihood;
         hmm.SaveModel();
     }
-
 
     private double WeightsSquare(Weights weights) {
         double sum_weights = 0;
@@ -356,4 +336,3 @@ class Backprop extends TrainAlgo {
         return tab;
     }
 }
-

@@ -343,6 +343,7 @@ abstract class TrainAlgo {
                         delta = Math.max(Params.kappaEmin, delta * Params.NMINUS);
                         deriv23[o][0][n] = 0;
                     }
+
                     if (rprop) {
                         if (iter == 1) {
                             delta = delta * Math.abs(deriv23[o][0][n]);

@@ -87,4 +87,3 @@ class Forward extends HMMAlgo {
         return L;
     }
 }
-

@@ -24,7 +24,7 @@ public class Juchmme {
         long startTime = System.currentTimeMillis();
 
         System.out.println("JUCHMME :: Java Utility for Class Hidden Markov Models and Extensions");
-        System.out.println("Version 2.1; September 2018");
+        System.out.println("Version 2.1.1; February 2019");
         System.out.println("Copyright (C) 2018 Pantelis Bagos");
         System.out.println("Freely distributed under the GNU General Public Licence (GPLv3)");
         System.out.println("--------------------------------------------------------------------------");
@@ -39,8 +39,10 @@ public class Juchmme {
         Model.Init(Args.mdelFile);
         System.out.println("--------------------------------------------------------------------------");
         //Parse HNN Encoding File
-        if (!Args.fileEncode.equals(""))
+        if (!Args.fileEncode.equals("")) {
             NNEncode.Init(Args.fileEncode);
+            System.out.println("--------------------------------------------------------------------------");
+        }
 
 
         /*
@@ -120,8 +122,4 @@ public class Juchmme {
         System.out.println("Execution time = " + (endTime - startTime) + " miliseconds");
         System.out.println("Execution time = " + execTime / 1000 + " seconds");
     }
-
 }
-
-
-

@@ -1,5 +1,7 @@
 package hmm;
 
+import java.lang.Math;
+
 public abstract class NN {
     private double[][] wts12; // no of input, no of hidden (the other way round)
     private double[][] wts23; // no of hidden, no of output (the other way round)
@@ -21,10 +23,12 @@ public abstract class NN {
         Activ act = new Activ(len1, len2, len3);
         act.layer1[0] = 1;
 
+        //Input Layer
         for (int i1 = 1; i1 < len1 + 1; i1++) {
             act.layer1[i1] = il[i1 - 1];
         }
 
+        //Hidden Layer
         act.layer2[0] = 1;
         for (int i2 = 1; i2 < len2 + 1; i2++) {
             for (int i1 = 0; i1 < len1 + 1; i1++) {
@@ -32,18 +36,26 @@ public abstract class NN {
                 act.layer2[i2] += act.layer1[i1] * wts12[i2 - 1][i1];
             }
 
-            act.layer2[i2] = 1 / (1 + Math.exp(-act.layer2[i2])) - 0.5;
-
-            //New
-            //act.layer2[i2] = ( 1 - Math.exp( -act.layer2[i2] ) ) / ( 1 + Math.exp( -act.layer2[i2] ) ) ;
-
+            if (Params.hiddenLayerFunction == 3) {
+                //Tanh
+                act.layer2[i2] = -1 + (2/ (1+Math.exp(-2* (act.layer2[i2]) ) ) );
+            } else if (Params.hiddenLayerFunction == 2) {
+                //Sigmoid Modified
+                act.layer2[i2] = (1 / (1 + Math.exp(-act.layer2[i2]))) - 0.5;
+            } else {
+                //Sigmoid
+                act.layer2[i2] = 1 / (1 + Math.exp(-act.layer2[i2]));
+            }
 
         }
 
+        //Output Layer
         for (int i3 = 0; i3 < len3; i3++) {
-            for (int i2 = 0; i2 < len2 + 1; i2++)
+            for (int i2 = 0; i2 < len2 + 1; i2++) {
                 act.layer3[i3] += act.layer2[i2] * wts23[i3][i2];
+            }
 
+            //Sigmoid
             act.layer3[i3] = 1 / (1 + Math.exp(-act.layer3[i3]));
         }
 
@@ -77,4 +89,3 @@ public abstract class NN {
     }
 
 }
- 

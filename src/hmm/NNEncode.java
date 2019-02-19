@@ -24,6 +24,7 @@ public class NNEncode {
     public static double[][] encode;
 
     public static final void Init(String file) {
+        System.out.println("Preparing NN Encoding file (" + file + ")");
         String linea = "";
         int row = 0;
         encode = new double[Model.nesym][Model.nesym];
