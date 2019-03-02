@@ -20,7 +20,7 @@ package hmm;
 import java.util.concurrent.RecursiveAction;
 
 public class DecodingParallel extends RecursiveAction {
-    private int start;a
+    private int start;
     private int end;
     private int threshold;
     HMM model;

@@ -101,9 +101,8 @@ public class Params {
     static boolean FASTA;             // Fasta File
     static boolean THREELINE;         // Three Line File
     static int nhidden = 3;
-    static boolean ALPHA = false;
-    static boolean ADD_FAKE_SEQ = false;
     static double ADD_GRAD = 0.0D;
+    static int hiddenLayerFunction = 1; //Sigmoid
 
     //BOOTSTRAP OPTIONS (HNN ONLY)
     static int BOOT = 0;
@@ -114,12 +113,16 @@ public class Params {
     static boolean WEIGHT_TIME = false;
 
     //RPROPNN OPTIONS (HNN ONLY)
-    static int windowSize = 11;
-    static int nhiddenNN = 3;
-    static int nOfCycles = 150;
+    static int nOfCycles = 50;
     static boolean crossVal = true;
     static int crossValIter = 5;
-    static double minGEdif = 0; // the min error difference between 2 adjacent iterations so as to continue training
+    static double minGEdiff = 0; // the min error difference between 2 adjacent iterations so as to continue training
+    public static String globalError = "CE";
+    public static double initialDelta = 0.1;
+    public static double maxDelta = 50.0;
+    public static double minDelta = 1e-6;
+    public static double etaInc = 1.2;
+    public static double etaDec = 0.5;
 
     //Multithreaded parallelization for multicores
     static boolean parallel = true;
@@ -258,22 +261,25 @@ public class Params {
             NOISE_EM = Utils.parseBoolean(props.getProperty("NOISE_EM"), "NOISE_EM");
             PRIOR_TRANS = Utils.parseDouble(props.getProperty("PRIOR_TRANS"), "PRIOR_TRANS");
             DECAY = Utils.parseDouble(props.getProperty("DECAY"), "DECAY");
-            ADD_FAKE_SEQ = Utils.parseBoolean(props.getProperty("ADD_FAKE_SEQ"), "ADD_FAKE_SEQ");
             threshold = Utils.parseDouble(props.getProperty("threshold"), "threshold");
             maxIter = Utils.parseInteger(props.getProperty("maxIter"), "maxIter");
 
             //HNN OPTIONS
             window = Utils.parseInteger(props.getProperty("window"), "window");
             nhidden = Utils.parseInteger(props.getProperty("nhidden"), "nhidden");
-            ALPHA = Utils.parseBoolean(props.getProperty("ALPHA"), "ALPHA");
+            hiddenLayerFunction = Utils.parseInteger(props.getProperty("hiddenLayerFunction"), "hiddenLayerFunction");
 
             //RPROPNN OPTIONS  (HNN ONLY)
-            windowSize = Utils.parseInteger(props.getProperty("windowSize"), "windowSize");
-            nhiddenNN = Utils.parseInteger(props.getProperty("hiddenNeuronsNum"), "hiddenNeuronsNum");
             nOfCycles = Utils.parseInteger(props.getProperty("numberOfCycles"), "numberOfCycles");
             crossVal = Utils.parseBoolean(props.getProperty("doCrossVal"), "doCrossVal");
             crossValIter = Utils.parseInteger(props.getProperty("crossValIter"), "crossValIter");
-            minGEdif = Utils.parseDouble(props.getProperty("minGEdiff"), "minGEdiff");
+            minGEdiff = Utils.parseDouble(props.getProperty("minGEdiff"), "minGEdiff");
+            globalError = props.getProperty("globalError");
+            initialDelta = Utils.parseDouble(props.getProperty("initialDelta"), "initialDelta");;
+            maxDelta = Utils.parseDouble(props.getProperty("maxDelta"), "maxDelta");;
+            minDelta = Utils.parseDouble(props.getProperty("minDelta"), "minDelta");;
+            etaInc = Utils.parseDouble(props.getProperty("etaInc"), "etaInc");;
+            etaDec = Utils.parseDouble(props.getProperty("etaDec"), "etaDec");;
 
             reader.close();
         } catch (FileNotFoundException ex) {
@@ -288,18 +294,40 @@ public class Params {
         System.out.println("Multithreaded parallelization = " + parallel);
         if (parallel)
             System.out.println("Processors : " + processors);
-        System.out.println("Ka = " + kappaA + "\tmin = " + kappaAmin + "\tmax = " + kappaAmax);
-        System.out.println("Ke = " + kappaE + "\tmin = " + kappaEmin + "\tmax = " + kappaEmax);
-        System.out.println("momentum = " + momentum);
-        System.out.print("RPROP = " + RPROP + "\tSILVA =" + SILVA + "\t");
-        System.out.println("Weight Decay = " + DECAY);
-
-        if (NOISE_TR)
-            System.out.println("PRIOR_TRANS= " + PRIOR_TRANS);
-        else
-            System.out.println("NO PRIORS FOR TRANSITIONS");
 
 
+        if (Args.RUN_TRAINING) {
+            System.out.print("TRAINING OPTIONS ");
+
+            if (HNN) {
+                System.out.print("HNN \n");
+                System.out.println("Window = " + window + "\tnhidden = " + nhidden + "\thiddenLayerFunction = " + hiddenLayerFunction);
+
+                if (RPROP)
+                    System.out.println("RPROP = " + RPROP + "\tminGEdiff = " + minGEdiff + "\tcrossVal = " + crossVal);
+
+            } else if (RUN_CML)
+                System.out.print("CML \n");
+            else {
+                System.out.print("ML \n");
+                System.out.println("RUN_GRADIENT = " + RUN_GRADIENT);
+            }
+
+            System.out.println("Ka = " + kappaA + "\tmin = " + kappaAmin + "\tmax = " + kappaAmax);
+            System.out.println("Ke = " + kappaE + "\tmin = " + kappaEmin + "\tmax = " + kappaEmax);
+            System.out.println("momentum = " + momentum);
+            System.out.print("RPROP = " + RPROP + "\tSILVA =" + SILVA + "\t");
+            System.out.println("Weight Decay = " + DECAY);
+
+            if (NOISE_TR)
+                System.out.println("PRIOR_TRANS= " + PRIOR_TRANS);
+            else
+                System.out.println("NO PRIORS FOR TRANSITIONS");
+
+            System.out.println("REFINE = " + REFINE + "\tFLANK=" + FLANK);
+            System.out.println("CONSTRAINT = " + CONSTRAINT);
+
+        }
     }
 
     /**

@@ -1,0 +1,26 @@
+# MODEL OPTIONS
+MODEL=LPXTG
+
+ESYM=ACDEFGHIKLMNPQRSTVWY
+OSYM=IMNnmLPXTGYoOpsBE
+PSYM=IMSOBE
+
+#Model Unique Labels
+transmLabels=M
+inLabels=I
+outLabels=O
+
+#Model states and labels
+STATE=B00 o1 O01 O02 O03 O04 O05 O06 O07 O08 O09 O10 M01 M02 M03 M04 M05 m01 m02 m03 m04 m05 m06 m07 m08 m09 m10 m11 m12 m13 m14 m15 m16 m17 m18 m19 m20 m21 m22 m23 m24 m25 M06 M07 M08 M09 M10 I01 I02 I03 I04 I05 I06 I07 I08 I09 I10 L P X T G Y N01 N02 N03 s01 s02 s03 s04 s05 s06 s07 s08 s09 s10 s11 s12 s13 s14 s15 s16 s17 s18 s19 s20 s21 s22 s23 s24 s25 p1 p2 p3 E00
+OSTATE=B   o  O   O   O   O   O   O   O   O   O   O   N   N   N   N   N   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   M   M   M   M   M   I   I   I   I   I   I   I   I   I   I   L P X T G Y n   n   n   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   s   p  p  p  E
+PSTATE=B   O  O   O   O   O   O   O   O   O   O   O   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   I   I   I   I   I   I   I   I   I   I   S S S S S S S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   I  I  I  E
+
+#MODEL PRIOR for every esym
+PRIOR = 0.077 0.018 0.058 0.066 0.040 0.072 0.024 0.056 0.063 0.086 0.022 0.046 0.046 0.040 0.049 0.062 0.057 0.068 0.015 0.035
+
+# Distribution for each osym
+# Each column must have a sum equal to 1
+# osym    I   M    N     n    m    L    P    X    T    G    Y    o    O    p    s    B   E
+PRIOR1 = 0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.9  0.0 0.0
+PRIOR2 = 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.0 0.0
+PRIOR3 = 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.0 0.0

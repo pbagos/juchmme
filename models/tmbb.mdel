@@ -1,0 +1,26 @@
+# MODEL OPTIONS
+MODEL=PREDTMBB2
+
+ESYM=ACDEFGHIKLMNPQRSTVWY
+OSYM=IiMmnPwOoBE
+PSYM=IMOBE
+
+#Model Unique Labels
+transmLabels=M
+inLabels=I
+outLabels=O
+
+#Model states and labels
+STATE=B00 M01 n01 m01 n02 m02 n03 m03 n04 m04 n05 m05 n06 m06 n07 m07 n08 M02 O10 O06 O07 O08 O09 O19 o01 O11 O12 O13 O14 O15 O16 M11 n11 m11 n12 m12 n13 m13 n14 m14 n15 m15 n16 m16 n17 m17 n18 M12 I01 I02 I03 I04 I05 I06 i01 I00 I07 I08 I09 I10 I11 E00
+OSTATE=B   M   n   m   n   m   n   m   n   m   n   m   n   m   n   m   n   M   w   w   w   O   O   O   o   O   O   O   w   w   w   P   n   m   n   m   n   m   n   m   n   m   n   m   n   m   n   P   I   I   I   I   I   I   i   I   I   I   I   I   I   E
+PSTATE=B   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   O   O   O   O   O   O   O   O   O   O   O   O   O   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   I   I   I   I   I   I   I   I   I   I   I   I   I   E
+
+#MODEL PRIOR for every esym
+PRIOR = 0.077 0.018 0.058 0.066 0.040 0.072 0.024 0.056 0.063 0.086 0.022 0.046 0.046 0.040 0.049 0.062 0.057 0.068 0.015 0.035
+
+# Distribution for each osym
+# Each column must have a sum equal to 1
+# osym     I    i    M     m    n    P    w   O    o   B   E
+PRIOR1 = 0.97 0.95 0.97 0.97 0.97 0.97 0.97 0.97 0.95 0.0 0.0
+PRIOR2 = 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.0 0.0
+PRIOR3 = 0.02 0.04 0.02 0.02 0.02 0.02 0.02 0.02 0.04 0.0 0.0

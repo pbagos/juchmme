@@ -301,12 +301,14 @@ abstract class TrainAlgo {
             }
 
             for (int n = 0; n < Params.nhidden + 1; n++) {
-                deriv23[o][0][n] = deriv23[o][0][n] / count_win;
+                if (count_win > 0)
+                    deriv23[o][0][n] = deriv23[o][0][n] / count_win;
             }
 
             for (int m = 0; m < Params.window * NNEncode.encode[0].length + 1; m++) {
                 for (int n = 1; n < Params.nhidden + 1; n++) {
-                    deriv12[o][n - 1][m] = deriv12[o][n - 1][m] / count_win;
+                    if (count_win > 0)
+                        deriv12[o][n - 1][m] = deriv12[o][n - 1][m] / count_win;
                 }
             }
         }
@@ -318,6 +320,7 @@ abstract class TrainAlgo {
     public void UpdateWeights(Weights weights, final boolean rprop, final boolean silva,
                               double[][][] deriv12, double[][][] deriv23) {
         System.out.println("\tUpdating weights");
+
 
         double[][][] dw12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
         double[][][] dw23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
@@ -354,9 +357,11 @@ abstract class TrainAlgo {
                     } else
                         dw = delta * deriv23[o][0][n] - Params.DECAY * weights.GetWeights23(o)[0][n];
 
+
                     delta23[o][0][n] = delta;
 
                 }
+
 
                 dw23[o][0][n] = dw;
 

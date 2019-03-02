@@ -1,0 +1,26 @@
+# MODEL OPTIONS
+MODEL=DEMO
+
+ESYM=AGCT
+OSYM=MmOoBE
+PSYM=MOBE
+
+#Model Unique Labels
+transmLabels=M
+inLabels=I
+outLabels=O
+
+#Model states and labels
+STATE =B0  M1  M2  O1  O2  E0
+OSTATE=B   M   m   O   o   E
+PSTATE=B   M   M   O   O   E
+
+#MODEL PRIOR for every symbol (esym)
+PRIOR = 0.077 0.018 0.058 0.066
+
+# Distribution for each osym state
+# Each column must have a sum equal to 1
+# osym     M     m   O    o   B   E
+PRIOR1 = 0.97 0.95 0.97 0.97 0.0 0.0
+PRIOR2 = 0.01 0.01 0.01 0.01 0.0 0.0
+PRIOR3 = 0.02 0.04 0.02 0.02 0.0 0.0

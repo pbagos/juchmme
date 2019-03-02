@@ -1,0 +1,6 @@
+RUN_CML true 
+RUN_GRADIENT false 
+HNN false 
+ALLOW_BEGIN true
+ALLOW_END true
+MODEL HMMTM

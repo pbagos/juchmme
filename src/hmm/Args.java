@@ -3,7 +3,7 @@ package hmm;
 import java.io.*;
 
 public class Args {
-    static String Vesrion = "2.1";
+    static String Vesrion = "1.0.1";
 
     static boolean RUN_TRAINING = false;
     static boolean RUN_CROSSVAL = false;
