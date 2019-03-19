@@ -265,7 +265,7 @@ abstract class TrainAlgo {
 
         System.out.print("\tComputing derivatives");
 
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             System.out.print(".");
             int count_win = 0;
             for (int k = 0; k < Model.nstate; k++) {
@@ -322,12 +322,12 @@ abstract class TrainAlgo {
         System.out.println("\tUpdating weights");
 
 
-        double[][][] dw12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-        double[][][] dw23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
-        double[][][] delta12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-        double[][][] delta23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
+        double[][][] dw12 = new double[Params.NNclassLabels][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
+        double[][][] dw23 = new double[Params.NNclassLabels][1][Params.nhidden + 1];
+        double[][][] delta12 = new double[Params.NNclassLabels][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
+        double[][][] delta23 = new double[Params.NNclassLabels][1][Params.nhidden + 1];
 
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             for (int n = 0; n < Params.nhidden + 1; n++) {
                 double dw;
 
@@ -430,7 +430,7 @@ abstract class TrainAlgo {
     }
 
     protected void CalcActs(SeqSet calcSeqs, Activ[][][] calcacts) {
-        for (int o = 0; o < Model.nosym - 2; o++)
+        for (int o = 0; o < Params.NNclassLabels; o++)
             for (int s = 0; s < calcSeqs.nseqs; s++)
                 for (int i = 0; i < calcSeqs.seq[s].getLen(); i++)
                     calcacts[o][s][i] = hmm.nn[o].Calc(calcSeqs.seq[s].getWindow(i));
@@ -503,7 +503,7 @@ abstract class TrainAlgo {
                     fwds[s] = new Forward(hmm, fbSeqs.seq[s], free);
                     bwds[s] = new Backward(hmm, fbSeqs.seq[s], free);
                 } catch (Exception e) {
-                    System.out.println(e.getMessage() + "The error ocurred at sequence " + (s + 1) + " " + fbSeqs.seq[s].header);
+                    System.out.println(e.getMessage() + "The error occured at sequence " + (s + 1) + " " + fbSeqs.seq[s].header);
                     errors = true;
                     continue;
                 }

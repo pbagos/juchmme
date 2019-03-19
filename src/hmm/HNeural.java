@@ -6,7 +6,7 @@ public class HNeural extends NN {
 
     public HNeural(double[][] w12, double[][] w23) {
         super(w12, w23,
-                Params.window * NNEncode.encode[0].length,
+                Params.inputLayerLen,
                 Params.nhidden, 1);
     }
 

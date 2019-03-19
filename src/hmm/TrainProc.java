@@ -3,11 +3,21 @@ package hmm;
 class TrainProc {
     public TrainProc(SeqSet trainSet, SeqSet trainSetUn, Probs tab) throws Exception {
         if (Args.RUN_JACKNIFE) {
+            if (Args.CROSSVAL_CLUSTSIZE > 0)
+                Args.CROSSVAL_CLUSTERS = (int) Math.ceil((double) trainSet.nseqs / (double) Args.CROSSVAL_CLUSTSIZE);
+            else
+                Args.CROSSVAL_CLUSTSIZE = (int) Math.ceil((double) trainSet.nseqs / (double) Args.CROSSVAL_CLUSTERS);
+
             System.out.println("TRAINING - Jacknife");
-            jackNife(trainSet, trainSetUn, tab);
+            CrossVal(trainSet, trainSetUn, tab, Args.CROSSVAL_CLUSTSIZE, Args.CROSSVAL_CLUSTERS);
         } else if (Args.RUN_CROSSVAL) {
-            System.out.println("TRAINING - Cross Validation k-fold = " + Args.CROSSVAL_CLUSTSIZE);
-            CrossVal(trainSet, trainSetUn, tab, Args.CROSSVAL_CLUSTSIZE);
+            if (Args.CROSSVAL_CLUSTSIZE > 0)
+                Args.CROSSVAL_CLUSTERS = (int) Math.ceil((double) trainSet.nseqs / (double) Args.CROSSVAL_CLUSTSIZE);
+            else
+                Args.CROSSVAL_CLUSTSIZE = (int) Math.ceil((double) trainSet.nseqs / (double) Args.CROSSVAL_CLUSTERS);
+
+            System.out.println("TRAINING - Cross Validation k-fold = " + Args.CROSSVAL_CLUSTERS);
+            CrossVal(trainSet, trainSetUn, tab, Args.CROSSVAL_CLUSTSIZE, Args.CROSSVAL_CLUSTERS);
         } else if (Args.RUN_SELFCONS) {
             selfCons(trainSet, trainSetUn, tab);
         }
@@ -22,18 +32,11 @@ class TrainProc {
         model = est.GetModel();
 
         System.out.println("TESTING");
-        Decoding dec = new Decoding(model, trainSet, true, true);
-    }
-
-    //Jacknife
-    static void jackNife(SeqSet jackSet, SeqSet trainSetUn, Probs tab) throws Exception {
-        CrossVal(jackSet, trainSetUn, tab, 1);
+        Decoding dec = new Decoding(model, trainSet, true, true, Params.parallel);
     }
 
     //Cross Validation
-    static void CrossVal(SeqSet jackSet, SeqSet trainSetUn, Probs tab, int clustSize) throws Exception {
-        //Cluster Lenght
-        int nClust = (int) Math.ceil((double) jackSet.nseqs / (double) clustSize);
+    static void CrossVal(SeqSet jackSet, SeqSet trainSetUn, Probs tab, int clustSize, int nClust) throws Exception {
         SeqSet trainSet, testSet;
         int cou;
         for (int c = 0; c < nClust; c++) {
@@ -54,7 +57,6 @@ class TrainProc {
                 if (!(i >= c * clustSize && i < (c + 1) * clustSize)) {
                     trainSet.seq[cou] = jackSet.seq[i];
                     trainSet.seq[cou].SetIndexID(cou);
-                    System.out.println("\tAdded " + trainSet.seq[cou].header + " to training set");
                     cou++;
                 }
             }
@@ -74,7 +76,7 @@ class TrainProc {
             }
 
             System.out.println("testset Len = " + testSet.nseqs);
-            Decoding dec = new Decoding(model, testSet, true, true);
+            Decoding dec = new Decoding(model, testSet, true, true, Params.parallel);
 
             cou = 0;
             for (int i = min; i < max; i++) {

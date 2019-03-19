@@ -8,6 +8,7 @@ public class Args {
     static boolean RUN_TRAINING = false;
     static boolean RUN_CROSSVAL = false;
     static int CROSSVAL_CLUSTSIZE = 0;
+    static int CROSSVAL_CLUSTERS = 0;
     static boolean RUN_JACKNIFE = false;
     static boolean RUN_SELFCONS = false;
     static boolean SHOW_PLOT = false;
@@ -142,11 +143,20 @@ public class Args {
                     } else
                         System.err.println("-" + a + ": Missing argument");
                     break;
+                case 'y':
+                    if (args.length > i + 1) {
+                        RUN_CROSSVAL = true;
+                        CROSSVAL_CLUSTERS = Integer.parseInt(args[i + 1]);
+                        i++;
+                    } else
+                        System.err.println("-" + a + ": Missing argument");
+                    break;
                 case 's':
                     RUN_SELFCONS = true;
                     break;
                 case 'j':
                     RUN_JACKNIFE = true;
+                    CROSSVAL_CLUSTSIZE = 1;
                     break;
                 case 'p':
                     SHOW_PLOT = true;
@@ -171,8 +181,7 @@ public class Args {
 
         }
 
-
-        if (fileA.equals("") || fileE.equals("") || parFile.equals("") || mdelFile.equals("") || (CROSSVAL_CLUSTSIZE > 1 && RUN_JACKNIFE)) {
+        if (fileA.equals("") || parFile.equals("") || mdelFile.equals("") || (CROSSVAL_CLUSTSIZE > 1 && RUN_JACKNIFE)) {
             System.err.println("Options:");
             System.err.println("\t-a <file>: transitions");
             System.err.println("\t-e <file>: emissions");

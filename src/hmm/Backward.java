@@ -66,7 +66,7 @@ class Backward extends HMMAlgo {
         }
 
         if (sum == Double.NEGATIVE_INFINITY)
-            System.out.println("Zero likelihood");
+            System.out.println("Zero likelihood at at sequence " + x.header);
 
         return sum;
     }

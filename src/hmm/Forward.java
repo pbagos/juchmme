@@ -19,6 +19,7 @@ class Forward extends HMMAlgo {
         for (int i = 1; i <= L; i++) {
             int lab = 0;
             boolean nonzero = false;
+            double loge_debug=0.0,loga_debug= 0.0;
 
             if (!free)
                 lab = x.getNPObs(i - 1);
@@ -27,17 +28,20 @@ class Forward extends HMMAlgo {
                 if (lab == -1 || lab == Model.plab[ell - 0] || free) {
                     double sum = Double.NEGATIVE_INFINITY;
 
-                    for (int k = 0; k < hmm.nstte; k++)
+                    for (int k = 0; k < hmm.nstte; k++) {
                         sum = logplus(sum, f[i - 1][k] + hmm.getLoga(k, ell));
+                        loga_debug = hmm.getLoga(k, ell);
+                    }
 
                     f[i][ell] = lge[ell][i - 1] + sum;
+                    loge_debug = lge[ell][i - 1];
                     nonzero = (nonzero || f[i][ell] != Double.NEGATIVE_INFINITY);
                 } else
                     f[i][ell] = Double.NEGATIVE_INFINITY;
             }
             if (!nonzero)
                 throw new Exception("ERROR: Zero probability at position " + i + ". Symbol: "
-                        + x.getSym(i - 1) + " Obs: " + x.getObs(i - 1) + ". ");
+                        + x.getSym(i - 1) + " Obs: " + x.getObs(i - 1) + ". "+" lge = "+loge_debug+" lga = "+loga_debug+"\n");
 
         }
     }
@@ -65,7 +69,8 @@ class Forward extends HMMAlgo {
             sum = logplus(sum, f[L][k] + (Params.ALLOW_END ? hmm.getLoga(k, hmm.nstte - 1) : 0));
 
         if (sum == Double.NEGATIVE_INFINITY)
-            System.out.println("Zero likelihood");
+            System.out.println("Zero likelihood at at sequence " + x.header);
+
 
         return sum;
     }
@@ -87,3 +92,4 @@ class Forward extends HMMAlgo {
         return L;
     }
 }
+

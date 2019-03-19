@@ -47,10 +47,10 @@ class Backprop extends TrainAlgo {
         Backward[] bwdsF = new Backward[seqs.nseqs];
         double[] logPF = new double[seqs.nseqs];
 
-        acts = new Activ[Model.nosym - 2][seqs.nseqs][seqs.getMaxL()];
+        acts = new Activ[Params.NNclassLabels][seqs.nseqs][seqs.getMaxL()];
         Activ[][][] valActs;
 
-        valActs = new Activ[Model.nosym - 2][valSeqs.nseqs][valSeqs.getMaxL()];
+        valActs = new Activ[Params.NNclassLabels][valSeqs.nseqs][valSeqs.getMaxL()];
 
         double bestl = Double.NEGATIVE_INFINITY;
         Weights bestw = new Weights();
@@ -243,8 +243,10 @@ class Backprop extends TrainAlgo {
             //emissions
             double[][][] deriv12;
             double[][][] deriv23;
-            deriv12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-            deriv23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
+            //+1 for Bias
+            deriv12 = new double[Params.NNclassLabels][Params.nhidden][Params.inputLayerLen+1];
+            deriv23 = new double[Params.NNclassLabels][1][Params.nhidden+1];
+
 
             ComputeDeriv(trainSet, E, deriv12, deriv23);
             UpdateWeights(tab.weights, Params.RPROP, Params.SILVA, deriv12, deriv23);
@@ -316,7 +318,7 @@ class Backprop extends TrainAlgo {
 
     private double WeightsSquare(Weights weights) {
         double sum_weights = 0;
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             for (int j = 0; j < Params.window * NNEncode.encode[0].length + 1; j++) {
                 for (int n = 0; n < Params.nhidden; n++) {
                     sum_weights = sum_weights + (weights.GetWeights12(o)[n][j]) * (weights.GetWeights12(o)[n][j]);
@@ -336,3 +338,4 @@ class Backprop extends TrainAlgo {
         return tab;
     }
 }
+

@@ -29,6 +29,16 @@ public class NNEncode {
         int row = 0;
         encode = new double[Model.nesym][Model.nesym];
 
+        //Initialization of NN class Labels
+        Params.NNclassLabels = Model.nosym;
+        Params.inputLayerLen = Params.window * encode[0].length;
+
+        if (Params.ALLOW_BEGIN)
+            Params.NNclassLabels--;
+
+        if (Params.ALLOW_END)
+            Params.NNclassLabels--;
+
         RandomAccessFile in = null;
 
         try {

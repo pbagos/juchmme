@@ -52,6 +52,18 @@ class Probs {
 
     }
 
+    public Probs(String file_a, boolean autoFillEmissions) {
+        this.aprob = new double[Model.nstate][Model.nstate];
+        this.eprob = new double[Model.nstate][Model.nesym];
+        initProbsByFile(file_a, this.aprob, Model.nstate, Model.nstate);
+
+        if (autoFillEmissions)
+            UniformizeEmissions();
+        else
+            RandomizeEmissions();
+
+    }
+
     public Probs(String file_a, String file_e) {
         this.aprob = new double[Model.nstate][Model.nstate];
         this.eprob = new double[Model.nstate][Model.nesym];
@@ -157,6 +169,9 @@ class Probs {
 
         if (Params.HNN)
             tab0 = new Probs(Args.fileA);
+        else
+        if (Params.EMISSIONS.equals("VITERBI"))
+            tab0 = new Probs(Args.fileA, true);
         else
             tab0 = new Probs(Args.fileA, Args.fileE);
 

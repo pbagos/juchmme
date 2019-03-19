@@ -25,20 +25,20 @@ class Weights {
     double[][][] deriv23;
 
     Weights() {
-        wts12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-        wts23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
+        wts12 = new double[Params.NNclassLabels][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
+        wts23 = new double[Params.NNclassLabels][1][Params.nhidden + 1];
 
-        deriv12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-        deriv23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
+        deriv12 = new double[Params.NNclassLabels][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
+        deriv23 = new double[Params.NNclassLabels][1][Params.nhidden + 1];
 
         if (!Params.RPROP && !Params.SILVA) {
-            dw12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-            dw23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
+            dw12 = new double[Params.NNclassLabels][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
+            dw23 = new double[Params.NNclassLabels][1][Params.nhidden + 1];
         } else {
-            delta12 = new double[Model.nosym - 2][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
-            delta23 = new double[Model.nosym - 2][1][Params.nhidden + 1];
+            delta12 = new double[Params.NNclassLabels][Params.nhidden][Params.window * NNEncode.encode[0].length + 1];
+            delta23 = new double[Params.NNclassLabels][1][Params.nhidden + 1];
 
-            for (int o = 0; o < Model.nosym - 2; o++) {
+            for (int o = 0; o < Params.NNclassLabels; o++) {
                 for (int m = 0; m < Params.window * NNEncode.encode[0].length + 1; m++)
                     for (int n = 0; n < Params.nhidden; n++) {
                         delta12[o][n][m] = Params.kappaE;
@@ -58,9 +58,9 @@ class Weights {
         boolean doCrossValidation = Params.crossVal;
         int crossValidationIterations = Params.crossValIter;
         double minimumGEdifference = Params.minGEdiff;
-        char[] labelAlphabet = new char[Model.nosym - 2];
+        char[] labelAlphabet = new char[Params.NNclassLabels];
 
-        for (int i = 0; i < Model.nosym - 2; i++) {
+        for (int i = 0; i < Params.NNclassLabels; i++) {
             labelAlphabet[i] = Model.osym.charAt(i);
         }
 
@@ -175,7 +175,7 @@ class Weights {
 
         Random rnd = RandomGen(seed);
 
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             for (int m = 0; m < Params.window * NNEncode.encode[0].length + 1; m++)
                 for (int n = 0; n < Params.nhidden; n++) {
                     double x = rnd.nextDouble();
@@ -195,7 +195,7 @@ class Weights {
         int len2 = Params.nhidden;
         int len3 = 1;
 
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             System.out.println("NEURAL\t" + o);
 
             for (int i2 = 0; i2 < len2; i2++) {
@@ -218,7 +218,7 @@ class Weights {
 
     public Weights GetClone() {
         Weights cl = new Weights();
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             for (int m = 0; m < Params.window * NNEncode.encode[0].length + 1; m++)
                 for (int n = 0; n < Params.nhidden; n++) {
                     cl.wts12[o][n][m] = wts12[o][n][m];
@@ -281,7 +281,7 @@ class Weights {
     public void RandomizeUniform(final double range, final long seed) {
         System.out.println("\tRandomize weights (uniform)");
         Random rnd = RandomGen(seed);
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             for (int m = 0; m < Params.window * NNEncode.encode[0].length + 1; m++)
                 for (int n = 0; n < Params.nhidden; n++) {
                     double x = rnd.nextDouble();
@@ -299,7 +299,7 @@ class Weights {
         System.out.println("\tRandomize weights (normal)");
         Random rnd = RandomGen(seed);
 
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             for (int m = 0; m < Params.window * NNEncode.encode[0].length + 1; m++)
                 for (int n = 0; n < Params.nhidden; n++) {
                     double x = rnd.nextDouble();
@@ -371,4 +371,6 @@ class Weights {
             }
         }
     }
+
+
 }

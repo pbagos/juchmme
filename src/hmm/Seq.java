@@ -292,7 +292,15 @@ public class Seq {
     public char[] getWindow(int i) {
         char[] win = new char[Params.window];
         int c = 0;
-        for (int j = i - (Params.window - 1) / 2; j <= i + (Params.window - 1) / 2; j++) {
+/*        for (int j = i - (Params.window - 1) / 2; j <= i + (Params.window - 1) / 2; j++) {
+            if (j < 0 || j >= xs.length()) {
+                win[c] = '0';
+            } else {
+                win[c] = xs.charAt(j);
+            }
+            c++;
+        }*/
+        for (int j = (i - Params.windowLeft); j <= (i + Params.windowRight); j++) {
             if (j < 0 || j >= xs.length()) {
                 win[c] = '0';
             } else {

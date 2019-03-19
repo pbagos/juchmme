@@ -27,8 +27,8 @@ public class HMM {
     public HMM(Probs tab) {
         Init(tab);
         if (Params.HNN) {
-            nn = new HNeural[Model.nosym - 2];
-            for (int o = 0; o < Model.nosym - 2; o++) {
+            nn = new HNeural[Params.NNclassLabels];
+            for (int o = 0; o < Params.NNclassLabels; o++) {
                 nn[o] = new HNeural(tab.weights.GetWeights12(o),
                         tab.weights.GetWeights23(o));
             }
@@ -179,7 +179,7 @@ public class HMM {
 
     public String printw() {
         String out = "";
-        for (int o = 0; o < Model.nosym - 2; o++) {
+        for (int o = 0; o < Params.NNclassLabels; o++) {
             out += ("NEURAL\t" + o + "\n");
             out += nn[o].print();
         }
@@ -249,5 +249,7 @@ public class HMM {
     public double getLoga(int i, int j) {
         return loga[i][j];
     }
-    
+
+
 }
+

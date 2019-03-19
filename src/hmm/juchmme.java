@@ -24,7 +24,7 @@ public class Juchmme {
         long startTime = System.currentTimeMillis();
 
         System.out.println("JUCHMME :: Java Utility for Class Hidden Markov Models and Extensions");
-        System.out.println("Version 1.0.1; February 2019");
+        System.out.println("Version 1.0.2; March 2019");
         System.out.println("Copyright (C) 2019 Pantelis Bagos");
         System.out.println("Freely distributed under the GNU General Public Licence (GPLv3)");
         System.out.println("--------------------------------------------------------------------------");
@@ -107,12 +107,12 @@ public class Juchmme {
             // DECODING
             if (Args.filesThree.size() > 0) {
                 SeqSet testSet = new SeqSet((String) Args.filesThree.get(0));
-                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true);
+                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel);
             }
 
             if (Args.filesFasta.size() > 0) {
                 SeqSet testSet = new SeqSet((String) Args.filesFasta.get(0));
-                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true);
+                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel);
             }
 
         }

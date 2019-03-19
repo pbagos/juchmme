@@ -2,7 +2,7 @@
 MODEL=TatP
 
 ESYM=ACDEFGHIKLMNPQRSTVWY
-OSYM=iIMKNmc123456789OhBEnvVHaSRFLKq
+OSYM=iIMKNmc123456789OhnvVHaSRFLKqBE
 PSYM=IMSTOBE
 
 #Model Unique Labels
@@ -11,16 +11,16 @@ inLabels=I
 outLabels=O
 
 #Model states and labels
-STATE= B  i  I1 I2 I3 I4 I5 I6 I7 I8 I9 I10 M1 M2 M3 M4 M5 m1 m2 m3 m4 m5 m6 m7 m8 m9 m10 m11  m12 m13 m14 m15 m16 m17 m18 m19 m20 m21 m22 m23 m24 m25 M6  M7  M8  M9  M10 O1  O2  O3  O4  O5  O6  O7  O8  O9  O10 Ms  N1  N2  N3  N4  N5  h1  h2  h3  h4  h5  h6  h7  h8  h9  h10 h11 h12 h13 h14 h15 h16 h17 h18 h19 h20 c1  c2  c3  c4  c5  A1  X1  A2  p1  p2  p3  p4  p5  ML  n1  n2  n3  S  R1  R2  X2  F  L   K  H1  H2  H3  H4  H5  H6  H7  H8  H9  H10 H11 H12 H13 H14 H15 H16 H17 H18 H19 H20  C1  C2  C3  C4  C5  A3  X3  A4  P1  P2  P3  P4  P5  p6  E
-OSTATE=B  i  I  I  I  I  I  I  I  I  I  I   K  K  K  K  K  m  m  m  m  m  m  m  m  m  m   m    m   m   m   m   m   m   m   m   m   m   m   m   m   m   M   M   M   M   M   O   O   O   O   O   O   O   O   O   O   a   N   N   N   N   N   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   c   c   c   c   c   1   2   3   4   5   6   7   8   a   n   n   v   S  R   R   q   F  L   K  H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   V   V    c   c   c   c   c   1   2   3   4   5   6   7   8   9   E
-PSTATE=B  I  I  I  I  I  I  I  I  I  I  I   M  M  M  M  M  M  M  M  M  M  M  M  M  M  M   M    M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   O   O   O   O   O   O   O   O   O   O   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   O   O   O   O   O   T   T   T   T   T  T   T   T   T  T   T  T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T    T   T   T   T   T   T   T   T   O   O   O   O   O   O   E
+STATE=B00 iNM I1k I2k I3k I4k I5k I6k I7k I8k I9k I10 M1k M2k M3z M4z M5z m1z m2z m3z m4z m5z m6z m7z m8z m9z m10 m11 m12 m13 m14 m15 m16 m17 m18 m19 m20 m21 m22 m23 m24 m25 M6v M7v M8v M9v M10 O1t O2t O3t O4t O5t O6t O7t O8t O9t O10 Msw N1w N2w N3w N4w N5w h1w h2w h3w h4w h5w h6w h7w h8w h9w h10 h11 h12 h13 h14 h15 h16 h17 h18 h19 h20 c1q c2q c3q c4q c5q A1e X1e A2e p1e p2e p3e p4e p5e MLe n1d n2d n3d Sdd R1d R2d X2d Fdd Ldd Kdd H1d H2d H3d H4d H5d H6d H7d H8d H9d H10 H11 H12 H13 H14 H15 H16 H17 H18 H19 H20 C1r C2r C3r C4r C5r A3r X3r A4r P1r P2r P3r P4r P5r p6r E00
+OSTATE=B   i   I   I   I   I   I   I   I   I   I   I   K   K   K   K   K   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   m   M   M   M   M   M   O   O   O   O   O   O   O   O   O   O   a   N   N   N   N   N   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   h   c   c   c   c   c   1   2   3   4   5   6   7   8   a   n   n   v   S   R   R   q   F   L   K   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   H   V   V   c   c   c   c   c   1   2   3   4   5   6   7   8   9   E
+PSTATE=B   I   I   I   I   I   I   I   I   I   I   I   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   M   O   O   O   O   O   O   O   O   O   O   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   S   O   O   O   O   O   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   T   O   O   O   O   O   O   E
 
 #MODEL PRIOR for every esym
 PRIOR = 0.077 0.018 0.058 0.066 0.040 0.072 0.024 0.056 0.063 0.086 0.022 0.046 0.046 0.040 0.049 0.062 0.057 0.068 0.015 0.035
 
 # Distribution for each osym
 # Each column must have a summ equal to 1
-# osym     i    I    M    K     N   m    c    1    2    3    4    5    6    7    8    9    O    h   B   E    n    v    V    H    a    S    R    F    L    K    q
-PRIOR1 = 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.94 0.94 0.94 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.0 0.0 0.92 0.92 1.00 0.92 0.00 0.92 0.00 0.92 0.92 0.92 1.00
-PRIOR2 = 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.0 0.0 0.06 0.06 0.00 0.06 1.00 0.06 1.00 0.06 0.06 0.06 0.00
-PRIOR3 = 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.00 0.00 0.00 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.0 0.0 0.02 0.02 0.00 0.02 0.00 0.02 0.00 0.02 0.02 0.02 0.00
+# osym     i    I    M    K     N   m    c    1    2    3    4    5    6    7    8    9    O    h   n    v    V    H    a    S    R    F    L    K    q    B   E
+PRIOR1 = 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.94 0.94 0.94 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.92 0.92 1.00 0.92 0.00 0.92 0.00 0.92 0.92 0.92 1.00 0.0 0.0
+PRIOR2 = 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.06 0.00 0.06 1.00 0.06 1.00 0.06 0.06 0.06 0.00 0.0 0.0
+PRIOR3 = 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.00 0.00 0.00 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.00 0.02 0.00 0.02 0.00 0.02 0.02 0.02 0.00 0.0 0.0

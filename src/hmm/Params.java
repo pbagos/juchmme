@@ -97,12 +97,16 @@ public class Params {
     static int maxIter = 200;
 
     // HNN OPTIONS
-    static int window = 7;
+    public static int window = 0;
+    public static int windowLeft=3;
+    public static int windowRight=3;
     static boolean FASTA;             // Fasta File
     static boolean THREELINE;         // Three Line File
     static int nhidden = 3;
     static double ADD_GRAD = 0.0D;
     static int hiddenLayerFunction = 1; //Sigmoid
+    static int inputLayerLen = 0;
+    static int NNclassLabels = 0;
 
     //BOOTSTRAP OPTIONS (HNN ONLY)
     static int BOOT = 0;
@@ -265,7 +269,9 @@ public class Params {
             maxIter = Utils.parseInteger(props.getProperty("maxIter"), "maxIter");
 
             //HNN OPTIONS
-            window = Utils.parseInteger(props.getProperty("window"), "window");
+            //window = Utils.parseInteger(props.getProperty("window"), "window");
+            windowLeft = Utils.parseInteger(props.getProperty("windowLeft"), "windowLeft");
+            windowRight = Utils.parseInteger(props.getProperty("windowRight"), "windowRight");
             nhidden = Utils.parseInteger(props.getProperty("nhidden"), "nhidden");
             hiddenLayerFunction = Utils.parseInteger(props.getProperty("hiddenLayerFunction"), "hiddenLayerFunction");
 
@@ -288,6 +294,10 @@ public class Params {
         } catch (IOException ex) {
             // I/O error
             System.out.println("ERROR with Configuration file " + file);
+        }
+
+        if (HNN){
+            window = windowLeft + 1 + windowRight;
         }
 
         //output

@@ -21,11 +21,12 @@ import java.util.concurrent.ForkJoinPool;
 
 class Decoding {
 
-    public Decoding(HMM model, SeqSet testSet, boolean free, boolean showResults) throws Exception {
+    public Decoding(HMM model, SeqSet testSet, boolean free, boolean showResults, boolean parallel) throws Exception {
         Test pred;
         int CPUs;
 
-        if (Params.parallel) {
+        //Test set must be have more than 4 sequences
+        if (parallel && (testSet.nseqs > 4)) {
             if (Params.processors / testSet.nseqs < 2)
                 CPUs = testSet.nseqs / 2;
             else
@@ -45,4 +46,6 @@ class Decoding {
             }
         }
     }
+
+
 }
