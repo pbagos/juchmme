@@ -1,0 +1,26 @@
+# MODEL OPTIONS
+MODEL=CASINO
+
+ESYM=123456
+OSYM=FLBE
+PSYM=HBE
+
+#Model Unique Labels
+transmLabels=M
+inLabels=I
+outLabels=O
+
+#Model states and labels
+STATE =B F L E
+OSTATE=B F L E
+PSTATE=B H H E
+
+#MODEL PRIOR for every esym
+PRIOR = 0.077 0.018 0.058 0.066 0.040 0.072
+
+# Distribution for each osym
+# Each column must have a summ equal to 1
+# osym     H    B   E
+PRIOR1 = 0.97 0.0 0.0
+PRIOR2 = 0.01 0.0 0.0
+PRIOR3 = 0.02 0.0 0.0

@@ -6,11 +6,8 @@ class PosteriorProb {
     private double logprob;
     private double[][] pprob;
     private int L;
-    int myNpsym;
 
     PosteriorProb(Forward fwd, Backward bwd) {
-        myNpsym = Model.npsym - 2;
-
         this.fwd = fwd;
         this.bwd = bwd;
         double logprob1 = fwd.logprob();    // should equal fwd.logprob()
@@ -21,10 +18,10 @@ class PosteriorProb {
 
         logprob = logprob1;
         L = fwd.seqLen();
-        pprob = new double[L][myNpsym];
+        pprob = new double[L][Model.lpsym];
 
         for (int i = 0; i < L; i++) {
-            for (int q = 0; q < myNpsym; q++)
+            for (int q = 0; q < Model.lpsym; q++)
                 pprob[i][q] = 0;
 
             for (int g = 1; g < Model.nstate - 1; g++)  //@@
@@ -38,12 +35,6 @@ class PosteriorProb {
                       best=q;*/
         }
 
-
-/*        for (int i=0; i<L; i++)
-	        for( int q=0; q<myNpsym; q++ )
-			System.out.println( i+" "+q+" .. "+pprob[i][q]   );
-
-*/
     }
 
     double[][] getPProb() {
@@ -75,10 +66,10 @@ class PosteriorProb {
         for (int i = 0; i < L; i++) {
             tot = 0;
 
-            for (int q = 0; q < myNpsym; q++)
+            for (int q = 0; q < Model.lpsym; q++)
                 tot += pprob[i][q];
 
-            for (int g = 0; g < myNpsym; g++)
+            for (int g = 0; g < Model.lpsym; g++)
                 pprob[i][g] /= (tot > 0) ? tot : 1;
 
         }

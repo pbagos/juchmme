@@ -27,7 +27,7 @@ class Decoding {
 
         //Test set must be have more than 4 sequences
         if (parallel && (testSet.nseqs > 4)) {
-            if (Params.processors / testSet.nseqs < 2)
+            if (testSet.nseqs / Params.processors< 2)
                 CPUs = testSet.nseqs / 2;
             else
                 CPUs = Params.processors;

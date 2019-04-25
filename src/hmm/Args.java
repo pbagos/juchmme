@@ -103,7 +103,6 @@ public class Args {
                     break;
                 case 'f':
                     if (args.length > i + 1) {
-                        System.out.println(args[i + 1]);
                         filesFasta.add(args[i + 1]);
                         Params.FASTA = true;
                         Params.THREELINE = false;

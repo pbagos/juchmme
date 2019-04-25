@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Model {
     public static String MODEL = "";
+    public static boolean isCHMM;
 
     public static String esym;
     public static String osym;
@@ -29,9 +30,10 @@ public class Model {
 
     public static int nstate;
     public static int npsym;
+    public static int lpsym;
     public static int nesym;
     public static int nosym;
-    public static int esyminv = 255;
+    public static int esyminv = 1000;
 
     static Encode enc;
 
@@ -95,6 +97,18 @@ public class Model {
             slab[k] = osym.lastIndexOf(ostate[k].charAt(0));
             plab[k] = psym.lastIndexOf(pstate[k].charAt(0));
         }
+
+        lpsym = Model.npsym;
+        if (Params.ALLOW_BEGIN)
+            lpsym--;
+
+        if (Params.ALLOW_END)
+            lpsym--;
+
+        if (lpsym > 1)
+            isCHMM = true;
+        else
+            isCHMM = false;
 
         //Output
         System.out.println("Using model " + MODEL);

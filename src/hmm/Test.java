@@ -27,27 +27,42 @@ class Test {
 
         if (Params.VITERBI > -1) {
             Viterbi vit2 = new Viterbi(estimate, sequence, free);
-            sequence.path[Params.VITERBI] = vit2.getPath2();
+
+            if (Model.isCHMM)
+                sequence.path[Params.VITERBI] = vit2.getPath2();
+            else
+                sequence.path[Params.VITERBI] = vit2.getPath();
+
             sequence.score[Params.VITERBI] = vit2.getProb() - fwd2.logprob();
-            sequence.relscore[Params.VITERBI] = CalcRelScore(sequence.getLen(), sequence.path[Params.VITERBI], pp2);
+
+            if (Model.isCHMM)
+                sequence.relscore[Params.VITERBI] = CalcRelScore(sequence.getLen(), sequence.path[Params.VITERBI], pp2);
         }
 
         if (Params.POSVIT > -1) {
             PosViterbi posvit2 = new PosViterbi(estimate, sequence, free, postp2);
-            sequence.path[Params.POSVIT] = posvit2.getPath2();
+
+            if (Model.isCHMM)
+                sequence.path[Params.POSVIT] = posvit2.getPath2();
+            else
+                sequence.path[Params.POSVIT] = posvit2.getPath();
+
             sequence.score[Params.POSVIT] = posvit2.getProb() - fwd2.logprob();
-            sequence.relscore[Params.POSVIT] = CalcRelScore(sequence.getLen(), sequence.path[Params.POSVIT], pp2);
+
+            if (Model.isCHMM)
+                sequence.relscore[Params.POSVIT] = CalcRelScore(sequence.getLen(), sequence.path[Params.POSVIT], pp2);
         }
 
-        if (Params.PLP > -1) {
+        if (Params.PLP > -1 && Model.isCHMM) {
             PLP plp2 = new PLP(estimate, sequence, free, postp2);
             sequence.path[Params.PLP] = plp2.getPath2();
             sequence.score[Params.PLP] = plp2.getProb() - fwd2.logprob();
+
             sequence.relscore[Params.PLP] = CalcRelScore(sequence.getLen(), sequence.path[Params.PLP], pp2);
         }
 
 
-        if (Params.NBEST > -1) {
+        if (Params.NBEST > -1 && Model.isCHMM) {
             NBest nbest = new NBest(estimate, sequence, 1, free);
             sequence.path[Params.NBEST] = nbest.getPath();
             sequence.score[Params.NBEST] = nbest.getProb() - fwd2.logprob();
@@ -56,7 +71,7 @@ class Test {
 
         if (Params.DYNAMIC > -1 || Args.SHOW_PLOT || Args.graphPlotDir != null) {
 
-            if (Params.DYNAMIC > -1) {
+            if (Params.DYNAMIC > -1 && Model.isCHMM){
                 Dynamic dyn = new Dynamic(postp2.getPProb(), sequence.getLen(), 'M', 'O', 'I');
                 sequence.path[Params.DYNAMIC] = dyn.getPath();
 
@@ -80,13 +95,6 @@ class Test {
         }
 
         int lng = sequence.getLen();
-        double maxprob1 = 0;
-
-        for (int i = 0; i < lng; i++) {
-            if (maxprob1 < pp2[i][1])
-                maxprob1 = pp2[i][1];
-        }
-
         double pnull = 0;
 
         for (int i = 0; i < lng; i++) {
@@ -96,7 +104,6 @@ class Test {
         }
 
         sequence.logOdds = (fwd2.logprob() - pnull);
-        sequence.maxProb = maxprob1;
         sequence.logProb = fwd2.logprob();
         sequence.lng = lng;
     }
@@ -161,14 +168,14 @@ class Test {
         java.lang.StringBuffer buf1 = new java.lang.StringBuffer();
 
         for (i = 0; i < seq.getLen(); i++)
-            for (int q = 0; q < Model.npsym - 2; q++) {
+            for (int q = 0; q < Model.lpsym; q++) {
                 if (total == null)
                     buf1.append(0.0D);
                 else
                     buf1.append(total[i][q]);
 
 
-                if (q < Model.npsym - 2 - 1)
+                if (q < Model.lpsym - 1)
                     buf1.append("|");
                 else buf1.append("&");
             }

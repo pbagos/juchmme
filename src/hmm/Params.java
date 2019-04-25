@@ -180,7 +180,6 @@ public class Params {
             parallel = Utils.parseBoolean(props.getProperty("PARALLEL"), "PARALLEL");
             defCPU = Utils.parseBoolean(props.getProperty("defCPU"), "defCPU");
             nOfCPU = Utils.parseInteger(props.getProperty("nCPU"), "nCPU");
-            ;
             processors = (defCPU) ? getSystemProcessors() : nOfCPU;
 
             //TESTING OPTIONS

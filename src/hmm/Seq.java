@@ -17,7 +17,6 @@ public class Seq {
     double dynScoreDiff;
     double logOdds;
     double logProb;
-    double maxProb;
     double lng;
     private boolean isUnlabeled;
 
@@ -44,7 +43,6 @@ public class Seq {
         } else {
             this.xs = seq;
         }
-
         this.xsorig = seq;
         this.indexID = indx;
 
@@ -152,33 +150,33 @@ public class Seq {
         if (Params.THREELINE)
             System.out.println("OB: " + xorig);
 
-        System.out.println("\t" + "lng = " + lng + "\t" + logOdds + " (logodds)");
-        System.out.println("\t" + "lng = " + lng + "\t" + maxProb + " (maxprob1)");
-        System.out.println("\t" + "lng = " + lng + "\t" + (-logProb / lng) + " (-logprob/lng)");
+        System.out.println("CC:\t" + "lng = " + lng + "\tlogodds = " + logOdds + "\t(-logprob/lng) = "+ (-logProb / lng));
 
         if (Params.VITERBI > -1) {
             System.out.println("VS: " + score[Params.VITERBI]);
-            System.out.println("VR: " + relscore[Params.VITERBI]);
+            if (Model.isCHMM)
+                System.out.println("VR: " + relscore[Params.VITERBI]);
             System.out.println("VP: " + path[Params.VITERBI]);
         }
         if (Params.POSVIT > -1) {
             System.out.println("PS: " + score[Params.POSVIT]);
-            System.out.println("PR: " + relscore[Params.POSVIT]);
+            if (Model.isCHMM)
+                System.out.println("PR: " + relscore[Params.POSVIT]);
             System.out.println("PP: " + path[Params.POSVIT]);
         }
-        if (Params.PLP > -1) {
+        if (Params.PLP > -1 && Model.isCHMM) {
             System.out.println("LS: " + score[Params.PLP]);
             System.out.println("LR: " + relscore[Params.PLP]);
             System.out.println("LP: " + path[Params.PLP]);
         }
 
-        if (Params.NBEST > -1) {
+        if (Params.NBEST > -1 && Model.isCHMM) {
             System.out.println("NS: " + score[Params.NBEST]);
             System.out.println("NR: " + relscore[Params.NBEST]);
             System.out.println("NP: " + path[Params.NBEST]);
         }
 
-        if (Params.DYNAMIC > -1) {
+        if (Params.DYNAMIC > -1 && Model.isCHMM) {
             System.out.println("DR: " + relscore[Params.DYNAMIC]);
             System.out.println("DR: " + dynScoreDiff);
             System.out.println("DP: " + path[Params.DYNAMIC]);
@@ -267,7 +265,7 @@ public class Seq {
             if (Params.PLP > -1) System.out.print("PVI: " + path[Params.PLP].charAt(i));
             System.out.print("\t");
 
-            for (int q = 0; q < Model.npsym - 2; q++) {
+            for (int q = 0; q < Model.lpsym; q++) {
                 System.out.print("|");
                 for (g = 1; g <= total[i][q] * wdth; g++) {
                     System.out.print(Model.psym.charAt(q));
@@ -280,7 +278,7 @@ public class Seq {
 
             System.out.print("|\t");
 
-            for (int q = 0; q < Model.npsym - 2; q++) {
+            for (int q = 0; q < Model.lpsym; q++) {
                 System.out.print(total[i][q] + "\t");
             }
 

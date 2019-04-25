@@ -84,7 +84,7 @@ class PosViterbi extends HMMAlgo {
         B0 = new Traceback2(L, kmax);
     }
 
-    private String getPath() {
+    public String getPath() {
         StringBuffer res = new StringBuffer();
         Traceback2 tb = B0;
         int i = tb.i, j = tb.j;

@@ -13,6 +13,9 @@ public class SeqSet {
     public SeqSet(String file) {
         System.out.println("Preparing Sequences");
         nseqs = CountSeqs(file);
+
+        //String output = Utils.executeCommand("wc -l " + file);
+        //String output = Utils.executeCommand("grep -i \">\" " + file);
         seq = new Seq[nseqs];
 
         System.out.println(nseqs + " sequences in file " + file);
@@ -33,6 +36,8 @@ public class SeqSet {
 
         System.out.println("--------------------------------------------------------------------------");
     }
+
+
 
     //Constructor set by Integer (number of sequences)
     public SeqSet(int i) {
