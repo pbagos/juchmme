@@ -1,7 +1,11 @@
 # juchmme
 Java Utility for Class Hidden Markov Models and Extensions
 
+## Introduction
 JUCHMME, an acronym for Java Utility for Class Hidden Markov Models and Extensions is a tool developed for biological sequence analysis.
+
+For documentation, see http://docs.google.com/viewer?a=v&pid=sites&srcid=Y29tcGdlbi5vcmd8bGFifGd4OjJkNWM5ZDRkYWIwYzQ0YTA
+
 The overall aim of this work has been to develop a software tool of capable of offering a large collection of standard algorithms for Hidden Markov Models (HMMs) as well as a number of extensions and to evaluate this model on various biological problems. The JUCHMME framework is characterized by:
 Flexibility: Ease of use and customization for various problems. The user can create models of any architecture, any alphabet (DNA, protein or other), all without requiring programming capabilities (settings will be made through a configuration file).
 
