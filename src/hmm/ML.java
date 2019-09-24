@@ -4,12 +4,7 @@ import java.io.*;
 import java.util.*;
 
 class ML extends TrainAlgo {
-    public double valLog;
-    private boolean valid; // If true enable EARLY functionality
     private double[][] E;
-    private double[][] A;
-
-    private Probs tab;
 
     public ML(final SeqSet trainSet, final Probs tab0, final SeqSet valSeqs, WeightsL weightsL) throws Exception {
         valid = true;
@@ -34,7 +29,7 @@ class ML extends TrainAlgo {
         double[][] down_gradA = new double[Model.nstate][Model.nstate];
         double[][] down_gradE = new double[Model.nstate][Model.nesym];
 
-        // Set up the inverse of b -> esym.charAt(b); assume all esyms <= 'Z'
+        // Set up the inverse of b -> esym.charAt(b);
         int[] esyminv = new int[Model.esyminv];
 
         for (int i = 0; i < esyminv.length; i++)
@@ -42,15 +37,6 @@ class ML extends TrainAlgo {
 
         for (int b = 0; b < Model.nesym; b++)
             esyminv[Model.esym.charAt(b)] = b;
-
-        /*
-   		// Initially use random transition and emission matrices
-   		for (int k=0; k<Model.nstate; k++)
-        {
-             amat[k] = randomdiscrete(Model.nstate);
-             emat[k] = randomdiscrete(Model.nesym);
-        }
-        */
 
         // noise
         if (Params.NOISE_TR || Params.NOISE_EM) {
@@ -66,24 +52,24 @@ class ML extends TrainAlgo {
         hmm = new HMM(tab);
 
         double oldloglikelihood = 0, oldvalLoglikelihood = 0, loglikelihood = 0;
-
-        Forward[] fwds = new Forward[trainSet.nseqs];
-        Backward[] bwds = new Backward[trainSet.nseqs];
-
-        double[] logP = new double[trainSet.nseqs];
-        String[] vPaths = new String[trainSet.nseqs];
+        ViterbiTraining vt = null;
+        ForwardBackward fwdbwd = null;
 
         //Initialization Step
-        if (TrainingWithViterbi)
-            loglikelihood = ViterbiTraining(trainSet, vPaths, logP, false, weightsL);
-        else
-            loglikelihood = fwdbwd(fwds, bwds, logP, false, trainSet, weightsL);
-
+        if (TrainingWithViterbi) {
+            vt = new ViterbiTraining(hmm, trainSet, false, weightsL);
+            loglikelihood = vt.getLogProb();
+        } else {
+            fwdbwd = new ForwardBackward(hmm, false, trainSet, weightsL);
+            loglikelihood = fwdbwd.getLogProb();
+        }
 
         double valLoglikelihood = Double.NEGATIVE_INFINITY;
 
-        if (valid)
-            valLoglikelihood = fwdbwd(false, valSeqs);
+        if (valid) {
+            ForwardBackward fb = new ForwardBackward(hmm, false, trainSet);
+            valLoglikelihood = fb.getLogProb();
+        }
 
         if (loglikelihood == Double.NEGATIVE_INFINITY)
             System.out.println("Probable illegal transition found");
@@ -128,10 +114,10 @@ class ML extends TrainAlgo {
                     //If TRUE  reestimation computed using the ViterbiTraining algorithm
                     //if FALSE reestimation computed using the Forward-Backward alogirth
                     if (!TrainingWithViterbi) {
-                        Forward fwd = fwds[s];
-                        Backward bwd = bwds[s];
+                        Forward fwd = fwdbwd.getFwds(s);
+                        Backward bwd = fwdbwd.getBwds(s);
                         int seqLen = trainSet.seq[s].getLen();
-                        double P = logP[s];
+                        double P = fwdbwd.getLogP(s);
 
                         for (int i = 1; i <= seqLen; i++)
                             for (int k = 0; k < Model.nstate; k++) {
@@ -142,8 +128,7 @@ class ML extends TrainAlgo {
 
                         AddExpC_A(A, trainSet.seq[s], P, fwd, bwd, weightsL);
                     } else {
-                        String vPath = vPaths[s];
-                        ViterbiTrainingExp(vPath, trainSet.seq[s], A, E, weightsL);
+                        vt.Exp(s, trainSet.seq[s], A, E, weightsL);
                     }
                 }    //end foreach sequence
 
@@ -215,18 +200,21 @@ class ML extends TrainAlgo {
             hmm = new HMM(tab);
 
             //E-step
-            //
-            if (TrainingWithViterbi)
-                loglikelihood = ViterbiTraining(trainSet, vPaths, logP, false, weightsL);
-            else
-                loglikelihood = fwdbwd(fwds, bwds, logP, false, trainSet, weightsL);
+            if (TrainingWithViterbi) {
+                vt = new ViterbiTraining(hmm, trainSet, false, weightsL);
+                loglikelihood = vt.getLogProb();
+            } else {
+                fwdbwd = new ForwardBackward(hmm, false, trainSet, weightsL);
+                loglikelihood = fwdbwd.getLogProb();
+            }
 
             logdiff = oldloglikelihood - loglikelihood;
             System.out.println(iter + "\tlog likelihood = " + loglikelihood + "\t\t diff = " + logdiff);
 
 
             if (valid) {
-                valLoglikelihood = fwdbwd(false, valSeqs);
+                ForwardBackward fb = new ForwardBackward(hmm, false, trainSet);
+                valLoglikelihood = fb.getLogProb();
 
                 System.out.print("\tval log likelihood = " + valLoglikelihood + "\t\t diff = ");
 

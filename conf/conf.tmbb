@@ -1,7 +1,7 @@
 # TRAINING OPTIONS
-RUN_CML=false
-RUN_GRADIENT=false
-HNN=false
+RUN_CML=true
+RUN_GRADIENT=true
+HNN=true
 ALLOW_BEGIN=true
 ALLOW_END=true
 RUN_ViterbiTraining=false
@@ -17,7 +17,7 @@ EMISSIONS=FILE
 WEIGHTS=RPROP
 
 # Multithreaded parallelization for multicores
-PARALLEL=true
+PARALLEL=false
 defCPU=true
 nCPU=10
 
@@ -92,8 +92,9 @@ NOISE_EM=true
 PRIOR_TRANS=0.001
 
 #HNN OPTIONS
-window=7
-nhidden=10
+windowLeft=5
+windowRight=5
+nhidden=7
 ADD_GRAD=0.0
 DECAY=0.001
 #1: Sigmoid, 2: Sigmoid Modified, 3: Tanh

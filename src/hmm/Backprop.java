@@ -3,32 +3,19 @@ package hmm;
 import java.lang.Math;
 
 class Backprop extends TrainAlgo {
-    public double valLog;
-    private boolean valid;
     private double[][][] E;
-    private double[][] A;
-    private Probs tab;
 
     public Backprop(final SeqSet trainSet, final Probs tab0, final SeqSet valSeqs, WeightsL weightsL) throws Exception {
         valid = true;
         Run(trainSet, tab0, valSeqs, 0.0D);
     }
 
-
     public Backprop(final SeqSet trainSet, final Probs tab0, final double stopLog, WeightsL weightsL) throws Exception {
         valid = false;
         Run(trainSet, tab0, new SeqSet(0), stopLog);
     }
 
-
-    public void Run(final SeqSet trainSet, final Probs tab0, final SeqSet valSeqs, final double stopLog) throws Exception {
-        int ex = 0;
-
-        SeqSet seqs = new SeqSet(trainSet.nseqs + ex);
-
-        for (int i = 0; i < seqs.nseqs - ex; i++)
-            seqs.seq[i] = trainSet.seq[i];
-
+    public void Run(final SeqSet seqs, final Probs tab0, final SeqSet valSeqs, final double stopLog) throws Exception {
         double loglikelihood, loglikelihoodC, loglikelihoodF;
         double valLoglikelihood, valLoglikelihoodC, valLoglikelihoodF;
 
@@ -39,14 +26,6 @@ class Backprop extends TrainAlgo {
         valLoglikelihoodC = Double.NEGATIVE_INFINITY;
         valLoglikelihoodF = Double.NEGATIVE_INFINITY;
 
-        Forward[] fwdsC = new Forward[seqs.nseqs];
-        Backward[] bwdsC = new Backward[seqs.nseqs];
-        double[] logPC = new double[seqs.nseqs];
-
-        Forward[] fwdsF = new Forward[seqs.nseqs];
-        Backward[] bwdsF = new Backward[seqs.nseqs];
-        double[] logPF = new double[seqs.nseqs];
-
         acts = new Activ[Params.NNclassLabels][seqs.nseqs][seqs.getMaxL()];
         Activ[][][] valActs;
 
@@ -55,32 +34,6 @@ class Backprop extends TrainAlgo {
         double bestl = Double.NEGATIVE_INFINITY;
         Weights bestw = new Weights();
         tab = new Probs(tab0.aprob, tab0.weights);
-
-        //System.out.println( "*** Bootstrapping ***" );
-        for (int i = 1; i <= Params.BOOT; i++) {
-            if (Params.WEIGHTS.equals("RANDOM_NORMAL"))
-                tab.weights.RandomizeNormal(Params.STDEV, 0);
-            else if (Params.WEIGHTS.equals("RANDOM_UNIFORM"))
-                tab.weights.RandomizeUniform(Params.RANGE, 0);
-
-            hmm = new HMM(tab);
-            //hmm.print();//////
-            CalcActs(seqs);
-
-            loglikelihoodC = fwdbwd(fwdsC, bwdsC, logPC, false, seqs);
-            loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs);
-            loglikelihood = loglikelihoodC - loglikelihoodF;
-            System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF);//////////
-
-
-            System.out.println(i + "/" + Params.BOOT + "\tlog likelihood = " + loglikelihood);
-
-            if (loglikelihood > bestl) {
-                bestl = loglikelihood;
-                bestw = tab0.weights.GetClone();
-            }
-
-        }
 
         if (bestl > Double.NEGATIVE_INFINITY) {
             tab.weights = bestw;
@@ -99,21 +52,25 @@ class Backprop extends TrainAlgo {
         if (valid)
             CalcActs(valSeqs, valActs);
 
-        loglikelihoodC = fwdbwd(fwdsC, bwdsC, logPC, false, seqs, ex);
+        ForwardBackward fwdbwdC = new ForwardBackward(hmm, false, seqs, acts);
+        ForwardBackward fwdbwdF = new ForwardBackward(hmm, true, seqs, acts);
+        loglikelihoodC = fwdbwdC.getLogProb();
+        loglikelihoodF = fwdbwdF.getLogProb();
 
-        if (valid)
-            valLoglikelihoodC = fwdbwd(false, valSeqs, valActs);
-
+        if (valid) {
+            ForwardBackward fb = new ForwardBackward(hmm, false, valSeqs, valActs);
+            valLoglikelihoodC = fb.getLogProb();
+        }
 
         double sum_weights = WeightsSquare(tab.weights);
-
-        loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs, ex);
 
         loglikelihood = loglikelihoodC - loglikelihoodF - Params.DECAY * sum_weights;
         System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF + ", SqWts=" + sum_weights);
 
         if (valid) {
-            valLoglikelihoodF = fwdbwd(true, valSeqs, valActs);
+            ForwardBackward fb = new ForwardBackward(hmm, true, valSeqs, valActs);
+            valLoglikelihoodF = fb.getLogProb();
+
             valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF - Params.DECAY * sum_weights;
             System.out.println("\tVC=" + valLoglikelihoodC + ", VF=" + valLoglikelihoodF + ", SqWts=" + sum_weights);
         }
@@ -156,13 +113,13 @@ class Backprop extends TrainAlgo {
 
             for (int s = 0; s < seqs.nseqs; s++)  // Foreach sequence
             {
-                Forward fwdC = fwdsC[s];
-                Backward bwdC = bwdsC[s];
-                double PC = logPC[s];            // NOT exp.
+                Forward fwdC = fwdbwdC.getFwds(s);
+                Backward bwdC = fwdbwdC.getBwds(s);
+                double PC = fwdbwdC.getLogP(s);
 
-                Forward fwdF = fwdsF[s];
-                Backward bwdF = bwdsF[s];
-                double PF = logPF[s];            // NOT exp.
+                Forward fwdF = fwdbwdF.getFwds(s);
+                Backward bwdF = fwdbwdF.getBwds(s);
+                double PF = fwdbwdF.getLogP(s);
 
                 int L = seqs.seq[s].getLen();
 
@@ -248,7 +205,7 @@ class Backprop extends TrainAlgo {
             deriv23 = new double[Params.NNclassLabels][1][Params.nhidden+1];
 
 
-            ComputeDeriv(trainSet, E, deriv12, deriv23);
+            ComputeDeriv(seqs, E, deriv12, deriv23);
             UpdateWeights(tab.weights, Params.RPROP, Params.SILVA, deriv12, deriv23);
 
             //LineSearch();
@@ -267,22 +224,29 @@ class Backprop extends TrainAlgo {
             if (valid)
                 CalcActs(valSeqs, valActs);
 
-            loglikelihoodC = fwdbwd(fwdsC, bwdsC, logPC, false, seqs, ex);
+            fwdbwdC = new ForwardBackward(hmm, false, seqs, acts);
+            loglikelihoodC = fwdbwdC.getLogProb();
+            fwdbwdF = new ForwardBackward(hmm, true, seqs, acts);
+            loglikelihoodF = fwdbwdF.getLogProb();
 
-            if (valid)
-                valLoglikelihoodC = fwdbwd(false, valSeqs, valActs);
+            if (valid) {
+                ForwardBackward fb = new ForwardBackward(hmm, false, valSeqs, valActs);
+                valLoglikelihoodC = fb.getLogProb();
+            }
 
             ////////////////////////////////////////////
             sum_weights = WeightsSquare(tab.weights);
             //sum_weights *=Params.DECAY;
             /////////////////////////////////////////////
 
-            loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs, ex);
+            //loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, seqs);
             loglikelihood = loglikelihoodC - loglikelihoodF - Params.DECAY * sum_weights;
             System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF + ", SqWts=" + sum_weights);//////////
 
             if (valid) {
-                valLoglikelihoodF = fwdbwd(true, valSeqs, valActs);
+                ForwardBackward fb = new ForwardBackward(hmm, true, valSeqs, valActs);
+                valLoglikelihoodF = fb.getLogProb();
+
                 valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF - Params.DECAY * sum_weights; //////////????????
                 System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF + ", SqWts=" + sum_weights);//////////
             }
@@ -292,7 +256,6 @@ class Backprop extends TrainAlgo {
 
             if (valid) {
                 System.out.print("\tval log likelihood = " + valLoglikelihood + "\t\t diff = ");
-
 
                 if (valLoglikelihood > oldvalLoglikelihood || iter < Params.ITER) {
                     System.out.println("DOWN");

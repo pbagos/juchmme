@@ -4,6 +4,10 @@ import java.lang.Math;
 import java.util.*;
 
 abstract class TrainAlgo {
+    public double valLog;
+    boolean valid; // If true enable EARLY functionality
+    double[][] A;
+    Probs tab;
 
     HMM hmm;
     int iter;
@@ -59,8 +63,6 @@ abstract class TrainAlgo {
                     K[i][j] = Math.max(Kmin, K[i][j] * Params.NMINUS);
                     prod[i][j] = 0;
                 }
-                /*else if( gin == 0 )
-                	???*/
             }
         }
     }
@@ -219,7 +221,7 @@ abstract class TrainAlgo {
             int lab = seq.getNPObs((i + 1) - 1); // was getNObs
             for (int k = 0; k < Model.nstate; k++) {
                 for (int ell = 0; ell < Model.nstate; ell++) {
-                    if (lab == Model.plab[ell] || lab == -1) ///pbagos@@
+                    if (lab == Model.plab[ell] || lab == -1)
                     {
                         double num = exp(fwdC.f[i][k]
                                 + hmm.getLoga(k, ell)
@@ -436,97 +438,6 @@ abstract class TrainAlgo {
                     calcacts[o][s][i] = hmm.nn[o].Calc(calcSeqs.seq[s].getWindow(i));
     }
 
-    double fwdbwd(Forward[] fwds, Backward[] bwds, double[] logP, boolean free, SeqSet fbseqs, WeightsL weightsL) throws Exception {
-        return fwdbwd(fwds, bwds, logP, free, fbseqs, acts, 0, weightsL);
-
-    }
-
-    double fwdbwd(Forward[] fwds, Backward[] bwds, double[] logP, boolean free, SeqSet fbseqs) throws Exception {
-        WeightsL weightsL = new WeightsL(fbseqs.nseqs);
-
-        return fwdbwd(fwds, bwds, logP, free, fbseqs, acts, 0, weightsL);
-
-    }
-
-    double fwdbwd(Forward[] fwds, Backward[] bwds, double[] logP, boolean free, SeqSet fbseqs, int exclude) throws Exception {
-        WeightsL weightsL = new WeightsL(fbseqs.nseqs);
-
-        return fwdbwd(fwds, bwds, logP, free, fbseqs, acts, exclude, weightsL);
-
-    }
-
-    double fwdbwd(boolean free, SeqSet fbseqs) throws Exception {
-        return fwdbwd(free, fbseqs, acts);
-    }
-
-
-    double fwdbwd(boolean free, SeqSet fbseqs, Activ[][][] fbacts) throws Exception {
-        Forward[] fwds = new Forward[fbseqs.nseqs];
-        Backward[] bwds = new Backward[fbseqs.nseqs];
-        double[] logP = new double[fbseqs.nseqs];
-        WeightsL weightsL = new WeightsL(fbseqs.nseqs);
-
-        return fwdbwd(fwds, bwds, logP, free, fbseqs, fbacts, 0, weightsL);
-
-    }
-
-    double fwdbwd(Forward[] fwds, Backward[] bwds, double[] logP, boolean free,
-                  SeqSet fbSeqs, Activ[][][] fbActs, int exclude, WeightsL weightsL) throws Exception {
-        System.out.println("\tComputing Forward+Backward (" + ((free) ? "Free" : "Clumped") + ")");
-        double loglikelihood = 0;
-        System.out.print("\t");
-
-        for (int i = 0; i < fbSeqs.nseqs; i++)
-            System.out.print("-");
-
-        System.out.println("");
-        System.out.print("\t");
-
-        boolean errors = false;
-        for (int s = 0; s < fbSeqs.nseqs; s++) {
-            if (Params.HNN) {
-                double[][] lge = new double[hmm.nstte][fbSeqs.seq[s].getLen()];
-                for (int i = 0; i < fbSeqs.seq[s].getLen(); i++) {
-                    lge[0][i] = hmm.getLoge(0, fbSeqs.seq[s], i);
-                    lge[hmm.nstte - 1][i] = hmm.getLoge(0, fbSeqs.seq[s], i);
-
-                    for (int k = 1; k < hmm.nstte - 1; k++) {
-                        lge[k][i] = Math.log(fbActs[Model.slab[k]][s][i].layer3[0]);
-                    }
-                }
-
-                fwds[s] = new Forward(hmm, fbSeqs.seq[s], lge, free);
-                bwds[s] = new Backward(hmm, fbSeqs.seq[s], lge, free);
-
-            } else {
-                try {
-                    fwds[s] = new Forward(hmm, fbSeqs.seq[s], free);
-                    bwds[s] = new Backward(hmm, fbSeqs.seq[s], free);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage() + "The error occured at sequence " + (s + 1) + " " + fbSeqs.seq[s].header);
-                    errors = true;
-                    continue;
-                }
-            }
-
-            System.out.print("*");
-
-            logP[s] = fwds[s].logprob();
-
-            if (s < fbSeqs.nseqs - exclude) {
-                loglikelihood += logP[s] * weightsL.getWeightL(fbSeqs.seq[s].getIndexID());
-            }
-
-        }
-        System.out.println();
-
-        if (errors)
-            throw new Exception("Errors ocurred...");
-
-        return loglikelihood;
-    }
-
-
     public void Tying(double[][] E) {
         //TYING!
         for (int k = 0; k < Model.nstate; k++) {
@@ -554,74 +465,4 @@ abstract class TrainAlgo {
             return -1.0D;
         else return 0.0D;
     }
-
-    double ViterbiTraining(SeqSet seqs, String[] vPath, double[] logP, boolean free, WeightsL weightsL) {
-        System.out.println("\tComputing Viterbi Training (" + ((free) ? "Free" : "Clumped") + ")");
-        double loglikelihood = 0.D;
-        System.out.print("\t");
-
-        for (int i = 0; i < seqs.nseqs; i++)
-            System.out.print("-");
-
-        System.out.println("");
-
-        Viterbi v;
-        for (int s = 0; s < seqs.nseqs; s++) {
-            v = new Viterbi(hmm, seqs.seq[s], free);
-            vPath[s] = v.getPath(); // Viterbi Path
-            logP[s] = v.getProb(); // Viterbi likelihood
-            loglikelihood += v.getProb() * weightsL.getWeightL(s);
-        }
-
-        return loglikelihood;
-
-    }
-
-    public void ViterbiTrainingExp(String vPath, Seq x, double[][] A, double[][] E, WeightsL weightsL) {
-        String[] PathC;
-        int length = x.getLen();// Sequence Length
-
-        //States length. All states must have the same length
-        int stateLen = Model.state[0].length();
-        PathC = new String[length];
-
-        //Split ViterbiPath to a String Array with path states
-        PathC = vPath.split("(?<=\\G.{" + stateLen + "})");
-
-        ViterbiTrainingScore(PathC, A, x, E, weightsL);
-    }
-
-    private void ViterbiTrainingScore(String seqPath[], double A[][], Seq x, double E[][], WeightsL weightsL) {
-        //if exists the begin state, find the next and scoring
-        if (Params.ALLOW_BEGIN) {
-            int k = Arrays.asList(Model.state).indexOf(seqPath[0]);
-            A[0][k] = A[0][k] + (1 * weightsL.getWeightL(x.getIndexID()));
-        }
-
-        int seqLen = x.getLen();
-        int sym, row, col, i;
-        for (i = 1; i <= seqLen - 1; i++) {
-            sym = x.getNESym(i - 1);
-            row = Arrays.asList(Model.state).indexOf(seqPath[i - 1]);
-            col = Arrays.asList(Model.state).indexOf(seqPath[i]);
-
-            A[row][col] = A[row][col] + (1 * weightsL.getWeightL(x.getIndexID()));
-            E[row][sym] = E[row][sym] + (1 * weightsL.getWeightL(x.getIndexID()));
-
-        }
-
-        //Score for the last state
-        sym = x.getNESym(i - 1);
-        row = Arrays.asList(Model.state).indexOf(seqPath[i - 1]);
-        E[row][sym] = E[row][sym] + (1 * weightsL.getWeightL(x.getIndexID()));
-
-        //if exists the end state, find the previous state and scoring
-        if (Params.ALLOW_END) {
-            row = Arrays.asList(Model.state).indexOf(seqPath[i - 1]);
-            col = (Model.nstate) - 1;
-            A[row][col] = A[row][col] + (1 * weightsL.getWeightL(x.getIndexID()));
-        }
-
-    }
-
 }

@@ -3,12 +3,7 @@ package hmm;
 import java.util.*;
 
 class CML extends TrainAlgo {
-
-    public double valLog;
-    private boolean valid;
-    private double[][] E;
-    private double[][] A;
-    private Probs tab;
+    double[][] E;
 
     public CML(final SeqSet trainSet, final Probs tab0, final SeqSet valSeqs, WeightsL weightsL) throws Exception {
         valid = true;
@@ -76,24 +71,24 @@ class CML extends TrainAlgo {
         valLoglikelihood = Double.NEGATIVE_INFINITY;
         double loglikelihoodC = 0, loglikelihoodF = 0;
 
-        Forward[] fwdsC = new Forward[trainSet.nseqs];
-        Backward[] bwdsC = new Backward[trainSet.nseqs];
-        double[] logPC = new double[trainSet.nseqs];
-        String[] vPathsC = new String[trainSet.nseqs];
-
-        Forward[] fwdsF = new Forward[trainSet.nseqs];
-        Backward[] bwdsF = new Backward[trainSet.nseqs];
-        double[] logPF = new double[trainSet.nseqs];
-        String[] vPathsF = new String[trainSet.nseqs];
+        ViterbiTraining vtC = null;
+        ViterbiTraining vtF = null;
+        ForwardBackward fwdbwdC = null;
+        ForwardBackward fwdbwdF = null;
 
         //Initialization Step
         if (TrainingWithViterbi) {
-            loglikelihoodC = ViterbiTraining(trainSet, vPathsC, logPC, false, weightsL);
-            loglikelihoodF = ViterbiTraining(trainSet, vPathsF, logPF, true, weightsL);
+            vtC = new ViterbiTraining(hmm, trainSet, false, weightsL);
+            loglikelihoodC =vtC.getLogProb();
+
+            vtF = new ViterbiTraining(hmm, trainSet, true, weightsL);
+            loglikelihoodF =vtF.getLogProb();
         } else {
             // Compute Forward and Backward tables for the sequences
-            loglikelihoodC = fwdbwd(fwdsC, bwdsC, logPC, false, trainSet, weightsL);
-            loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, trainSet, weightsL);
+            fwdbwdC = new ForwardBackward(hmm, false, trainSet, weightsL);
+            loglikelihoodC = fwdbwdC.getLogProb();
+            fwdbwdF = new ForwardBackward(hmm, true, trainSet, weightsL);
+            loglikelihoodF = fwdbwdF.getLogProb();
         }
 
         double loglikelihood = loglikelihoodC - loglikelihoodF;
@@ -103,8 +98,11 @@ class CML extends TrainAlgo {
         System.out.println(iter + "\tlog likelihood = " + Params.fmt.format(loglikelihood));
 
         if (valid) {
-            valLoglikelihoodC = fwdbwd(false, valSeqs);
-            valLoglikelihoodF = fwdbwd(true, valSeqs);
+            ForwardBackward fb = new ForwardBackward(hmm, false, trainSet);
+            valLoglikelihoodC = fb.getLogProb();
+
+            fb = new ForwardBackward(hmm, true, trainSet);
+            valLoglikelihoodF = fb.getLogProb();
 
             valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF;
             System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF);
@@ -158,18 +156,18 @@ class CML extends TrainAlgo {
                     //If TRUE  reestimation computed using the ViterbiTraining algorithm
                     //if FALSE reestimation computed using the Forward-Backward alogirth
                     if (!TrainingWithViterbi) {
-                        Forward fwdC = fwdsC[s];
-                        Backward bwdC = bwdsC[s];
-                        double PC = logPC[s];            // NOT exp.
+                        Forward fwdC = fwdbwdC.getFwds(s);
+                        Backward bwdC = fwdbwdC.getBwds(s);
+                        double PC = fwdbwdC.getLogP(s);
 
-                        Forward fwdF = fwdsF[s];
-                        Backward bwdF = bwdsF[s];
-                        double PF = logPF[s];            // NOT exp.
+                        Forward fwdF = fwdbwdF.getFwds(s);
+                        Backward bwdF = fwdbwdF.getBwds(s);
+                        double PF = fwdbwdF.getLogP(s);
 
                         int seqLen = trainSet.seq[s].getLen();
 
                         for (int i = 1; i <= seqLen; i++)
-                            for (int k = 0; k < Model.nstate; k++) // @@ ektos begin kai end?
+                            for (int k = 0; k < Model.nstate; k++) // without begin and end
                             {
                                 if (esyminv[trainSet.seq[s].getSym(i - 1)] < 0)
                                     throw new Exception("ERROR: Symbol " + trainSet.seq[s].getSym(i - 1) +
@@ -181,7 +179,7 @@ class CML extends TrainAlgo {
                             }
 
                         //-Calc new transitions
-                        for (int i = 0; i <= seqLen - 1; i++) // @@ 1 prin + 1 meta?
+                        for (int i = 0; i <= seqLen - 1; i++)
                         {
                             int lab = (trainSet.seq[s].getNPObs((i + 1) - 1));
 
@@ -219,18 +217,13 @@ class CML extends TrainAlgo {
                                         - PF);
                             }
 
-                    } else
-                    {
-                        String vPathC = vPathsC[s];
-                        String vPathF = vPathsF[s];
-
-                        ViterbiTrainingExp(vPathC, trainSet.seq[s], AC, EC, weightsL);
-                        ViterbiTrainingExp(vPathF, trainSet.seq[s], AF, EF, weightsL);
+                    } else {
+                        vtC.Exp(s, trainSet.seq[s], AC, EC, weightsL);
+                        vtF.Exp(s, trainSet.seq[s], AF, EF, weightsL);
 
                         for (int i = 0; i < Model.nstate; i++)
                             for (int j = 0; j < Model.nstate; j++)
                                 A[i][j] = AC[i][j] - AF[i][j];
-
                     }
 
                     //AddExpC_A( A, trainSet.seq[s], PC, fwdC, bwdC );
@@ -302,12 +295,17 @@ class CML extends TrainAlgo {
             hmm = new HMM(tab);
 
             if (TrainingWithViterbi) {
-                loglikelihoodC = ViterbiTraining(trainSet, vPathsC, logPC, false, weightsL);
-                loglikelihoodF = ViterbiTraining(trainSet, vPathsF, logPF, true, weightsL);
+                vtC = new ViterbiTraining(hmm, trainSet, false, weightsL);
+                loglikelihoodC =vtC.getLogProb();
+
+                vtF = new ViterbiTraining(hmm, trainSet, true, weightsL);
+                loglikelihoodF =vtF.getLogProb();
             } else {
                 // Compute Forward and Backward tables for the sequences
-                loglikelihoodC = fwdbwd(fwdsC, bwdsC, logPC, false, trainSet, weightsL);
-                loglikelihoodF = fwdbwd(fwdsF, bwdsF, logPF, true, trainSet, weightsL);
+                fwdbwdC = new ForwardBackward(hmm, false, trainSet, weightsL);
+                loglikelihoodC = fwdbwdC.getLogProb();
+                fwdbwdF = new ForwardBackward(hmm, true, trainSet, weightsL);
+                loglikelihoodF = fwdbwdF.getLogProb();
             }
 
             System.out.println("\tC=" + loglikelihoodC + ", F=" + loglikelihoodF);
@@ -317,8 +315,11 @@ class CML extends TrainAlgo {
             System.out.println(iter + "\tlog likelihood = " + loglikelihood + "\t\t diff = " + logdiff);
 
             if (valid) {
-                valLoglikelihoodC = fwdbwd(false, valSeqs);
-                valLoglikelihoodF = fwdbwd(true, valSeqs);
+                ForwardBackward fb = new ForwardBackward(hmm, false, trainSet);
+                valLoglikelihoodC = fb.getLogProb();
+
+                fb = new ForwardBackward(hmm, true, trainSet);
+                valLoglikelihoodF = fb.getLogProb();
 
                 valLoglikelihood = valLoglikelihoodC - valLoglikelihoodF;
                 System.out.println("\tvalC=" + valLoglikelihoodC + ", valF=" + valLoglikelihoodF);

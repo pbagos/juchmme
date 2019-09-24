@@ -152,7 +152,8 @@ class GEM extends TrainAlgo {
         for (int b = 0; b < Model.nesym; b++)
             esyminv[Model.esym.charAt(b)] = b;
 
-        loglikelihood = fwdbwd(fwds, bwds, logP, false, trainSet, weightsL);
+        ForwardBackward fwdbwd = new ForwardBackward(hmm, false, trainSet, weightsL);
+        loglikelihood = fwdbwd.getLogProb();
 
         if (loglikelihood == Double.NEGATIVE_INFINITY)
             System.out.println("Probable illegal transition found");
@@ -167,11 +168,10 @@ class GEM extends TrainAlgo {
             System.out.print(".");
 
             //Compute estimates for A and E
-
-            Forward fwd = fwds[s];
-            Backward bwd = bwds[s];
+            Forward fwd = fwdbwd.getFwds(s);
+            Backward bwd = fwdbwd.getBwds(s);
             int seqLen = trainSet.seq[s].getLen();
-            double P = logP[s];
+            double P = fwdbwd.getLogP(s);
 
             for (int i = 1; i <= seqLen; i++)
                 for (int k = 0; k < Model.nstate; k++) {

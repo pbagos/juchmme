@@ -92,7 +92,8 @@ NOISE_EM=true
 PRIOR_TRANS=0.001
 
 #HNN OPTIONS
-window=7
+windowLeft=5
+windowRight=5
 nhidden=10
 ADD_GRAD=0.0
 DECAY=0.001
