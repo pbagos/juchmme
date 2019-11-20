@@ -227,4 +227,28 @@ public class SeqSet {
         return false;
     }
 
+    public void SaveSet(String filename){
+        try {
+            File outputFile = new File(filename);
+            FileWriter out = new FileWriter(outputFile);
+            for (int i = 0; i < nseqs; i++){
+                out.write(seq[i].header + "\n");
+                out.write(seq[i].getSeq() + "\n");
+            }
+
+            out.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public void PrintSet(){
+        for (int i = 0; i < nseqs; i++){
+            System.out.println(seq[i].header);
+            System.out.println(seq[i].getSeq());
+        }
+    }
+
 }

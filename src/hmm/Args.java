@@ -110,6 +110,16 @@ public class Args {
                     } else
                         System.err.println("-" + a + ": Missing argument");
                     break;
+                case 'A':
+                    if (args.length > i + 1) {
+                        filesFasta.add(args[i + 1]);
+                        Params.FASTA = true;
+                        Params.THREELINE = false;
+                        Params.MSA = true;
+                        i++;
+                    } else
+                        System.err.println("-" + a + ": Missing argument");
+                    break;
                 case 'd':
                     if (args.length > i + 1) {
                         fileD = args[i + 1];
@@ -191,6 +201,7 @@ public class Args {
             System.err.println("\t-x <file>: HNN Encode");
             System.err.println("\t-i <file>: 3-line sequences to test");
             System.err.println("\t-f <file>: fasta sequences to test");
+            System.err.println("\t-A <file>: Aligment fasta sequences to test");
             System.err.println("\t-t <file>: run training with this training set");
             System.err.println("\t-s : run self-consistency");
             System.err.println("\t-j : run jacknife");

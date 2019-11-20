@@ -346,10 +346,11 @@ class CML extends TrainAlgo {
 
         System.out.println(stopLog);
         hmm.lh = loglikelihood;
-        hmm.SaveModel();
+        //hmm.SaveModel();
     }
 
     public Probs GetProbs() {
         return tab;
     }
 }
+

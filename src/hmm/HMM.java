@@ -134,6 +134,31 @@ public class HMM {
         }
     }
 
+    public void SaveModel(String suffix) {
+        try {
+            File outputFile = new File("A_" + suffix);
+            FileWriter out = new FileWriter(outputFile);
+            out.write(printa());
+            out.close();
+
+
+            if (Params.HNN) {
+                outputFile = new File("W_" + suffix);
+                out = new FileWriter(outputFile);
+                out.write(printw());
+                out.close();
+            } else {
+                outputFile = new File("E_" + suffix);
+                out = new FileWriter(outputFile);
+                out.write(printe());
+                out.close();
+            }
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public Probs GetProbs() {
         double[][] a = new double[nstte][nstte];
         double[][] e = new double[nstte][Model.nesym];

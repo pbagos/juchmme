@@ -30,6 +30,7 @@ class TrainProc {
         System.out.println("TRAINING - Self Consistency");
         Estimator est = new Estimator(trainSet, trainSetUn, tab);
         model = est.GetModel();
+        model.SaveModel();
 
         System.out.println("TESTING");
         Decoding dec = new Decoding(model, trainSet, true, true, Params.parallel);
@@ -63,6 +64,7 @@ class TrainProc {
 
             Estimator est = new Estimator(trainSet, trainSetUn, tab);
             HMM model = est.GetModel();
+            model.SaveModel(Model.MODEL +"_cross"+(c + 1));
 
             System.out.println("Testing cluster " + (c + 1));
             int min = (c * clustSize);
@@ -74,6 +76,7 @@ class TrainProc {
                 testSet.seq[cou].SetIndexID(cou);
                 cou++;
             }
+            //testSet.SaveSet("testSet_cross"+(c + 1));
 
             System.out.println("testset Len = " + testSet.nseqs);
             Decoding dec = new Decoding(model, testSet, true, true, Params.parallel);

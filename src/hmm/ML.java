@@ -231,7 +231,7 @@ class ML extends TrainAlgo {
         } while (Math.abs(logdiff) > Params.threshold && iter < Params.maxIter && loglikelihood < stopLog);
 
         hmm.lh = loglikelihood;
-        hmm.SaveModel();
+        //hmm.SaveModel();
     }
 
     public Probs GetProbs() {

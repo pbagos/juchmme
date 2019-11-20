@@ -7,6 +7,8 @@ public class Params {
     public static final java.text.DecimalFormat fmt =
             new java.text.DecimalFormat("0.000", new java.text.DecimalFormatSymbols(Locale.US));
 
+    static boolean FASTA;             // Fasta File
+    static boolean THREELINE;         // Three Line File
 
     //    Configuration
     static int MINHLEN = 7;
@@ -55,6 +57,7 @@ public class Params {
     static int POSVIT = 3;
     static int PLP = 4;
     static int NBEST = -5;
+    static boolean MSA = false;             // MSA
 
     //TRAINING OPTIONS
     static boolean RUN_CML = false;
@@ -100,8 +103,6 @@ public class Params {
     public static int window = 0;
     public static int windowLeft=3;
     public static int windowRight=3;
-    static boolean FASTA;             // Fasta File
-    static boolean THREELINE;         // Three Line File
     static int nhidden = 3;
     static double ADD_GRAD = 0.0D;
     static int hiddenLayerFunction = 1; //Sigmoid

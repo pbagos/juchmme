@@ -276,7 +276,7 @@ class Backprop extends TrainAlgo {
         } while (logdiff > Params.threshold && iter < Params.maxIter && loglikelihood < stopLog);
 
         hmm.lh = loglikelihood;
-        hmm.SaveModel();
+        //hmm.SaveModel();
     }
 
     private double WeightsSquare(Weights weights) {
