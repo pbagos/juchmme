@@ -100,19 +100,21 @@ public class Juchmme {
                 System.out.println("TRAINING");
                 Estimator est = new Estimator(trainSetLa, trainSetUn, tab);
                 model = est.GetModel();
+                model.SaveModel();
             } else {
                 model = new HMM(tab);
             }
 
             // DECODING
-            if (Args.filesThree.size() > 0) {
+            if (Params.THREELINE) {
                 SeqSet testSet = new SeqSet((String) Args.filesThree.get(0));
-                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel);
+                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel, false);
+                stats.calcStats(testSet);
             }
 
-            if (Args.filesFasta.size() > 0) {
+            if (Params.FASTA) {
                 SeqSet testSet = new SeqSet((String) Args.filesFasta.get(0));
-                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel);
+                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel, Params.MSA);
             }
 
         }

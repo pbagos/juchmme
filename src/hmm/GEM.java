@@ -55,7 +55,7 @@ class GEM extends TrainAlgo {
             //E-step
             //Predict the labels of the unlabeled or partially labeled data
             System.out.println("SSL - Predict the labels of  " + trainSetUnNew.nseqs + " unLabeled Sequences");
-            Decoding dec = new Decoding(hmm, trainSetUnNew, false, false, true);
+            Decoding dec = new Decoding(hmm, trainSetUnNew, false, false, true, false);
 
             int numOfSeqToAdd = 0;
             for (int s = 0; s < trainSetUnNew.nseqs; s++) {

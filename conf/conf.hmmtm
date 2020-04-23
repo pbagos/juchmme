@@ -1,12 +1,12 @@
 # TRAINING OPTIONS
-RUN_CML=false
-RUN_GRADIENT=false
-HNN=false
+RUN_CML=true
+RUN_GRADIENT=true
+HNN=true
 ALLOW_BEGIN=true
 ALLOW_END=true
 RUN_ViterbiTraining=false
 threshold=0.02
-maxIter=200
+maxIter=50
 
 #PROBABILITIES
 #FILE, RANDOM, UNIFORM, VITERBI
@@ -17,7 +17,7 @@ EMISSIONS=FILE
 WEIGHTS=RPROP
 
 # Multithreaded parallelization for multicores
-PARALLEL=true
+PARALLEL=false
 defCPU=true
 nCPU=10
 
@@ -51,7 +51,7 @@ MINSSC=3
 STRDIV=9
 
 #Refine OPTIONS
-FLANK=5
+FLANK=3
 REFINE=true
 ML_INIT=false
 
@@ -92,9 +92,9 @@ NOISE_EM=true
 PRIOR_TRANS=0.001
 
 #HNN OPTIONS
-windowLeft=5
-windowRight=5
-nhidden=10
+windowLeft=9
+windowRight=9
+nhidden=7
 ADD_GRAD=0.0
 DECAY=0.001
 #1: Sigmoid, 2: Sigmoid Modified, 3: Tanh

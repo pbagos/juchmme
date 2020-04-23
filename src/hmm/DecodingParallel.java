@@ -52,18 +52,18 @@ public class DecodingParallel extends RecursiveAction {
     }
 
     protected void computeDirectly(HMM model, SeqSet testSet, boolean free) {
-        try {
-            Test pred;
+        Test pred;
 
-            for (int i = start; i < end; i++) {
+        for (int i = start; i < end; i++) {
+            try {
                 pred = new Test(model, testSet.seq[i], free);
                 if (this.showResults)
                     testSet.seq[i].ShowRes();
+            } catch (Exception e) {
+                System.out.println("DecodingParallel: ERROR in sequence "+testSet.seq[i].header);
+                //System.exit(0);
             }
-        } catch (Exception e) {
-            System.out.println("DecodingParallel: ERROR ");
         }
-
     }
 
     /**

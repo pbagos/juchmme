@@ -152,7 +152,7 @@ public class Args {
                     } else
                         System.err.println("-" + a + ": Missing argument");
                     break;
-                case 'y':
+                case 'k':
                     if (args.length > i + 1) {
                         RUN_CROSSVAL = true;
                         CROSSVAL_CLUSTERS = Integer.parseInt(args[i + 1]);

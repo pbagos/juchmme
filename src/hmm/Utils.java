@@ -140,4 +140,9 @@ public final class Utils {
 
     }
 
+    public static String removeDashes(String c){
+        return c.replaceAll("\\-","");
+    }
+
+
 }

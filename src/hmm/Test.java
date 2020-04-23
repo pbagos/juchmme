@@ -4,24 +4,29 @@ class Test {
     private double[][] pp2;
 
     public Test(HMM estimate, Seq sequence, boolean free) throws Exception {
-        Run(estimate, sequence, free, true);
+        Run(estimate, sequence, free, false, null);
     }
 
-    public Test(HMM estimate, Seq sequence, boolean free, boolean showResults) throws Exception {
-        Run(estimate, sequence, free, showResults);
+    public Test(HMM estimate, Seq sequence, boolean free, String p_paths[]) throws Exception {
+        Run(estimate, sequence, free, true, p_paths);
     }
 
-    public void Run(HMM estimate, Seq sequence, boolean free, boolean showResults) throws Exception {
-        Forward fwd2 = new Forward(estimate, sequence, free);
-        Backward bwd2 = new Backward(estimate, sequence, free);
+    public void Run(HMM estimate, Seq sequence, boolean free, boolean MSA, String p_paths[]) throws Exception {
 
-        if (fwd2.logprob() == Double.NEGATIVE_INFINITY) {
+        Forward fwd = new Forward(estimate, sequence, free);
+        Backward bwd = new Backward(estimate, sequence, free);
+
+        if (fwd.logprob() == Double.NEGATIVE_INFINITY) {
             //return null;
             System.out.println("Error");
             System.exit(0);
         }
 
-        PosteriorProb postp2 = new PosteriorProb(fwd2, bwd2);
+        PosteriorProb postp2;
+        if (MSA)
+            postp2 = new PosteriorProb(p_paths, sequence.getLen());
+        else
+            postp2 = new PosteriorProb(fwd, bwd);
 
         double[][] pp2 = postp2.getPProb();
 
@@ -33,7 +38,7 @@ class Test {
             else
                 sequence.path[Params.VITERBI] = vit2.getPath();
 
-            sequence.score[Params.VITERBI] = vit2.getProb() - fwd2.logprob();
+            sequence.score[Params.VITERBI] = vit2.getProb() - fwd.logprob();
 
             if (Model.isCHMM)
                 sequence.relscore[Params.VITERBI] = CalcRelScore(sequence.getLen(), sequence.path[Params.VITERBI], pp2);
@@ -47,7 +52,7 @@ class Test {
             else
                 sequence.path[Params.POSVIT] = posvit2.getPath();
 
-            sequence.score[Params.POSVIT] = posvit2.getProb() - fwd2.logprob();
+            sequence.score[Params.POSVIT] = posvit2.getProb() - fwd.logprob();
 
             if (Model.isCHMM)
                 sequence.relscore[Params.POSVIT] = CalcRelScore(sequence.getLen(), sequence.path[Params.POSVIT], pp2);
@@ -56,7 +61,7 @@ class Test {
         if (Params.PLP > -1 && Model.isCHMM) {
             PLP plp2 = new PLP(estimate, sequence, free, postp2);
             sequence.path[Params.PLP] = plp2.getPath2();
-            sequence.score[Params.PLP] = plp2.getProb() - fwd2.logprob();
+            sequence.score[Params.PLP] = plp2.getProb() - fwd.logprob();
 
             sequence.relscore[Params.PLP] = CalcRelScore(sequence.getLen(), sequence.path[Params.PLP], pp2);
         }
@@ -65,7 +70,7 @@ class Test {
         if (Params.NBEST > -1 && Model.isCHMM) {
             NBest nbest = new NBest(estimate, sequence, 1, free);
             sequence.path[Params.NBEST] = nbest.getPath();
-            sequence.score[Params.NBEST] = nbest.getProb() - fwd2.logprob();
+            sequence.score[Params.NBEST] = nbest.getProb() - fwd.logprob();
             sequence.relscore[Params.NBEST] = CalcRelScore(sequence.getLen(), sequence.path[Params.NBEST], pp2);
         }
 
@@ -95,6 +100,13 @@ class Test {
         }
 
         int lng = sequence.getLen();
+
+        double maxProb1 = 0;
+        for (int i=0; i < lng; i++){
+            if (maxProb1 < pp2[i][1])
+                maxProb1 = pp2[i][1];
+        }
+
         double pnull = 0;
 
         for (int i = 0; i < lng; i++) {
@@ -103,18 +115,19 @@ class Test {
                 pnull += Math.log(Model.cprior[x]);
         }
 
-        sequence.logOdds = (fwd2.logprob() - pnull);
-        sequence.logProb = fwd2.logprob();
+        sequence.logOdds = (fwd.logprob() - pnull);
+        sequence.logProb = fwd.logprob();
         sequence.lng = lng;
+        sequence.maxProb = maxProb1;
     }
 
     public static double CalcRelScore(final int len, final String path, final double[][] pp) {
         double relScore = 0;
+
         for (int i = 0; i < len; i++) {
             int lab = Model.psym.indexOf(path.charAt(i));
             if (lab == -1)
                 System.out.println("Error. Unknown label on " + i);
-
             else
                 relScore += pp[i][lab];
         }

@@ -21,31 +21,46 @@ import java.util.concurrent.ForkJoinPool;
 
 class Decoding {
 
-    public Decoding(HMM model, SeqSet testSet, boolean free, boolean showResults, boolean parallel) throws Exception {
+    public Decoding(HMM model, SeqSet testSet, boolean free, boolean showResults, boolean parallel, boolean pMSA) throws Exception {
         Test pred;
-        int CPUs;
 
-        //Test set must be have more than 4 sequences
-        if (parallel && (testSet.nseqs > 4)) {
-            if (testSet.nseqs / Params.processors< 2)
-                CPUs = testSet.nseqs / 2;
-            else
-                CPUs = Params.processors;
+        if (pMSA == true) {
+            MSA msa = new MSA(model, testSet, Params.CONSTRAINT);
 
-            final int threshold = testSet.nseqs / CPUs;
-
-            DecodingParallel dec = new DecodingParallel(model, testSet, free, 0, testSet.nseqs, threshold, showResults);
-            ForkJoinPool threadPool = new ForkJoinPool(Params.processors);
-            threadPool.invoke(dec);
+            //use new tables to predict the label for first Sequence (target sequence) with PLP algorithm
+            pred = new Test(model, testSet.seq[0], free, msa.paths);
+            if (showResults)
+                testSet.seq[0].ShowRes();
 
         } else {
-            for (int j = 0; j < testSet.nseqs; j++) {
-                pred = new Test(model, testSet.seq[j], free);
-                if (showResults)
-                    testSet.seq[j].ShowRes();
+            int CPUs;
+
+            //Test set must be have more than 4 sequences
+            if (parallel && (testSet.nseqs > 4)) {
+                if (testSet.nseqs / Params.processors < 2)
+                    CPUs = testSet.nseqs / 2;
+                else
+                    CPUs = Params.processors;
+
+                final int threshold = testSet.nseqs / CPUs;
+
+                DecodingParallel dec = new DecodingParallel(model, testSet, free, 0, testSet.nseqs, threshold, showResults);
+                ForkJoinPool threadPool = new ForkJoinPool(Params.processors);
+                threadPool.invoke(dec);
+
+            } else {
+                for (int j = 0; j < testSet.nseqs; j++) {
+                    try {
+                        pred = new Test(model, testSet.seq[j], free);
+                        if (showResults)
+                            testSet.seq[j].ShowRes();
+                    } catch (Exception e) {
+                        System.out.println("Decoding: ERROR in sequence "+testSet.seq[j].header);
+                        //System.exit(0);
+                    }
+                }
             }
         }
     }
-
 
 }

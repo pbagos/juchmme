@@ -248,6 +248,13 @@ public class SeqSet {
         for (int i = 0; i < nseqs; i++){
             System.out.println(seq[i].header);
             System.out.println(seq[i].getSeq());
+            System.out.println(seq[i].getSeqOrig());
+        }
+    }
+
+    public void RemoveDashes(){
+        for (int i = 0; i < nseqs; i++){
+            seq[i].SetSeq(Utils.removeDashes(seq[i].getSeq()));
         }
     }
 

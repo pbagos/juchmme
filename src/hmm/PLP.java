@@ -24,7 +24,7 @@ class PLP extends HMMAlgo {
         for (int i = 1; i <= L; i++)
             v[i][0] = Double.NEGATIVE_INFINITY;
 
-        for (int i = 1; i <= L; i++)
+        for (int i = 1; i <= L; i++) {
             for (int ell = 0; ell < hmm.nstte; ell++) {
                 double delta;
                 delta = 0;
@@ -49,12 +49,13 @@ class PLP extends HMMAlgo {
                 }
 
                 double p = postp2.getPostForLabel(i - 1, Model.plab[ell]);
+
                 v[i][ell] = p + maxprod;
 
                 B[i][ell] = new Traceback2(i - 1, kmax);
 
             }
-
+        }
 
         int kmax = 0;
 
@@ -107,6 +108,7 @@ class PLP extends HMMAlgo {
         Traceback2 tb = B0;
         int i = tb.i, j = tb.j;
         while ((tb = B[tb.i][tb.j]) != null) {
+            //System.out.println(hmm.pstte[j] + " : "+hmm.stte[j]);
             res.append(hmm.pstte[j]);
             i = tb.i;
             j = tb.j;

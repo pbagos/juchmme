@@ -17,6 +17,7 @@ public class Seq {
     double dynScoreDiff;
     double logOdds;
     double logProb;
+    double maxProb;
     double lng;
     private boolean isUnlabeled;
 
@@ -61,6 +62,10 @@ public class Seq {
 
     public void SetObs(String newxstates) {
         xstates = newxstates;
+    }
+
+    public void SetSeq(String newSeq) {
+        xs = newSeq;
     }
 
     public void SetIndexID(int idx) {
@@ -147,18 +152,18 @@ public class Seq {
         if (Params.PAST_OBS_EXT)
             System.out.println("OR: " + xsorig);
 
-        if (Params.THREELINE)
+        if (Params.THREELINE || Args.RUN_TRAINING)
             System.out.println("OB: " + xorig);
 
-        System.out.println("CC:\t" + "lng = " + lng + "\tlogodds = " + logOdds + "\t(-logprob/lng) = "+ (-logProb / lng));
+        System.out.println("CC:\t" + "len = " + lng + "\tlogodds = " + logOdds + "\tmaxProb = " + maxProb + "\t(-logprob/lng) = "+ (-logProb / lng));
 
-        if (Params.VITERBI > -1) {
+        if (Params.VITERBI > -1 && Params.MSA != true) {
             System.out.println("VS: " + score[Params.VITERBI]);
             if (Model.isCHMM)
                 System.out.println("VR: " + relscore[Params.VITERBI]);
             System.out.println("VP: " + path[Params.VITERBI]);
         }
-        if (Params.POSVIT > -1) {
+        if (Params.POSVIT > -1 && Params.MSA != true) {
             System.out.println("PS: " + score[Params.POSVIT]);
             if (Model.isCHMM)
                 System.out.println("PR: " + relscore[Params.POSVIT]);
@@ -170,13 +175,13 @@ public class Seq {
             System.out.println("LP: " + path[Params.PLP]);
         }
 
-        if (Params.NBEST > -1 && Model.isCHMM) {
+        if (Params.NBEST > -1 && Model.isCHMM && Params.MSA != true) {
             System.out.println("NS: " + score[Params.NBEST]);
             System.out.println("NR: " + relscore[Params.NBEST]);
             System.out.println("NP: " + path[Params.NBEST]);
         }
 
-        if (Params.DYNAMIC > -1 && Model.isCHMM) {
+        if (Params.DYNAMIC > -1 && Model.isCHMM && Params.MSA != true) {
             System.out.println("DR: " + relscore[Params.DYNAMIC]);
             System.out.println("DR: " + dynScoreDiff);
             System.out.println("DP: " + path[Params.DYNAMIC]);
@@ -186,6 +191,10 @@ public class Seq {
 
     public int getLen() {
         return xs.length();
+    }
+
+    public int getLenOrig() {
+        return xsorig.length();
     }
 
     public String getHeader() {
@@ -224,6 +233,10 @@ public class Seq {
      */
     public String getSeq() {
         return xs;
+    }
+
+    public String getSeqOrig() {
+        return xsorig;
     }
 
     /*

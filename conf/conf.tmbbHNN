@@ -6,15 +6,15 @@ ALLOW_BEGIN=true
 ALLOW_END=true
 RUN_ViterbiTraining=false
 threshold=0.02
-maxIter=50
+maxIter=200
 
-#PR
+#PROBABILITIES
 #FILE, RANDOM, UNIFORM, VITERBI
 TRANSITIONS=FILE
 #FILE, RANDOM, UNIFORM, VITERBI
 EMISSIONS=FILE
 #FILE, RANDOM_NORMAL, RANDOM_UNIFORM, RPROP, BOOT
-WEIGHTS=RPROP
+WEIGHTS=FILE
 
 # Multithreaded parallelization for multicores
 PARALLEL=false
@@ -92,9 +92,9 @@ NOISE_EM=true
 PRIOR_TRANS=0.001
 
 #HNN OPTIONS
-windowLeft=5
-windowRight=5
-nhidden=9
+windowLeft=3
+windowRight=3
+nhidden=11
 ADD_GRAD=0.0
 DECAY=0.001
 #1: Sigmoid, 2: Sigmoid Modified, 3: Tanh

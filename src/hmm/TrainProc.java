@@ -33,7 +33,7 @@ class TrainProc {
         model.SaveModel();
 
         System.out.println("TESTING");
-        Decoding dec = new Decoding(model, trainSet, true, true, Params.parallel);
+        Decoding dec = new Decoding(model, trainSet, true, true, Params.parallel, false);
     }
 
     //Cross Validation
@@ -76,10 +76,10 @@ class TrainProc {
                 testSet.seq[cou].SetIndexID(cou);
                 cou++;
             }
-            //testSet.SaveSet("testSet_cross"+(c + 1));
+            testSet.SaveSet("testSet_cross"+(c + 1));
 
             System.out.println("testset Len = " + testSet.nseqs);
-            Decoding dec = new Decoding(model, testSet, true, true, Params.parallel);
+            Decoding dec = new Decoding(model, testSet, true, true, Params.parallel, false);
 
             cou = 0;
             for (int i = min; i < max; i++) {
