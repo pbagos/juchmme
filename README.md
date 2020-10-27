@@ -21,7 +21,13 @@ HMM Extensions: To overcome HMM limitations, a number of extensions have been de
 
 JUCHMME is an executable file in Java that is executed from the command line. JUCHMME is written in Java and requires a 32-bit or 64-bit Java runtime environment version 7 or later, freely available from http://www.java.org. The Windows and MacOS X installers contain a suitable Java runtime environment that will be used if a suitable Java runtime environment cannot be found on the computer.
 
-Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/pbagos/juchmme. 
+Download the program from http://www.compgen.org/tools/juchmme or Github https://github.com/pbagos/juchmme.
+
+If you find JUCHMME useful in your research, please consider citing the reference that describes this work:
+
+JUCHMME: a Java Utility for Class Hidden Markov Models and Extensions for biological sequence analysis.
+Tamposis A. Ioannis, Tsirigos D. Konstantinos , Theodoropoulou C. Margarita, Kontou I. Panagiota, Tsaousis N. Giorgos, Sarantopoulou Dimitra, Litou I. Zoi and Pantelis G. Bagos. 
+PMID: 31250907 (https://www.ncbi.nlm.nih.gov/pubmed/31250907)
 
 ## Compile 
 
@@ -45,6 +51,8 @@ The juchmme program is controlled by a list of command-line argument options. Th
 
 -f: the input sequence FASTA file. This file stores the input sequences for decoding algorithms in a fasta format. 
 
+-A: the input Multiple Sequence Alignment FASTA file. This file stores the input Multiple sequence Alignment (MSA) in for decoding algorithms in one line FASTA format 
+
 -m: the model file. This parameter file is required.
 
 -x: the HNN encoding file
@@ -53,7 +61,9 @@ The juchmme program is controlled by a list of command-line argument options. Th
 
 -c: the configuration file
 
--v 10: k–fold cross-validation mode using an integer larger than 0 for k (for instance k=10)
+-v cluster size: k–fold cross-validation mode using an integer larger than 0 for cluster size (for instance clusterSize=175)
+
+-k number of clusters: k–fold cross-validation mode using an integer larger than 0 for k (for instance k=10)
 
 -s: self-consistency test
 
