@@ -48,6 +48,12 @@ class Decoding {
                 ForkJoinPool threadPool = new ForkJoinPool(Params.processors);
                 threadPool.invoke(dec);
 
+                if (showResults){
+                    for (int j = 0; j < testSet.nseqs; j++) {
+                        testSet.seq[j].ShowRes();
+                    }
+                }
+
             } else {
                 for (int j = 0; j < testSet.nseqs; j++) {
                     try {
