@@ -27,10 +27,11 @@ class MSA {
     public MSA(HMM hmm, SeqSet testSet, boolean free) throws Exception {
         System.out.println("Decoding using MSA");
 
-        testSet.RemoveDashes();
+        //testSet.RemoveDashes();
+        testSet.RemoveChars(Params.MSAgapSymbol);
 
         //Predict labels for alignment sequences
-        Decoding dec = new Decoding(hmm, testSet, false, false, true, false);
+        Decoding dec = new Decoding(hmm, testSet, free, false, true, false);
 
         paths = new String[testSet.nseqs];
         for (int i = 0; i < testSet.nseqs; i++){
@@ -41,7 +42,7 @@ class MSA {
     }
 
     private String addDashes(String seqWithDashes, String predWithoutDashes){
-        Pattern p = Pattern.compile("[\\-]");
+        Pattern p = Pattern.compile("[\\*]");
         Matcher m = p.matcher(seqWithDashes);
 
         StringBuilder str = new StringBuilder(predWithoutDashes);

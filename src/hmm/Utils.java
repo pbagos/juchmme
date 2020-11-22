@@ -144,5 +144,8 @@ public final class Utils {
         return c.replaceAll("\\-","");
     }
 
+    public static String removeChars(String c, String s){
+        return c.replaceAll("\\"+s,"");
+    }
 
 }

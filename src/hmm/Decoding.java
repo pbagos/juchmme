@@ -62,7 +62,6 @@ class Decoding {
                             testSet.seq[j].ShowRes();
                     } catch (Exception e) {
                         System.out.println("Decoding: ERROR in sequence "+testSet.seq[j].header);
-                        //System.exit(0);
                     }
                 }
             }

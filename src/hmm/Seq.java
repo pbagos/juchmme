@@ -22,15 +22,21 @@ public class Seq {
     private boolean isUnlabeled;
 
     public Seq(String seq, String obs, int indx) {
+        this.xsorig = seq;
+        this.xorig = obs;
+
         //If set the extension of alphabet transform the sequence with new Alphabet
         if (Params.PAST_OBS_EXT) {
+            if (Params.MSA) {
+                seq = Utils.removeChars(seq, Params.MSAgapSymbol);
+                obs = Utils.removeChars(obs, Params.MSAgapSymbol);
+            }
+
             this.xs = Model.enc.transformSeq(seq);
         } else {
             this.xs = seq;
         }
 
-        this.xsorig = seq;
-        this.xorig = obs;
         this.xstates = obs;
         this.indexID = indx;
         this.isUnlabeled = checkUnlabeledSeq(obs);
@@ -39,12 +45,18 @@ public class Seq {
     }
 
     public Seq(String seq, int indx) {
+        this.xsorig = seq;
+
         if (Params.PAST_OBS_EXT) {
+            if (Params.MSA) {
+                seq = Utils.removeChars(seq, Params.MSAgapSymbol);
+            }
+
             this.xs = Model.enc.transformSeq(seq);
         } else {
             this.xs = seq;
         }
-        this.xsorig = seq;
+
         this.indexID = indx;
 
         EmptyXStates();
@@ -60,8 +72,18 @@ public class Seq {
         init();
     }
 
+    public void Print() {
+        System.out.println(this.header);
+        System.out.println(this.xs);
+        System.out.println(this.xstates);
+    }
+
     public void SetObs(String newxstates) {
         xstates = newxstates;
+    }
+
+    public void SetObsOrig(String newObs) {
+        xorig = newObs;
     }
 
     public void SetSeq(String newSeq) {
@@ -303,14 +325,6 @@ public class Seq {
     public char[] getWindow(int i) {
         char[] win = new char[Params.window];
         int c = 0;
-/*        for (int j = i - (Params.window - 1) / 2; j <= i + (Params.window - 1) / 2; j++) {
-            if (j < 0 || j >= xs.length()) {
-                win[c] = '0';
-            } else {
-                win[c] = xs.charAt(j);
-            }
-            c++;
-        }*/
         for (int j = (i - Params.windowLeft); j <= (i + Params.windowRight); j++) {
             if (j < 0 || j >= xs.length()) {
                 win[c] = '0';

@@ -120,6 +120,16 @@ public class Args {
                     } else
                         System.err.println("-" + a + ": Missing argument");
                     break;
+                case 'I':
+                    if (args.length > i + 1) {
+                        filesThree.add(args[i + 1]);
+                        Params.FASTA = false;
+                        Params.THREELINE = true;
+                        Params.MSA = true;
+                        i++;
+                    } else
+                        System.err.println("-" + a + ": Missing argument");
+                    break;
                 case 'd':
                     if (args.length > i + 1) {
                         fileD = args[i + 1];

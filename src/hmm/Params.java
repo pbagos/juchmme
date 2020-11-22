@@ -58,6 +58,7 @@ public class Params {
     static int PLP = 4;
     static int NBEST = -5;
     static boolean MSA = false;             // MSA
+    static String MSAgapSymbol = "*";
 
     //TRAINING OPTIONS
     static boolean RUN_CML = false;
@@ -227,6 +228,7 @@ public class Params {
             POSVIT = (POSVIT_p) ? 3 : -3;
             PLP_p = Utils.parseBoolean(props.getProperty("PLP"), "PLP");
             PLP = (PLP_p) ? 4 : -4;
+
 
             //EARLY STOPPING
             EARLY = Utils.parseBoolean(props.getProperty("EARLY"), "EARLY");

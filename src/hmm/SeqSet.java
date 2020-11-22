@@ -246,9 +246,7 @@ public class SeqSet {
 
     public void PrintSet(){
         for (int i = 0; i < nseqs; i++){
-            System.out.println(seq[i].header);
-            System.out.println(seq[i].getSeq());
-            System.out.println(seq[i].getSeqOrig());
+            seq[i].Print();
         }
     }
 
@@ -257,5 +255,11 @@ public class SeqSet {
             seq[i].SetSeq(Utils.removeDashes(seq[i].getSeq()));
         }
     }
-
+    public void RemoveChars(String c){
+        for (int i = 0; i < nseqs; i++){
+            seq[i].SetSeq(Utils.removeChars(seq[i].getSeq(), c));
+            seq[i].SetObs(Utils.removeChars(seq[i].getObs(), c));
+            seq[i].SetObsOrig(Utils.removeChars(seq[i].getObs(), c));
+        }
+    }
 }

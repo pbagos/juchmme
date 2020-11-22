@@ -108,8 +108,7 @@ public class Juchmme {
             // DECODING
             if (Params.THREELINE) {
                 SeqSet testSet = new SeqSet((String) Args.filesThree.get(0));
-                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel, false);
-                stats.calcStats(testSet);
+                Decoding dec = new Decoding(model, testSet, Params.CONSTRAINT, true, Params.parallel, Params.MSA);
             }
 
             if (Params.FASTA) {
