@@ -172,10 +172,18 @@ class Estimator {
                 //training.GetModel().print( new SystemOut() );
 
                 for (int j = 0; j < trainSet.nseqs; j++) {
-                    trainSet.seq[j].PutDashes(Model.transmLabels);
+                    System.out.println("Performed refinement " + trainSet.seq[j].header);
+                    //Refine multiple labels
+                    for (int i = 0; i < Params.REFINE_LABELS.length(); i++) {
+                        String label = Character.toString(Params.REFINE_LABELS.charAt(i));
+                        if (Model.psym.contains(label)) {
+                            trainSet.seq[j].PutDashes(label);
+                        } else {
+                            System.out.println("Warning: Refinement label "+label+" doesn't exist in model PSYM value.");
+                        }
+                    }
                     Viterbi vit2 = new Viterbi(training.GetModel(), trainSet.seq[j], false);
                     trainSet.seq[j].SetObs(vit2.getPath2());
-                    System.out.println("Performed refinement.");
                 }
             }
 

@@ -254,5 +254,14 @@ class Stats {
             Print();
         }
 
+        if (Params.LPB > -1) {
+            for (int j = 0; j < testSet.nseqs; j++)
+                pp[j] = testSet.seq[j].path[Params.LPB];
+
+            Run(testSet.getOrigPath(), pp, Model.transmLabels, Model.inLabels, Model.outLabels);
+            System.out.println("LPB:\n");
+            Print();
+        }
+
     }
 }

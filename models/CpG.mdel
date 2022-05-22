@@ -1,7 +1,7 @@
 # MODEL OPTIONS
 MODEL=CpG
 
-ESYM=AGCT
+ESYM=ACGT
 OSYM=HLBE
 PSYM=HBE
 
@@ -14,15 +14,15 @@ outLabels=O
 # A+ C+ G+ T+ A- C- G- T-
 # A  C  G  T  a  c  g  t
 STATE =B A C G T a c g t E
-OSTATE=B A C G T a c g t E
-PSTATE=B H H H H H H H H E
+OSTATE=B H H H H L L L L E
+PSTATE=B H H H H L L L L E
 
 #MODEL PRIOR for every esym
 PRIOR = 0.077 0.018 0.058 0.066
 
 # Distribution for each osym
-# Each column must have a summ equal to 1
-# osym     H    B   E
-PRIOR1 = 0.97 0.0 0.0
-PRIOR2 = 0.01 0.0 0.0
-PRIOR3 = 0.02 0.0 0.0
+# Each column must have a sum equal to 1
+# osym     H    L   B   E
+PRIOR1 = 0.97 0.97 0.0 0.0
+PRIOR2 = 0.01 0.01 0.0 0.0
+PRIOR3 = 0.02 0.02 0.0 0.0

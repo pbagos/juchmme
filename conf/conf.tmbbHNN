@@ -17,7 +17,7 @@ EMISSIONS=FILE
 WEIGHTS=FILE
 
 # Multithreaded parallelization for multicores
-PARALLEL=false
+PARALLEL=true
 defCPU=true
 nCPU=10
 
@@ -53,6 +53,7 @@ STRDIV=9
 #Refine OPTIONS
 FLANK=3
 REFINE=true
+REFINE_LABELS=M
 ML_INIT=false
 
 # DECODING OPTIONS
@@ -61,6 +62,7 @@ NBEST=false
 DYNAMIC=false
 POSVIT=false
 PLP=true
+LPB=false
 CONSTRAINT=false
 
 #EARLY STOPPING OPTIONS

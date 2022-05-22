@@ -3,7 +3,7 @@ package hmm;
 import java.io.*;
 
 public class Args {
-    static String Vesrion = "1.0.1";
+    static String Vesrion = "1.0.5";
 
     static boolean RUN_TRAINING = false;
     static boolean RUN_CROSSVAL = false;
@@ -54,7 +54,7 @@ public class Args {
             switch (a) {
                 case 'V':
 
-                    System.err.println("JUCHMME Version" + Vesrion);
+                    System.err.println("JUCHMME Version " + Vesrion);
                     System.exit(0);
 
                 case 'a':
@@ -140,6 +140,7 @@ public class Args {
                 case 't':
                     if (args.length > i + 1) {
                         file = args[i + 1];
+                        filesThree.add(args[i + 1]);
                         i++;
                         RUN_TRAINING = true;
                         Params.THREELINE = true;

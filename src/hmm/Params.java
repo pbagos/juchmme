@@ -41,6 +41,7 @@ public class Params {
     //ESTIMATION
     static int FLANK = 5;
     static boolean REFINE = false;
+    static String REFINE_LABELS = "M";
     static boolean ML_INIT = false;
     static boolean ALLOW_END = true;
     static boolean ALLOW_BEGIN = true;  //conf R:starting stage
@@ -51,12 +52,14 @@ public class Params {
     static boolean DYNAMIC_p = false;
     static boolean POSVIT_p = true;
     static boolean PLP_p = true;
+    static boolean LPB_p = true;
     static boolean CONSTRAINT = false;
     static int VITERBI = 1;
     static int DYNAMIC = -2;
     static int POSVIT = 3;
     static int PLP = 4;
     static int NBEST = -5;
+    static int LPB = -6;
     static boolean MSA = false;             // MSA
     static String MSAgapSymbol = "*";
 
@@ -215,6 +218,7 @@ public class Params {
             //Estimation Options
             FLANK = Utils.parseInteger(props.getProperty("FLANK"), "FLANK");
             REFINE = Utils.parseBoolean(props.getProperty("REFINE"), "REFINE");
+            REFINE_LABELS = props.getProperty("REFINE_LABELS");
             ML_INIT = Utils.parseBoolean(props.getProperty("ML_INIT"), "ML_INIT");
 
             // DECODING OPTIONS
@@ -228,7 +232,8 @@ public class Params {
             POSVIT = (POSVIT_p) ? 3 : -3;
             PLP_p = Utils.parseBoolean(props.getProperty("PLP"), "PLP");
             PLP = (PLP_p) ? 4 : -4;
-
+            LPB_p = Utils.parseBoolean(props.getProperty("LPB"), "LPB");
+            LPB = (LPB_p) ? 6 : -6;
 
             //EARLY STOPPING
             EARLY = Utils.parseBoolean(props.getProperty("EARLY"), "EARLY");

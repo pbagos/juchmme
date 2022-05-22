@@ -19,7 +19,7 @@ PSTATE=B H H E
 PRIOR = 0.077 0.018 0.058 0.066 0.040 0.072
 
 # Distribution for each osym
-# Each column must have a summ equal to 1
+# Each column must have a sum equal to 1
 # osym     H    B   E
 PRIOR1 = 0.97 0.0 0.0
 PRIOR2 = 0.01 0.0 0.0

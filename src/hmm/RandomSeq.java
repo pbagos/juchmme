@@ -32,7 +32,7 @@ public class RandomSeq {
         }
 
         try {
-            File outputFile = new File("set.txt");
+            File outputFile = new File("CpGset.txt");
             FileWriter out = new FileWriter(outputFile);
 
             for (int i = 0; i < seqNum; i++) {

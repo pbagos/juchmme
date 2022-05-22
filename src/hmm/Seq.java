@@ -208,6 +208,12 @@ public class Seq {
             System.out.println("DR: " + dynScoreDiff);
             System.out.println("DP: " + path[Params.DYNAMIC]);
         }
+
+        if (Params.LPB > -1 && Model.isCHMM && Params.MSA != true) {
+            System.out.println("LPBS: " + score[Params.LPB]);
+            System.out.println("LPBR: " + relscore[Params.LPB]);
+            System.out.println("LPBP: " + path[Params.LPB]);
+        }
     }
 
 

@@ -62,7 +62,6 @@ class Test {
             PLP plp2 = new PLP(estimate, sequence, free, postp2);
             sequence.path[Params.PLP] = plp2.getPath2();
             sequence.score[Params.PLP] = plp2.getProb() - fwd.logprob();
-
             sequence.relscore[Params.PLP] = CalcRelScore(sequence.getLen(), sequence.path[Params.PLP], pp2);
         }
 
@@ -72,6 +71,13 @@ class Test {
             sequence.path[Params.NBEST] = nbest.getPath();
             sequence.score[Params.NBEST] = nbest.getProb() - fwd.logprob();
             sequence.relscore[Params.NBEST] = CalcRelScore(sequence.getLen(), sequence.path[Params.NBEST], pp2);
+        }
+
+        if (Params.LPB > -1 && Model.isCHMM) {
+            LPB lpb = new LPB(estimate, sequence, 1, free, postp2);
+            sequence.path[Params.LPB] = lpb.getPath();
+            sequence.score[Params.LPB] = lpb.getProb() - fwd.logprob();
+            sequence.relscore[Params.LPB] = CalcRelScore(sequence.getLen(), sequence.path[Params.LPB], pp2);
         }
 
         if (Params.DYNAMIC > -1 || Args.SHOW_PLOT || Args.graphPlotDir != null) {
@@ -123,7 +129,6 @@ class Test {
 
     public static double CalcRelScore(final int len, final String path, final double[][] pp) {
         double relScore = 0;
-
         for (int i = 0; i < len; i++) {
             int lab = Model.psym.indexOf(path.charAt(i));
             if (lab == -1)
