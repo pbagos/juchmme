@@ -19,6 +19,7 @@ public class Seq {
     double logProb;
     double maxProb;
     double lng;
+    double[][] postProp;
     private boolean isUnlabeled;
 
     public Seq(String seq, String obs, int indx) {
@@ -167,6 +168,8 @@ public class Seq {
 
     //SHOW RESULTS
     void ShowRes() {
+        if (Args.SHOW_PLOT)
+            ShowProb();
 
         System.out.println("ID: " + header);
         System.out.println("SQ: " + xs);
@@ -285,7 +288,8 @@ public class Seq {
         return this.indexID;
     }
 
-    void ShowProb(double[][] total) {
+    void ShowProb() {
+        double[][] total = postProp;
         int wdth = 20;
         System.out.println("#\t(res)\tObs:\tVI\tNB\tDY\tPost.");
 

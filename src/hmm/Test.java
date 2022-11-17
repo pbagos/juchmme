@@ -93,16 +93,16 @@ class Test {
             }
 
             double[][] pp = postp2.getPProb();
-
+/*
             if (Args.SHOW_PLOT || Args.graphPlotDir != null) {
 
                 if (Args.SHOW_PLOT)
                     sequence.ShowProb(pp);
 
-                if (Args.graphPlotDir != null)
-                    saveGraphPlot(sequence, pp);
-            }
 
+            }*/
+            if (Args.graphPlotDir != null)
+                saveGraphPlot(sequence, pp);
         }
 
         int lng = sequence.getLen();
@@ -120,11 +120,11 @@ class Test {
             if (x > -1)
                 pnull += Math.log(Model.cprior[x]);
         }
-
-        sequence.logOdds = (fwd.logprob() - pnull);
-        sequence.logProb = fwd.logprob();
-        sequence.lng = lng;
-        sequence.maxProb = maxProb1;
+        sequence.postProp = postp2.getPProb();
+        sequence.logOdds  = (fwd.logprob() - pnull);
+        sequence.logProb  = fwd.logprob();
+        sequence.lng      = lng;
+        sequence.maxProb  = maxProb1;
     }
 
     public static double CalcRelScore(final int len, final String path, final double[][] pp) {

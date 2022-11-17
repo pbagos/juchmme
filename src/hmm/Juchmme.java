@@ -24,7 +24,7 @@ public class Juchmme {
         long startTime = System.currentTimeMillis();
 
         System.out.println("JUCHMME :: Java Utility for Class Hidden Markov Models and Extensions");
-        System.out.println("Version 1.0.5; September 2019");
+        System.out.println("Version 1.0.6; September 2019");
         System.out.println("Copyright (C) 2019 Pantelis Bagos");
         System.out.println("Freely distributed under the GNU General Public Licence (GPLv3)");
         System.out.println("--------------------------------------------------------------------------");
